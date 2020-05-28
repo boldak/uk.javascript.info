@@ -1,42 +1,42 @@
 
-# Object.keys, values, entries
+# Об'єкт.ключі, значення, записи
 
-Let's step away from the individual data structures and talk about the iterations over them.
+Давайте відійдемо від окремих структур даних і поговоримо про ітерації над ними.
 
-In the previous chapter we saw methods `map.keys()`, `map.values()`, `map.entries()`.
+У попередньому розділі ми бачили методи `map.keys ()`, `map.values ()`, `map.entries ()`.
 
-These methods are generic, there is a common agreement to use them for data structures. If we ever create a data structure of our own, we should implement them too.
+Ці методи є загальними, існує спільна згода використовувати їх для структур даних. Якщо ми коли-небудь створимо власну структуру даних, ми також повинні їх реалізувати.
 
-They are supported for:
+Вони підтримуються для:
 
 - `Map`
 - `Set`
 - `Array`
 
-Plain objects also support similar methods, but the syntax is a bit different.
+Звичайні об'єкти також підтримують подібні методи, але синтаксис трохи інший.
 
-## Object.keys, values, entries
+## # Об'єкт.ключі, значення, записи
 
-For plain objects, the following methods are available:
+Для простих об'єктів доступні наступні методи:
 
-- [Object.keys(obj)](mdn:js/Object/keys) -- returns an array of keys.
-- [Object.values(obj)](mdn:js/Object/values) -- returns an array of values.
-- [Object.entries(obj)](mdn:js/Object/entries) -- returns an array of `[key, value]` pairs.
+- [Object.keys(obj)](mdn:js/Object/keys) -- повертає масив ключів.
+- [Object.values(obj)](mdn:js/Object/values) -- повертає масив значень.
+- [Object.entries(obj)](mdn:js/Object/entries) -- повертає масив `[key, value]` пар.
 
-Please note the distinctions (compared to map for example):
+Зверніть увагу на відмінності (порівняно з картою, наприклад):
 
-|             | Map              | Object       |
+|             | Мапа              | Об'єкт       |
 |-------------|------------------|--------------|
-| Call syntax | `map.keys()`  | `Object.keys(obj)`, but not `obj.keys()` |
-| Returns     | iterable    | "real" Array                     |
+| Виклик синтаксису| `map.keys()`  | `Object.keys(obj)`, але не `obj.keys()` |
+| Повертає     | ітерабельний    | "справжній" Масив                     |
 
-The first difference is that we have to call `Object.keys(obj)`, and not `obj.keys()`.
+Перша відмінність полягає в тому, що ми повинні викликати `Object.keys (obj)`, а не `obj.keys ()`.
 
-Why so? The main reason is flexibility. Remember, objects are a base of all complex structures in JavaScript. So we may have an object of our own like `data` that implements its own `data.values()` method. And we still can call `Object.values(data)` on it.
+Чому так? Основна причина - гнучкість. Пам'ятайте, що об'єкти є базою всіх складних структур у JavaScript. Таким чином, у нас може бути власний об'єкт на зразок `data`, який реалізує власний метод` data.values() `. І ми все ще можемо звернутися до "Object.values(data)" на ньому.
 
-The second difference is that `Object.*` methods return "real" array objects, not just an iterable. That's mainly for historical reasons.
+Друга відмінність полягає в тому, що методи `Object. *` Повертають "реальні" об'єкти масиву, а не просто ітерабельні. Це в основному з історичних причин.
 
-For instance:
+Наприклад:
 
 ```js
 let user = {
@@ -49,7 +49,7 @@ let user = {
 - `Object.values(user) = ["John", 30]`
 - `Object.entries(user) = [ ["name","John"], ["age",30] ]`
 
-Here's an example of using `Object.values` to loop over property values:
+Ось приклад використання `Object.values` для переходу на значення властивостей:
 
 ```js run
 let user = {
@@ -57,41 +57,41 @@ let user = {
   age: 30
 };
 
-// loop over values
+// циклічне значення
 for (let value of Object.values(user)) {
-  alert(value); // John, then 30
+  alert(value); // Джону, тоді 30 років
 }
 ```
 
-```warn header="Object.keys/values/entries ignore symbolic properties"
-Just like a `for..in` loop, these methods ignore properties that use `Symbol(...)` as keys.
+`` `warn header =" Object.keys / величини / записи ігнорують символьні властивості "
+Як і цикл `for..in`, ці методи ігнорують властивості, які використовують` Symbol (...) `як ключі.
 
-Usually that's convenient. But if we want symbolic keys too, then there's a separate method [Object.getOwnPropertySymbols](mdn:js/Object/getOwnPropertySymbols) that returns an array of only symbolic keys. Also, there exist a method [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys) that returns *all* keys.
+Зазвичай це зручно. Але якщо ми також хочемо символічних ключів, то існує окремий метод [Object.getOwnPropertySymbols] (mdn: js / Object / getOwnPropertySymbols), який повертає масив лише символічних ключів. Також існує метод [Reflect.ownKeys (obj)] (mdn: js / Reflect / ownKeys), який повертає * усі * ключі.
 ```
 
 
-## Transforming objects
+## Перетворення об’єктів
 
-Objects lack many methods that exist for arrays, e.g. `map`, `filter` and others.
+Об'єктам бракує багатьох методів, які існують для масивів, наприклад `карта`,` фільтр` та інші.
 
-If we'd like to apply them, then we can use `Object.entries` followed `Object.fromEntries`:
+Якщо ми хочемо їх застосувати, тоді ми можемо використовувати `Object.entries` за пунктом` Object.fromEntries`:
 
-1. Use `Object.entries(obj)` to get an array of key/value pairs from `obj`.
-2. Use array methods on that array, e.g. `map`.
-3. Use `Object.fromEntries(array)` on the resulting array to turn it back into an object.
+1. Використовуйте `Object.entries (obj)`, щоб отримати масив пар ключів / значень з `obj`.
+2. Використовуйте методи масиву для цього масиву, наприклад `карта`.
+3. Використовуйте "Object.fromEntries (масив)" на отриманому масиві, щоб повернути його назад в об'єкт.
 
-For example, we have an object with prices, and would like to double them:
+Наприклад, у нас є об'єкт із цінами, і ми хотіли б їх подвоїти:
 
 ```js run
 let prices = {
-  banana: 1,
-  orange: 2,
-  meat: 4,
+  banana: 1, //банан: 1//
+  orange: 2, //апельсин: 2//
+  meat: 4, //м'ясо: 4//
 };
 
 *!*
 let doublePrices = Object.fromEntries(
-  // convert to array, map, and then fromEntries gives back the object
+  // перетворити в масив, карту, а потім із fromEntries повертає об'єкт
   Object.entries(prices).map(([key, value]) => [key, value * 2])
 );
 */!*
@@ -99,4 +99,4 @@ let doublePrices = Object.fromEntries(
 alert(doublePrices.meat); // 8
 ```   
 
-It may look difficult from the first sight, but becomes easy to understand after you use it once or twice. We can make powerful chains of transforms this way. 
+Це може виглядати важко з першого погляду, але стає зрозумілим легко після того, як ви використовуєте його один або два рази. Ми можемо зробити потужні ланцюги перетворень таким чином. 
