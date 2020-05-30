@@ -1,4 +1,4 @@
-# WeakMap and WeakSet
+# WeakMap та WeakSet
 
 As we know from the chapter <info:garbage-collection>, JavaScript engine stores a value in memory while it is reachable (and can potentially be used).
 
