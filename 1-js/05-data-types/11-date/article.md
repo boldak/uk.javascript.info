@@ -1,6 +1,6 @@
 # Дата і час
 
-Зустрічайте новий вбудований об'єкт: [Date](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date). Він зберігає дату/час, та  надає методи управління ними
+Зустрічайте новий вбудований об'єкт: [Date](mdn:js/Date). Він зберігає дату/час, та  надає методи управління ними
 
 Наприклад, його можна використовувати для зберігання часу створення/зміни, для вимірювання часу або просто для виведення поточної дати.
 
@@ -80,16 +80,16 @@
 
 Існують методи отримання року, місяця і т.д. з об'єкта `Date`:
 
-[getFullYear()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getFullYear)
+[getFullYear()](mdn:js/Date/getFullYear)
 : Отримати рік (4 цифри)
 
-[getMonth()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth)
+[getMonth()](mdn:js/Date/getMonth)
 : Отримати місяць, ** від 0 до 11 **.
 
-[getDate()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getDate)
+[getDate()](mdn:js/Date/getDate)
 : Отримати день місяця, від 1 до 31, що дещо суперечить назві методу.
 
-[getHours()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getHours), [getMinutes()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getMinutes), [getSeconds()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getSeconds), [getMilliseconds()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getMilliseconds)
+[getHours()](mdn:js/Date/getHours), [getMinutes()](mdn:js/Date/getMinutes), [getSeconds()](mdn:js/Date/getSeconds), [getMilliseconds()](mdn:js/Date/getMilliseconds)
 : Отримати, відповідно, години, хвилини, секунди або мілісекунди.
 
 ```warn header="Ніякого `getYear()`. Тільки `getFullYear()`"
@@ -98,12 +98,12 @@
 
 Крім того, можна отримати певний день тижня:
 
-[getDay()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getDay)
+[getDay()](mdn:js/Date/getDay)
 : Повернути день тижня від `0` (неділя) до `6` (суботи). Незважаючи на те, що в ряді країн за перший день тижня прийнятий понеділок, в JavaScript початок тижня припадає на неділю.
 
 **Всі вищеперелічені способи возвращают значень у відповідність з місцевим часовим поясом.**
 
-Однак існують і їх UTC-варіанти, які повертають день, місяць, рік для тимчасової зони UTC+0: [getUTCFullYear()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getUTCFullYear), [getUTCMonth()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getUTCMonth), [getUTCDay()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getUTCDay). Для їх використання потрібно після `"get"` підставити `"UTC"`.
+Однак існують і їх UTC-варіанти, які повертають день, місяць, рік для тимчасової зони UTC+0: [getUTCFullYear()](mdn:js/Date/getUTCFullYear), [getUTCMonth()](mdn:js/Date/getUTCMonth), [getUTCDay()](mdn:js/Date/getUTCDay). Для їх використання потрібно після `"get"` підставити `"UTC"`.
 
 Якщо ваш місцевий часовий пояс зміщений відносно UTC, то наступний код покаже різні години:
 
@@ -120,10 +120,10 @@ alert( date.getUTCHours() );
 
 Крім вищенаведених методів, існують два особливих методу без UTC-варіанту:
 
-[getTime()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime)
+[getTime()](mdn:js/Date/getTime)
 : Для заданої дати повертає timestamp - кількість мілісекунд, що пройшли з 1 січня 1970 року UTC + 0.
 
-[getTimezoneOffset()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset)
+[getTimezoneOffset()](mdn:js/Date/getTimezoneOffset)
 : Повертає різницю у хвилинах між місцевим часовим поясом і UTC
 
     ```js run
@@ -137,14 +137,14 @@ alert( date.getUTCHours() );
 
 Наступні методи дозволяють встановити компоненти дати/часу:
 
-- [`setFullYear(year, [month], [date])`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setFullYear)
-- [`setMonth(month, [date])`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setMonth)
-- [`setDate(date)`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setDate)
-- [`setHours(hour, [min], [sec], [ms])`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setHours)
-- [`setMinutes(min, [sec], [ms])`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setMinutes)
-- [`setSeconds(sec, [ms])`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setSeconds)
-- [`setMilliseconds(ms)`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setMilliseconds)
-- [`setTime(milliseconds)`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/setTime) (встановлює дату у вигляді цілої кількості мілісекунд, що пройшли з 01.01.1970 UTC)
+- [`setFullYear(year, [month], [date])`](mdn:js/Date/setFullYear)
+- [`setMonth(month, [date])`](mdn:js/Date/setMonth)
+- [`setDate(date)`](mdn:js/Date/setDate)
+- [`setHours(hour, [min], [sec], [ms])`](mdn:js/Date/setHours)
+- [`setMinutes(min, [sec], [ms])`](mdn:js/Date/setMinutes)
+- [`setSeconds(sec, [ms])`](mdn:js/Date/setSeconds)
+- [`setMilliseconds(ms)`](mdn:js/Date/setMilliseconds)
+- [`setTime(milliseconds)`](mdn:js/Date/setTime) (встановлює дату у вигляді цілої кількості мілісекунд, що пройшли з 01.01.1970 UTC)
 
 У всіх цих методів, крім `setTime()`, є UTC-варіант, наприклад: `setUTCHours()`.
 
@@ -381,7 +381,7 @@ for (let i = 0; i < 10; i++) {
 
 ## Date.parse з рядка
 
-Метод [Date.parse(str)](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/parse) зчитує дату із рядка.
+Метод [Date.parse(str)](mdn:js/Date/parse) зчитує дату із рядка.
 
 Формат рядка повинен бути наступним: `YYYY-MM-DDTHH:mm:ss.sssZ`, де:
 
@@ -412,7 +412,7 @@ alert(date);
 
 ## Підсумок
 
-- Дата і час в JavaScript представлені об'єктом [Date](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date). Не можна створити "тільки дату" або "тільки час": об'єкти `Date` завжди містять і те, і інше.
+- Дата і час в JavaScript представлені об'єктом [Date](mdn:js/Date). Не можна створити "тільки дату" або "тільки час": об'єкти `Date` завжди містять і те, і інше.
 - Місяці рахуються від нуля (так, січень -- це нульовий місяць).
 - Дні тижня в `getDay()` також рахуються від нуля (це неділя).
 - Об'єкт `Date` самостійно коригується при введенні значень, що виходять за рамки допустимих. Це корисно для додавання/віднімання днів/місяців/тижнів.
@@ -421,7 +421,7 @@ alert(date);
 
 Врахуйте, що, на відміну від деяких інших систем, в JavaScript timestamp в мілісекундах, а не в секундах.
 
-Часом нам потрібно виміряти час з високою точністю. Власними засобами JavaScript виміряти час в мікросекундах (1/1000000 секунди) не можна, але в більшості середовищ така можливість є. Наприклад, в браузерах є метод [performance.now()](https://developer.mozilla.org/ru/docs/Web/API/Performance/now), який повертає кількість мілісекунд з початку завантаження сторінки з точністю до мікросекунд (3 цифри після точки):
+Часом нам потрібно виміряти час з високою точністю. Власними засобами JavaScript виміряти час в мікросекундах (1/1000000 секунди) не можна, але в більшості середовищ така можливість є. Наприклад, в браузерах є метод [performance.now()](mdn:api/Performance/now), який повертає кількість мілісекунд з початку завантаження сторінки з точністю до мікросекунд (3 цифри після точки):
 
 ```js run
 alert(`Завантаження розпочато ${performance.now()}мс назад`);
