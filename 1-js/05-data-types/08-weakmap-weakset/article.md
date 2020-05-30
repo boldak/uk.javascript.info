@@ -1,43 +1,42 @@
 # WeakMap та WeakSet
 
-As we know from the chapter <info:garbage-collection>, JavaScript engine stores a value in memory while it is reachable (and can potentially be used).
+Як ми знаємо з розділу <info:garbage-collection>, JavaScript зберігає значення в пам'яті до тих пір, поки вони досяжні (тобто, ці значення можуть бути використані).
 
-For instance:
+Наприклад:
 ```js
 let john = { name: "John" };
 
-// the object can be accessed, john is the reference to it
-
-// overwrite the reference
+// об'єкт доступний, john -- це посилання на нього
+// перепишемо посилання
 john = null;
 
 *!*
-// the object will be removed from memory
+// об'єкт буде видалено з пам'яті
 */!*
 ```
 
-Usually, properties of an object or elements of an array or another data structure are considered reachable and kept in memory while that data structure is in memory.
+Зазвичай властивості об'єкта, елементи масиву або іншої структури даних вважаються досяжними і зберігаються в пам'яті до тих пір, поки ця структура даних міститься в пам'яті.
 
-For instance, if we put an object into an array, then while the array is alive, the object will be alive as well, even if there are no other references to it.
+Наприклад, якщо ми помістимо об'єкт в масив, то до тих пір, поки масив існує, об'єкт також буде існувати в пам'яті, не дивлячись на те, що інших посилань на нього немає.
 
-Like this:
+Як тут:
 
 ```js
 let john = { name: "John" };
 
 let array = [ john ];
 
-john = null; // overwrite the reference
+john = null; // перезаписуємо посилання на об'єкт
 
 *!*
-// john is stored inside the array, so it won't be garbage-collected
-// we can get it as array[0]
+// об'єкт john зберігається в масиві, тому він не буде видалений очисником сміття
+// ми можемо взяти його значення як array[0]
 */!*
 ```
 
-Similar to that, if we use an object as the key in a regular `Map`, then while the `Map` exists, that object exists as well. It occupies memory and may not be garbage collected.
+Аналогічно, якщо ми використовуємо об'єкт як ключ в `Map`, то до тих пір, поки існує` Map`, також буде існувати і цей об'єкт. Він займає місце в пам'яті і не може бути знищений очисником сміття.
 
-For instance:
+Наприклад:
 
 ```js
 let john = { name: "John" };
@@ -45,17 +44,17 @@ let john = { name: "John" };
 let map = new Map();
 map.set(john, "...");
 
-john = null; // overwrite the reference
+john = null; // перезаписуємо посилання на об'єкт
 
 *!*
-// john is stored inside the map,
-// we can get it by using map.keys()
+// john збережений всередині об'єкта map,
+// він доступний нам через map.keys()
 */!*
 ```
 
-`WeakMap` is fundamentally different in this aspect. It doesn't prevent garbage-collection of key objects.
+`WeakMap` - принципово інша структура в цьому аспекті. Вона не запобігає видаленню об'єктів очисником сміття, коли ці об'єкти виступають в якості ключів.
 
-Let's see what it means on examples.
+Давайте розглянемо це на прикладах:
 
 ## WeakMap
 
