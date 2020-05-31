@@ -1,71 +1,70 @@
 
-# The old "var"
+# Застаріле ключове слово"var"
 
-```smart header="This article is for understanding old scripts"
-The information in this article is useful for understanding old scripts.
-
-That's not how we write a new code.
+```smart header="Ця стаття призначена для розуміння старих скриптів"
+Інформація в цій статті корисна для розуміння старих скриптів.
+Це не те як ми пишемо новий код
 ```
 
-In the very first chapter about [variables](info:variables), we mentioned three ways of variable declaration:
+У першому розділі про [змінні](info:variables), ми згадали три способи оголошення змінних:
 
 1. `let`
 2. `const`
 3. `var`
 
-`let` and `const` behave exactly the same way in terms of Lexical Environments.
+`let` і `const` поводяться однаково з точки зору лексичних середовищ.
 
-But `var` is a very different beast, that originates from very old times. It's generally not used in modern scripts, but still lurks in the old ones.
+Але `var` це зовсім інший звір, який бере свій початок з дуже давніх часів. Зазвичай він не використовується в сучасних скриптах, але все ще може ховатися в старих.
 
-If you don't plan on meeting such scripts you may even skip this chapter or postpone it, but then there's a chance that it bites you later.
+Якщо в даний момент ви не працюєте з подібними скриптами, ви можете пропустити або відкласти прочитання цього розділу, проте, є шанс, що ви зіткнетеся з var в майбутньому.
 
-From the first sight, `var` behaves similar to `let`. That is, declares a variable:
+На перший погляд, `var` поводиться так само, як і `let`. Наприклад, оголошення змінної:
 
 ```js run
 function sayHi() {
-  var phrase = "Hello"; // local variable, "var" instead of "let"
+  var phrase = "Привіт"; // локальна змінна, "var" замість "let"
 
-  alert(phrase); // Hello
+  alert(phrase); // Привіт
 }
 
 sayHi();
 
-alert(phrase); // Error, phrase is not defined
+alert(phrase); // Помилка: phrase не знайдена
 ```
 
-...But here are the differences.
+...але відмінності таки є.
 
-## "var" has no block scope
+## Для "var" немає блочної області видимості
 
-Variables, declared with `var`, are either function-wide or global. They are visible through blocks.
+Область видимості змінних `var` обмежується функціями, або, якщо змінна глобальна, то скриптом. Такі змінні доступні за межами блоку.
 
-For instance:
+Наприклад:
 
 ```js run
 if (true) {
-  var test = true; // use "var" instead of "let"
+  var test = true; // використовуємо "var" замість "let"
 }
 
 *!*
-alert(test); // true, the variable lives after if
+alert(test); // true, змінна існує за межами блоку if
 */!*
 ```
 
-As `var` ignores code blocks, we've got a global variable `test`.
+Так як `var` ігнорує блоки, ми отримуємо глобальну змінну `test`.
 
-If we used `let test` instead of `var test`, then the variable would only be visible inside `if`:
+Якщо б ми використовували `let test` замість `var test`, тоді змінна була б доступною тільки в блоці `if`:
 
 ```js run
 if (true) {
-  let test = true; // use "let"
+  let test = true; // використовуємо "let"
 }
 
 *!*
-alert(test); // Error: test is not defined
+alert(test); // Помилка: test не знайдена
 */!*
 ```
 
-The same thing for loops: `var` cannot be block- or loop-local:
+Так само і для циклів: `var` не може бути блочною чи локальною у циклі:
 
 ```js
 for (var i = 0; i < 10; i++) {
@@ -73,38 +72,38 @@ for (var i = 0; i < 10; i++) {
 }
 
 *!*
-alert(i); // 10, "i" is visible after loop, it's a global variable
+alert(i); // 10, змінна "i" доступна поза межами циклу, так як вона глобальна
 */!*
 ```
 
-If a code block is inside a function, then `var` becomes a function-level variable:
+Якщо блок коду знаходиться в функції, то `var` стає локальною змінною в цій функції:
 
 ```js run
 function sayHi() {
   if (true) {
-    var phrase = "Hello";
+    var phrase = "Привіт";
   }
 
-  alert(phrase); // works
+  alert(phrase); // працює
 }
 
 sayHi();
-alert(phrase); // Error: phrase is not defined (Check the Developer Console)
+alert(phrase); // Помилка: phrase не знайдена
 ```
 
-As we can see, `var` pierces through `if`, `for` or other code blocks. That's because a long time ago in JavaScript blocks had no Lexical Environments. And `var` is a remnant of that.
+Як ми бачимо, `var` виходить за межі `if`, `for` чи інших блоків коду. Це відбувається, тому що на зорі розвитку JavaScript блоки коду не мали лексичного оточення. Саме тому `var` пережиток минулого.
 
-## "var" declarations are processed at the function start
+## "var" обробляються на початку запуску функції
 
-`var` declarations are processed when the function starts (or script starts for globals).
+Оголошення змінних `var` обробляються на початку виконання функції (або запуску скрипта, якщо змінна є глобальною).
 
-In other words, `var` variables are defined from the beginning of the function, no matter where the definition is (assuming that the definition is not in the nested function).
+Іншими словами, змінні `var` вважаються оголошеними з самого початку виконання функції незалежно від того, в якому місці функції реально знаходяться їх оголошення (за умови, що вони не перебувають у вкладеній функції).
 
-So this code:
+Тобто цей код:
 
 ```js run
 function sayHi() {
-  phrase = "Hello";
+  phrase = "Привіт";
 
   alert(phrase);
 
@@ -115,7 +114,7 @@ function sayHi() {
 sayHi();
 ```
 
-...Is technically the same as this (moved `var phrase` above):
+...Технічно повністю еквівалентний наступному (оголошення змінної `var phrase` переміщено в початок функції):
 
 ```js run
 function sayHi() {
@@ -123,18 +122,18 @@ function sayHi() {
   var phrase;
 */!*
 
-  phrase = "Hello";
+  phrase = "Привіт";
 
   alert(phrase);
 }
 sayHi();
 ```
 
-...Or even as this (remember, code blocks are ignored):
+...І навіть коду нижче (як ви пам'ятаєте, блокова область видимості ігнорується):
 
 ```js run
 function sayHi() {
-  phrase = "Hello"; // (*)
+  phrase = "Привіт"; // (*)
 
   *!*
   if (false) {
@@ -147,128 +146,128 @@ function sayHi() {
 sayHi();
 ```
 
-People also call such behavior "hoisting" (raising), because all `var` are "hoisted" (raised) to the top of the function.
+Така поведінка називається "hoisting" (спливання, підняття), тому що всі оголошення змінних `var` "спливають" в самий верх функції.
 
-So in the example above, `if (false)` branch never executes, but that doesn't matter. The `var` inside it is processed in the beginning of the function, so at the moment of `(*)` the variable exists.
+Отже, у прикладі вище `if (false)` умова ніколи не виконається, але це не важливо. Змінна `var` "спливає" на початок функції, тобто в момент присвоєння значення `(*)` змінна вже існує.
 
-**Declarations are hoisted, but assignments are not.**
+**Оголошення змінних "спливають", але присвоєння значень - немає.**
 
-That's best demonstrated with an example:
+Найпростіше продемонструвати це на прикладі:
 
 ```js run
 function sayHi() {
   alert(phrase);  
 
 *!*
-  var phrase = "Hello";
+  var phrase = "Привіт";
 */!*
 }
 
 sayHi();
 ```
 
-The line `var phrase = "Hello"` has two actions in it:
+Рядок `var phrase = "Hello"` складається з двух дій:
 
-1. Variable declaration `var`
-2. Variable assignment `=`.
+1. Оголошення змінної `var`
+2. Присвоєння значення змінної `=`.
 
-The declaration is processed at the start of function execution ("hoisted"), but the assignment always works at the place where it appears. So the code works essentially like this:
+Оголошення змінної обробляється на початку виконання функції ("спливає"), проте присвоєння значення завжди відбувається в тому рядку коду, де воно зазначено. Тобто код виконується за наступним сценарієм:
 
 ```js run
 function sayHi() {
 *!*
-  var phrase; // declaration works at the start...
+  var phrase; // оголошення змінної спрацьовуе на початку...
 */!*
 
   alert(phrase); // undefined
 
 *!*
-  phrase = "Hello"; // ...assignment - when the execution reaches it.
+  phrase = "Привіт"; // ...присвоєння - в момент, коли виповниться даний рядок коду.
 */!*
 }
 
 sayHi();
 ```
 
-Because all `var` declarations are processed at the function start, we can reference them at any place. But variables are undefined until the assignments.
+Оскільки всі оголошення змінних `var` dобробляються на початку функції, ми можемо посилатися на них в будь-якому місці. Однак, змінні мають значення `undefined` до рядка з присвоєнням значення.
 
-In both examples above `alert` runs without an error, because the variable `phrase` exists. But its value is not yet assigned, so it shows `undefined`.
+В обох прикладах вище виклик `alert` відбувався без помилки, тому що змінна `phrase` вже існувала. Але її значення ще не було присвоєно, тому ми отримували `undefined`.
 
 ### IIFE
 
-As in the past there was only `var`, and it has no block-level visibility, programmers invented a way to emulate it. What they did was called "immediately-invoked function expressions" (abbreviated as IIFE).
+Оскільки в минулому існував лише `var`, і він не має видимості на рівні блоків, програмісти винайшли спосіб його емуляції. Те, що вони зробили, називалося "immediately-invoked function expressions" (скорочено IIFE).
 
-That's not something we should use nowadays, but you can find them in old scripts.
+Це не те, що ми повинні сьогодні використовувати, але ви можете знайти це у старих скриптах.
 
-An IIFE looks like this:
+IIFE виглядає так:
 
 ```js run
 (function() {
 
-  let message = "Hello";
+  let message = "Привіт";
 
-  alert(message); // Hello
+  alert(message); // Привіт
 
 })();
 ```
 
-Here a Function Expression is created and immediately called. So the code executes right away and has its own private variables.
+Тут вираз функції створюється і відразу викликається. Таким чином, код виконується відразу ж і має власні закриті змінні.
 
-The Function Expression is wrapped with parenthesis `(function {...})`, because when JavaScript meets `"function"` in the main code flow, it understands it as the start of a Function Declaration. But a Function Declaration must have a name, so this kind of code will give an error:
+Вираз функції укладено в круглі дужки `(function {...})`, тому що коли JavaScript зустрічає «function» в основному потоці коду, він розуміє його як початок оголошення функції. Але оголошення функції повинно мати ім'я, тому код такого типу видасть помилку:
 
 ```js run
-// Try to declare and immediately call a function
-function() { // <-- Error: Function statements require a function name
+// Спробуйте оголосити і негайно викликати функцію
+function() { // <-- Помилка: для операторів функцій слід вказати ім'я функції
 
-  let message = "Hello";
+  let message = "Привіт";
 
-  alert(message); // Hello
+  alert(message); // Привіт
 
 }();
 ```
 
-Even if we say: "okay, let's add a name", that won't work, as JavaScript does not allow Function Declarations to be called immediately:
+Навіть якщо ми скажемо: «Добре, давайте додамо ім'я», це не спрацює, оскільки JavaScript не дозволяє викликати оголошення функцій відразу:
 
 ```js run
-// syntax error because of parentheses below
+// синтаксична помилка через дужки нижче
 function go() {
 
-}(); // <-- can't call Function Declaration immediately
+}(); // <-- не може негайно викликати оголошення функції
 ```
 
-So, the parentheses around the function is a trick to show JavaScript that the function is created in the context of another expression, and hence it's a Function Expression: it needs no name and can be called immediately.
+Таким чином, круглі дужки навколо функції - це ніби пастка, що показує JavaScript, що функція створюється в контексті іншого виразу, і, отже, цей вислів функції: їй не потрібно ім'я і вона може бути викликана негайно.
 
-There exist other ways besides parentheses to tell JavaScript that we mean a Function Expression:
+Крім дужок, існують інші способи повідомити JavaScript, що ми маємо на увазі вираз функції:
 
 ```js run
-// Ways to create IIFE
+// Шляхи створення IIFE
 
 (function() {
-  alert("Parentheses around the function");
+  alert("Дужки навколо функції");
 }*!*)*/!*();
 
 (function() {
-  alert("Parentheses around the whole thing");
+  alert("Дужки навколо всього");
 }()*!*)*/!*;
 
 *!*!*/!*function() {
-  alert("Bitwise NOT operator starts the expression");
+  alert("Побітовий оператор NOT запускає вираз");
 }();
 
 *!*+*/!*function() {
-  alert("Unary plus starts the expression");
+  alert("Унарний плюс запускає вираз");
 }();
 ```
 
-In all the above cases we declare a Function Expression and run it immediately. Let's note again: nowadays there's no reason to write such code.
+У всіх вищезгаданих випадках ми оголошуємо вираз функції і запускаємо його негайно. Відзначимо ще раз: наразі немає причин писати такий код.
 
-## Summary
+## Підсумки
 
-There are two main differences of `var` compared to `let/const`:
+Існує 2 основні відмінності `var` від `let/const`:
 
-1. `var` variables have no block scope, they are visible minimum at the function level.
-2. `var` declarations are processed at function start (script start for globals).
+1. Змінні `var` не мають блокової області видимості, вони обмежені, як мінімум, тілом функції.
+2. Оголошення (ініціалізація) змінних `var` проводиться на початку виконання функції (або скрипта для глобальних змінних).
 
-There's one more very minor difference related to the global object, that we'll cover in the next chapter.
+Є ще одна невелика відмінність, що стосується глобального об'єкту, ми розглянемо її в наступному розділі.
 
-These differences make `var` worse than `let` most of the time. Block-level variables is such a great thing. That's why `let` was introduced in the standard long ago, and is now a major way (along with `const`) to declare a variable.
+Всі ці відмінності роблять `var` гіршою за `let` у більшості випадків. Блокова область видимості - це зручно. Саме через це багато років тому `let` і `const` були введені в стандарт і зараз є основним способом оголошення змінних.
