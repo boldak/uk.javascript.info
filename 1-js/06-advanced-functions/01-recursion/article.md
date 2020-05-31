@@ -1,28 +1,27 @@
-# Recursion and stack
+# Рекурсія і стек
 
-Let's return to functions and study them more in-depth.
+Давайте повернемось до функцій та вивчимо їх більш детально.
 
-Our first topic will be *recursion*.
+Нашою першою темою буде *рекурсія*.
 
-If you are not new to programming, then it is probably familiar and you could skip this chapter.
+Якщо Ви не новачок у програмуванні, тоді, можливо, уже знайомі з цим і пропустите даний розділ.
 
-Recursion is a programming pattern that is useful in situations when a task can be naturally split into several tasks of the same kind, but simpler. Or when a task can be simplified into an easy action plus a simpler variant of the same task. Or, as we'll see soon, to deal with certain data structures.
+Рекурсія - це патерн в програмуванні, корисний у ситуації, коли одна задача може бути розділена на декілька такого ж типу, але простіших. Або коли задачу можна спростити до простих дій в спрощеному варіанті цієї задачі. Або, як побачимо пізніше, для роботи з певними структурами даних.
 
-When a function solves a task, in the process it can call many other functions. A partial case of this is when a function calls *itself*. That's called *recursion*.
+Коли функція вирішує задачу, в процесі вона може викликати багато інших функцій. Частковий випадок цього - це коли функція викликає *себе*. Це називають *рекурсією*.
 
-## Two ways of thinking
+## Два підходи
 
-For something simple to start with -- let's write a function `pow(x, n)` that raises `x` to a natural power of `n`. In other words, multiplies `x` by itself `n` times.
-
+Щоб почати із чогось просто, давайте напишемо функцію `pow(x, n)`, яка підносить число `x` до натурального степеня `n. Іншими словами, множить `x` саме на себе `n` разів. 
 ```js
 pow(2, 2) = 4
 pow(2, 3) = 8
 pow(2, 4) = 16
 ```
 
-There are two ways to implement it.
+Є два способи реалізувати це.
 
-1. Iterative thinking: the `for` loop:
+1. Ітеративний підхід: цикл `for`:
 
     ```js run
     function pow(x, n) {
@@ -39,7 +38,7 @@ There are two ways to implement it.
     alert( pow(2, 3) ); // 8
     ```
 
-2. Recursive thinking: simplify the task and call self:
+2. Рекурсивний підхід: спростити задачу і викликати функцію всередині самої себе:
 
     ```js run
     function pow(x, n) {
@@ -53,9 +52,9 @@ There are two ways to implement it.
     alert( pow(2, 3) ); // 8
     ```
 
-Please note how the recursive variant is fundamentally different.
+Зауважте, наскільки фундаментально відрізняються ці підходи.
 
-When `pow(x, n)` is called, the execution splits into two branches:
+Коли викликаємо `pow(x, n)`, виклик розгалужується на дві вітки:
 
 ```js
               if n==1  = x
@@ -65,27 +64,27 @@ pow(x, n) =
               else     = x * pow(x, n - 1)
 ```
 
-1. If `n == 1`, then everything is trivial. It is called *the base* of recursion, because it immediately produces the obvious result: `pow(x, 1)` equals `x`.
-2. Otherwise, we can represent `pow(x, n)` as `x * pow(x, n - 1)`. In maths, one would write <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. This is called *a recursive step*: we transform the task into a simpler action (multiplication by `x`) and a simpler call of the same task (`pow` with lower `n`). Next steps simplify it further and further until `n` reaches `1`.
+1. Якщо `n == 1`, тоді все просто. Це називається *базою* рекурсії, тому що вона відразу обчислює очевидний результат: `pow(x, 1)` дорівнює `x`.
+2. Інакше, ми можемо представити `pow(x, n)` як `x * pow(x, n - 1)`. В математиці це записується як <code>x<sup>n</sup> = x * x<sup>n-1</sup></code>. Це називають *кроком рекурсії*: ми зводимо задачу до простої дії (множення на `x`) в спрощеному завданні (`pow` з меншим `n`). На наступних кроках це продовжується, аж поки `n` не досягне `1`.
 
-We can also say that `pow` *recursively calls itself* till `n == 1`.
+Також можна сказати, що `pow` *рекурсивно себе викликає* допоки `n == 1`.
 
-![recursive diagram of pow](recursion-pow.svg)
+![рекурсивна діаграма pow](recursion-pow.svg)
 
 
-For example, to calculate `pow(2, 4)` the recursive variant does these steps:
+До прикладу, для обчислення `pow(2, 4)` рекурсивний спосіб матиме наступні кроки:
 
 1. `pow(2, 4) = 2 * pow(2, 3)`
 2. `pow(2, 3) = 2 * pow(2, 2)`
 3. `pow(2, 2) = 2 * pow(2, 1)`
 4. `pow(2, 1) = 2`
 
-So, the recursion reduces a function call to a simpler one, and then -- to even more simpler, and so on, until the result becomes obvious.
+Отже, рекурсія спрощує виклик функції до простішого, потім до ще більш простого, і так далі, поки не досягне мети.
 
-````smart header="Recursion is usually shorter"
-A recursive solution is usually shorter than an iterative one.
+````smart header="Рекурсія зазвичай коротша"
+Рекурсивний спосіб зазвичай коротший за ітеративний.
 
-Here we can rewrite the same using the conditional operator `?` instead of `if` to make `pow(x, n)` more terse and still very readable:
+Тепер ми може переписати те саме, використовуючи умовний оператор `?` замість `if`, щоб зробити `pow(x, n)` лаконічнішим, залишивши таким же читабельним:
 
 ```js run
 function pow(x, n) {
@@ -94,36 +93,36 @@ function pow(x, n) {
 ```
 ````
 
-The maximal number of nested calls (including the first one) is called *recursion depth*. In our case, it will be exactly `n`.
+Максимальна кількість вкладених викликів (включаючи перший) називається *глибиною рекурсії*. В нашому випадку, вона рівна `n`.
 
-The maximal recursion depth is limited by JavaScript engine. We can rely on it being 10000, some engines allow more, but 100000 is probably out of limit for the majority of them. There are automatic optimizations that help alleviate this ("tail calls optimizations"), but they are not yet supported everywhere and work only in simple cases.
+Максимальна глибина рекурсії обмежена рушієм JavaScript. Можна вважати, що це число рівне 10000, деякі рушії мають більше, але 100000 -- це, напевно, за межами можливостей для більшості з них. Існують автоматичні оптимізації, що дозволяє пом'якшити це ("оптимізації хвостової рекурсії"), але вони досі не всюди підтримуються та працюють лише в простих випадках.
 
-That limits the application of recursion, but it still remains very wide. There are many tasks where recursive way of thinking gives simpler code, easier to maintain.
+Це обмежує сферу використання рекурсії, але вона все ще залишається досить широкою. Існує багато задач, де рекурсивний підхід дає простіший код, що легше застосовувати та підтримувати.
 
-## The execution context and stack
+## Контекст виконання та стек
 
-Now let's examine how recursive calls work. For that we'll look under the hood of functions.
+Давайте з'ясуємо, як рекурсивні виклики працюють. Для цього ми подивимося "під капот" функцій.
 
-The information about the process of execution of a running function is stored in its *execution context*.
+Інформація про процес виконання функції зберігається в її *контексті виконання*.
 
-The [execution context](https://tc39.github.io/ecma262/#sec-execution-contexts) is an internal data structure that contains details about the execution of a function: where the control flow is now, the current variables, the value of `this` (we don't use it here) and few other internal details.
+[Контекст виконання](https://tc39.github.io/ecma262/#sec-execution-contexts) -- це внутрішня структура даних, что містить подробиці про виконання функції: у якому місці в коді знаходиться інтерпретатор, локальні змінні функції, значення `this` (ми його не використовуємо в даному прикладі) та деякі інші внутрішні деталі.
 
-One function call has exactly one execution context associated with it.
+Один виклик функції має лише один контекст виконання, що з ним пов'язаний.
 
-When a function makes a nested call, the following happens:
+Коли функція робить вкладений виклик, відбувається наступне:
 
-- The current function is paused.
-- The execution context associated with it is remembered in a special data structure called *execution context stack*.
-- The nested call executes.
-- After it ends, the old execution context is retrieved from the stack, and the outer function is resumed from where it stopped.
+- Виконання даної функції призупиняється.
+- Контекст виконання, пов'язаний із нею, записується в особливу структуру даних -- *стек контексту виконання*.
+- Виконується вкладений виклик.
+- Коли він закінчується, попередній контекст виконання дістається зі стеку, і виконання зовнішньої функції відновлюється на тому місці, де воно призупинилася. 
 
-Let's see what happens during the `pow(2, 3)` call.
+Давайте подивиось, що відбувається під час виклику `pow(2, 3)`.
 
 ### pow(2, 3)
 
-In the beginning of the call `pow(2, 3)` the execution context will store variables: `x = 2, n = 3`, the execution flow is at line `1` of the function.
+Спочатку, після виклику `pow(2, 3)` контекст виконання зберігає змінні: `x = 2, n = 3`, виконання знаходиться на рядку `1` функції.
 
-We can sketch it as:
+Можна зобразити це як:
 
 <ul class="function-execution-context-list">
   <li>
@@ -132,7 +131,7 @@ We can sketch it as:
   </li>
 </ul>
 
-That's when the function starts to execute. The condition `n == 1` is false, so the flow continues into the second branch of `if`:
+Це тільки початок виконання функції. Умова `n == 1` не справджується, тому виконання переходить на другу гілку `if`:
 
 ```js run
 function pow(x, n) {
@@ -149,7 +148,7 @@ alert( pow(2, 3) );
 ```
 
 
-The variables are same, but the line changes, so the context is now:
+Змінні ті самі, але рядок змінився, тож контекст тепер:
 
 <ul class="function-execution-context-list">
   <li>
@@ -158,19 +157,19 @@ The variables are same, but the line changes, so the context is now:
   </li>
 </ul>
 
-To calculate `x * pow(x, n - 1)`, we need to make a subcall of `pow` with new arguments `pow(2, 2)`.
+Щоб обчислити `x * pow(x, n - 1)`, необхідно виконати підвиклик `pow` з новими аргументами: `pow(2, 2)`.
 
 ### pow(2, 2)
 
-To do a nested call, JavaScript remembers the current execution context in the *execution context stack*.
+Щоби зробити вкладений виклик, JavaScript "запам'ятовує" актуальний контекст виконання в *стек*.
 
-Here we call the same function `pow`, but it absolutely doesn't matter. The process is the same for all functions:
+Тут ми викликаємо цю ж функцію `pow`, але це не має значення. Процес аналогічний для всіх функцій:
 
-1. The current context is "remembered" on top of the stack.
-2. The new context is created for the subcall.
-3. When the subcall is finished -- the previous context is popped from the stack, and its execution continues.
+1. Актуальний контекст "запам'ятовується" на вершині стеку.
+2. Створюється новий контекст для підвиклику.
+3. По закінченню підвиклику попередній контекст дістається зі стеку, і його виконання продовжується.
 
-Here's the context stack when we entered the subcall `pow(2, 2)`:
+Ось стек у момент підквиклику `pow(2, 2)`:
 
 <ul class="function-execution-context-list">
   <li>
@@ -183,21 +182,21 @@ Here's the context stack when we entered the subcall `pow(2, 2)`:
   </li>
 </ul>
 
-The new current execution context is on top (and bold), and previous remembered contexts are below.
+Новий контекст виконання тепер знаходиться зверху (і виділений), в той час як попередні збережені контексти -- знизу.
 
-When we finish the subcall -- it is easy to resume the previous context, because it keeps both variables and the exact place of the code where it stopped.
+По завершенню підвиклику легко відновити виконання попереднього контексту, тому що він зберігає змінні і точне місце в коді, де він призупинився.
 
 ```smart
-Here in the picture we use the word "line", as our example there's only one subcall in line, but generally a single line of code may contain multiple subcalls, like `pow(…) + pow(…) + somethingElse(…)`.
+На картинці можемо бачити слово "line". В нашому коді є лише один підвиклик в рядку, але загалом один рядом коду може містити декілька підвикликів, як `pow(…) + pow(…) + somethingElse(…)`.
 
-So it would be more precise to say that the execution resumes "immediately after the subcall".
+Тож, біль правильно сказати, что виконання відновлюється "відразу після підвиклику".
 ```
 
 ### pow(2, 1)
 
-The process repeats: a new subcall is made at line `5`, now with arguments `x=2`, `n=1`.
+Процес повторюється: новий підвиклик виконується в рядку `5`, тепер з аргументами `x=2`, `n=1`.
 
-A new execution context is created, the previous one is pushed on top of the stack:
+Створено новий контекст, старий "виштовхнуто" на вершину стеку:
 
 <ul class="function-execution-context-list">
   <li>
@@ -214,11 +213,11 @@ A new execution context is created, the previous one is pushed on top of the sta
   </li>
 </ul>
 
-There are 2 old contexts now and 1 currently running for `pow(2, 1)`.
+Є 2 старих контексти і 1 запущено в даний момент для `pow(2, 1)`.
 
-### The exit
+### Вихід
 
-During the execution of `pow(2, 1)`, unlike before, the condition `n == 1` is truthy, so the first branch of `if` works:
+Під час виконання `pow(2, 1)`, на відміну від того, як було раніше, умова `n == 1` справджується, тож перша гілка `if` виконується:
 
 ```js
 function pow(x, n) {
@@ -232,9 +231,9 @@ function pow(x, n) {
 }
 ```
 
-There are no more nested calls, so the function finishes, returning `2`.
+Більше немає вкладених викликів, тож виконання функції завершується, повертаючи, returning `2`.
 
-As the function finishes, its execution context is not needed anymore, so it's removed from the memory. The previous one is restored off the top of the stack:
+Коли функцію завершего, її контекст виконання більше не потрібен, тому він видаляється з пам'яті. У той час як попередній відновлюється з вершини стеку:
 
 
 <ul class="function-execution-context-list">
@@ -248,9 +247,9 @@ As the function finishes, its execution context is not needed anymore, so it's r
   </li>
 </ul>
 
-The execution of `pow(2, 2)` is resumed. It has the result of the subcall `pow(2, 1)`, so it also can finish the evaluation of `x * pow(x, n - 1)`, returning `4`.
+Виконання `pow(2, 2)` відновлено. Воно містить результат підвиклику `pow(2, 1)`, тож може також завершити обчислення `x * pow(x, n - 1)`, повернувши `4`.
 
-Then the previous context is restored:
+Далі відновлюється попередній контекст:
 
 <ul class="function-execution-context-list">
   <li>
@@ -259,15 +258,15 @@ Then the previous context is restored:
   </li>
 </ul>
 
-When it finishes, we have a result of `pow(2, 3) = 8`.
+Коли виконання завершується, маємо результат `pow(2, 3) = 8`.
 
-The recursion depth in this case was: **3**.
+Глибина рекурсії в цьому випадку становить: **3**.
 
-As we can see from the illustrations above, recursion depth equals the maximal number of context in the stack.
+Як можемо бачити з ілюстрації зверху, глибина рекурсії дорівнює найбільшому числу контекстів в стеку.
 
-Note the memory requirements. Contexts take memory. In our case, raising to the power of `n` actually requires the memory for `n` contexts, for all lower values of `n`.
+Зауважте вимоги до пам'яті. Контексти потребують її. В нашому випадку, піднесення до степеня `n` потребує пам'яті для `n` контекстів, для усіх нижчих `n`.
 
-A loop-based algorithm is more memory-saving:
+Алгоритм на основі циклу більш заощадливий в контексті пам'яті:
 
 ```js
 function pow(x, n) {
@@ -281,19 +280,19 @@ function pow(x, n) {
 }
 ```
 
-The iterative `pow` uses a single context changing `i` and `result` in the process. Its memory requirements are small, fixed and do not depend on `n`.
+Ітеративний `pow` використовує один контекст для зміни `i` та `result` в процесі. Вимоги до пам'яті нижчі, фіксовані та не залежать від `n`.
 
-**Any recursion can be rewritten as a loop. The loop variant usually can be made more effective.**
+**Будь яка рекурсія може бути переписана як цикл. Цей варіант зазвичай є більш ефективним.**
 
-...But sometimes the rewrite is non-trivial, especially when function uses different recursive subcalls depending on conditions and merges their results or when the branching is more intricate. And the optimization may be unneeded and totally not worth the efforts.
+...Але бувають особливі випадки, надміру коли функція використовує різні рекурсивні підвиклики залежно від умов та поглинає результати, або коли маємо заплутане розгалуження. Оптимізація може бути непотрібна та не верта витрачених сил.
 
-Recursion can give a shorter code, easier to understand and support. Optimizations are not required in every place, mostly we need a good code, that's why it's used.
+Рекурсія може дати коротший код, який легше розуміти та підтримувати. Оптимізації не є необхідними всюди, але часто нам потрібен хороший код, для отримання якого це і використовується.
 
-## Recursive traversals
+## Рекурсивні обходи
 
-Another great application of the recursion is a recursive traversal.
+Інше чудове застосування рекурсії -- рекурсивні обходи.
 
-Imagine, we have a company. The staff structure can be presented as an object:
+Уявімо, ми маємо компанію. Структура персоналу представлена об'єктом:
 
 ```js
 let company = {
@@ -322,34 +321,34 @@ let company = {
 };
 ```
 
-In other words, a company has departments.
+Іншими словами, в компанії є відділи.
 
-- A department may have an array of staff. For instance, `sales` department has 2 employees: John and Alice.
-- Or a department may split into subdepartments, like `development` has two branches: `sites` and `internals`. Each of them has their own staff.
-- It is also possible that when a subdepartment grows, it divides into subsubdepartments (or teams).
+- Відділ може мати масив працівників. Наприклад, відділ `sales` містить 2 робітників: John and Alice.
+- Або відділ може бути розділений на департаменти, як-от `development` має 2 гілки: `sites` і `internals`. Кожен містить своїх робітників.
+- Також можливо, що коли департамент зростає, він розділяється на субдепартаменти (команди).
 
-    For instance, the `sites` department in the future may be split into teams for `siteA` and `siteB`. And they, potentially, can split even more. That's not on the picture, just something to have in mind.
+    Наприклад, відділ `sites` в майбутньому може бути розділено на команди для `siteA` та `siteB`. І вони потенційно можуть розгалудитись і далі. Цього немає на картинці, просто запам'ятайте.
 
-Now let's say we want a function to get the sum of all salaries. How can we do that?
+Тепер, скажімо, ми хочемо, щоб функція розрахувала суму усіх зарплат. Як можна це зробити?
 
-An iterative approach is not easy, because the structure is not simple. The first idea may be to make a `for` loop over `company` with nested subloop over 1st level departments. But then we need more nested subloops to iterate over the staff in 2nd level departments like `sites`... And then another subloop inside those for 3rd level departments that might appear in the future? If we put 3-4 nested subloops in the code to traverse a single object, it becomes rather ugly.
+Ітеративний підхід не є простим через складну структуру. Перша ідея -- зробити цикл `for` по `company` із вкладеним циклом по першому рівню відділів. Але тоді необхідно більше вкладених циклів для ітерації по робітниками департаментів другого рівня як `sites`... І ще один вкладений цикл для третього рівня, що може з'явитися у майбутньому? Якщо створити 3-4 вкладених цикли в код для роботи з одним об'єктом, це виглядатиме жахливо.
 
-Let's try recursion.
+Використаймо рекурсію.
 
-As we can see, when our function gets a department to sum, there are two possible cases:
+Як можемо бачити, коли функція отримує відділ для підрахунку суми, є 2 можливих випадки:
 
-1. Either it's a "simple" department with an *array* of people -- then we can sum the salaries in a simple loop.
-2. Or it's *an object* with `N` subdepartments -- then we can make `N` recursive calls to get the sum for each of the subdeps and combine the results.
+1. Або це "простий" відділ з *масивом* людей -- тоді можна знайти суму за домогою простого циклу.
+2. Або це *об'єкт* з `N` департаментів -- тоді можемо виконати `N` рекурсивних викликів, щоб отримати суму по кожному субдепартаменту, та поєднати результати.
 
-The 1st case is the base of recursion, the trivial case, when we get an array.
+Перший випадок -- це база рекурсії, простий випадок, коли ми отримуємо масив.
 
-The 2nd case when we get an object is the recursive step. A complex task is split into subtasks for smaller departments. They may in turn split again, but sooner or later the split will finish at (1).
+Другий випадок, коли ми отримуємо об'єкт, -- рекурсивний крок. Складна задача розбивається на підзадачі для менших департаметів. Це може продовжуватись, доки рано чи пізно розбиття закінчиться на (1).
 
-The algorithm is probably even easier to read from the code:
+Можливо, алгоритм навіть простіше зрозуміти через код:
 
 
 ```js run
-let company = { // the same object, compressed for brevity
+let company = { // Той самий об'єкт, але скорочений для лаконічності
   sales: [{name: 'John', salary: 1000}, {name: 'Alice', salary: 1600 }],
   development: {
     sites: [{name: 'Peter', salary: 2000}, {name: 'Alex', salary: 1800 }],
@@ -357,7 +356,7 @@ let company = { // the same object, compressed for brevity
   }
 };
 
-// The function to do the job
+// Функція, що виконує поставлену задачу
 *!*
 function sumSalaries(department) {
   if (Array.isArray(department)) { // case (1)
@@ -375,46 +374,46 @@ function sumSalaries(department) {
 alert(sumSalaries(company)); // 7700
 ```
 
-The code is short and easy to understand (hopefully?). That's the power of recursion. It also works for any level of subdepartment nesting.
+Код короткий та простий для розуміння. В цьому сила рекурсії. Це так само працює для будь-якого рівня вкладених субдепартаментів.
 
-Here's the diagram of calls:
+Діаграма викликів:
 
-![recursive salaries](recursive-salaries.svg)
+![Рекурсивні зарплати](recursive-salaries.svg)
 
-We can easily see the principle: for an object `{...}` subcalls are made, while arrays `[...]` are the "leaves" of the recursion tree, they give immediate result.
+Можна легко побачити принцип: для об'єкта `{...}` робляться підвиклики, в той час як масиви -- це "листочки" на дереві рекурсії, вони дають окремі результати.
 
-Note that the code uses smart features that we've covered before:
+Зауважте, що код використовує корисні прийоми, згадані вище:
 
-- Method `arr.reduce` explained in the chapter <info:array-methods> to get the sum of the array.
-- Loop `for(val of Object.values(obj))` to iterate over object values: `Object.values` returns an array of them.
+- Метод `arr.reduce`, пояснений в розділі <info:array-methods>, використовується для обчислення суми членів масиву.
+- Цикл `for(val of Object.values(obj))` для ітерації по значенням об'єкту: `Object.values` повертає масив значень.
 
 
-## Recursive structures
+## Рекурсивні структури
 
-A recursive (recursively-defined) data structure is a structure that replicates itself in parts.
+Рекурсивна (рекурсивно-визначена) структура даних -- це структура, що відтворює себе по частинах.
 
-We've just seen it in the example of a company structure above.
+Ми бачили це на прикладі структури компанії.
 
-A company *department* is:
-- Either an array of people.
-- Or an object with *departments*.
+*Відділ* компанії -- це:
+- Або масив людей.
+- Або об'єкт з *департаментами*.
 
-For web-developers there are much better-known examples: HTML and XML documents.
+Для веб-розробників існуєть більш відомі приклади: HTML і XML документи.
 
-In the HTML document, an *HTML-tag* may contain a list of:
-- Text pieces.
-- HTML-comments.
-- Other *HTML-tags* (that in turn may contain text pieces/comments or other tags etc).
+У HTML документі, *HTML-тег* може містити список з:
+- Частин тексту.
+- HTML-коментарів.
+- Інших *HTML-тегів* (які в свою чергу можуть містити частини тексту/коментарі або інші теги і т.д.).
 
-That's once again a recursive definition.
+Знову маємо рекурсивне визначення.
 
-For better understanding, we'll cover one more recursive structure named "Linked list" that might be a better alternative for arrays in some cases.
+Для кращого розуміння, ми розглянемо ще одну рекурсивну структуру під назвою "Зв'язний список", яка може бути кращою альтернативою масивам у деяких випадках.
 
-### Linked list
+### Зв'язний список
 
-Imagine, we want to store an ordered list of objects.
+Уявімо, ми хочемо зберігати впорядкований список об'єктів.
 
-The natural choice would be an array:
+Природно, нашим вибором буде масив:
 
 ```js
 let arr = [obj1, obj2, obj3];
