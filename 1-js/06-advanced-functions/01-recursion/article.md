@@ -419,17 +419,17 @@ alert(sumSalaries(company)); // 7700
 let arr = [obj1, obj2, obj3];
 ```
 
-...But there's a problem with arrays. The "delete element" and "insert element" operations are expensive. For instance, `arr.unshift(obj)` operation has to renumber all elements to make room for a new `obj`, and if the array is big, it takes time. Same with `arr.shift()`.
+...Але з масивами є проблема. Операції з видалення та додавання елементу -- ресурсовитратні. До прикладу, операція `arr.unshift(obj)` має переставити усі елементи, щоб звільнити місце для нового `obj`, і якщо масив великий, це вимагатиме трохи часу. Те саме з `arr.shift()`.
 
-The only structural modifications that do not require mass-renumbering are those that operate with the end of array: `arr.push/pop`. So an array can be quite slow for big queues, when we have to work with the beginning.
+Єдиними структурними модифікаціями, які не потребують масового перенумерації, є ті, які взаємодіють із закінченням масиву: `arr.push/pop'. Тож масив може бути досить повільним для великих розмірів, коли нам доведеться працювати з початком.
 
-Alternatively, if we really need fast insertion/deletion, we can choose another data structure called a [linked list](https://en.wikipedia.org/wiki/Linked_list).
+На противагу, якщо нам необхідні швидкі вставка/видалення, можемо обрати структуру даних під назвою [зв'язний список](https://en.wikipedia.org/wiki/Linked_list).
 
-The *linked list element* is recursively defined as an object with:
+*Елемент зв'язного списку* рекурсивно визначений як об'єкт із:
 - `value`.
-- `next` property referencing the next *linked list element* or `null` if that's the end.
+- `next` -- поле, що посилається на наступний *елемент зв'язного списку*, або рівне `null`, якщо це кінець масиву.
 
-For instance:
+Наприклад:
 
 ```js
 let list = {
@@ -447,11 +447,11 @@ let list = {
 };
 ```
 
-Graphical representation of the list:
+Графічне зображення списку:
 
-![linked list](linked-list.svg)
+![Зв'язний список](linked-list.svg)
 
-An alternative code for creation:
+Альтернативний код для створення:
 
 ```js no-beautify
 let list = { value: 1 };
@@ -461,26 +461,26 @@ list.next.next.next = { value: 4 };
 list.next.next.next.next = null;
 ```
 
-Here we can even more clearly see that there are multiple objects, each one has the `value` and `next` pointing to the neighbour. The `list` variable is the first object in the chain, so following `next` pointers from it we can reach any element.
+Тут можна добре бачити, що є декілька об'єктів, кожен з який має `value` і `next`, що вказує на сусіда. Змінна `list` знаходиться в першому об'єкті ланцюжка, тож з використанням `next`, починаючи відлік з неї, ми можемо потрапити в будь-який елемент.
 
-The list can be easily split into multiple parts and later joined back:
+Список можна легко розділити на декілька частин і потім об'єднати знову.
 
 ```js
 let secondList = list.next.next;
 list.next.next = null;
 ```
 
-![linked list split](linked-list-split.svg)
+![Об'єднання зв'язного списку](linked-list-split.svg)
 
-To join:
+Для об'єднання:
 
 ```js
 list.next.next = secondList;
 ```
 
-And surely we can insert or remove items in any place.
+І, звісно, ми можемо додати чи вилучити елементи в будь-якому місці.
 
-For instance, to prepend a new value, we need to update the head of the list:
+До прикладу, щоб додати нове значення, необхідно оновити перший елемент списку:
 
 ```js
 let list = { value: 1 };
@@ -489,40 +489,40 @@ list.next.next = { value: 3 };
 list.next.next.next = { value: 4 };
 
 *!*
-// prepend the new value to the list
+// додаємо новий елемент
 list = { value: "new item", next: list };
 */!*
 ```
 
-![linked list](linked-list-0.svg)
+![Зв'язний список](linked-list-0.svg)
 
-To remove a value from the middle, change `next` of the previous one:
+Щоб вилучити елемент із середини списку, змінимо `next` попереднього:
 
 ```js
 list.next = list.next.next;
 ```
 
-![linked list](linked-list-remove-1.svg)
+![Зв'язний список](linked-list-remove-1.svg)
 
-We made `list.next` jump over `1` to value `2`. The value `1` is now excluded from the chain. If it's not stored anywhere else, it will be automatically removed from the memory.
+`list.next` перестрибнуло з `1` на значення `2`. Значення `1` тепер виключено з ланцюжка. Якщо воно не зберігається деінде, то буде автоматично видалено з пам'яті.
 
-Unlike arrays, there's no mass-renumbering, we can easily rearrange elements.
+На відміну від масивів, немає масової перенумерації, ми легко переставляємо елементи.
 
-Naturally, lists are not always better than arrays. Otherwise everyone would use only lists.
+Звісно, списки не завжди є кращими за масиви. Інакше усі б використовували лише списки. 
 
-The main drawback is that we can't easily access an element by its number. In an array that's easy: `arr[n]` is a direct reference. But in the list we need to start from the first item and go `next` `N` times to get the Nth element.
+Основним недоліком є те, що ми не можемо легко отримувати елемент за його номером. В масиві це просто: `arr[n]` є прямою адресацією. Але у списку необхідно починати з першого члена і за допомогою `next` іти `N` разів, аби дістатися N-го елемента.
 
-...But we don't always need such operations. For instance, when we need a queue or even a [deque](https://en.wikipedia.org/wiki/Double-ended_queue) -- the ordered structure that must allow very fast adding/removing elements from both ends, but access to its middle is not needed.
+...Але ці операції не завжди необхідні. Наприклад, коли ми маємо чергу або навіть [двобічну чергу](https://en.wikipedia.org/wiki/Double-ended_queue) -- впорядковану структу, що дозволяє швидке додавання/вилучення елементів з обох кінців, але доступ до середини не є необхідним.
 
-Lists can be enhanced:
-- We can add property `prev` in addition to `next` to reference the previous element, to move back easily.
-- We can also add a variable named `tail` referencing the last element of the list (and update it when adding/removing elements from the end).
-- ...The data structure may vary according to our needs.
+Списки можуть бути покращені:
+- Можна додати властивість `prev` на додачу до `next`, аби посилатися на попередній елемент, щоби  легко переміщатися назад.
+- Можемо також додати змінну `tail`, що посилається на останній елемент списку (і оновлювати його при додавані/вилучення елементів з кінця).
+- ...Структура даних може варіюватися залежно від потреб.
 
-## Summary
+## У підсумку
 
-Terms:
-- *Recursion*  is a programming term that means calling a function from itself. Recursive functions can be used to solve tasks in elegant ways.
+Поняття:
+- *Рекурсія*  is a programming term that means calling a function from itself. Recursive functions can be used to solve tasks in elegant ways.
 
     When a function calls itself, that's called a *recursion step*. The *basis* of recursion is function arguments that make the task so simple that the function does not make further calls.
 
