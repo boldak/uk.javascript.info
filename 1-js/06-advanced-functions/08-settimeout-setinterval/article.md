@@ -1,39 +1,39 @@
-# Scheduling: setTimeout and setInterval
+# Планування: setTimeout та setInterval
 
-We may decide to execute a function not right now, but at a certain time later. That's called "scheduling a call".
+Ми можемо викликати функцію не прямо зараз, а пізніше, через заданий момент часу. Це називається "планування виклику".
 
-There are two methods for it:
+Для цього є два методи:
 
-- `setTimeout` allows us to run a function once after the interval of time.
-- `setInterval` allows us to run a function repeatedly, starting after the interval of time, then repeating continuously at that interval.
+- `setTimeout` викликає функцію одиноразово через певний інтервал часу.
+- `setInterval` викликає функцію регулярно, повторюючи виклик через певний інтервал часу.
 
-These methods are not a part of JavaScript specification. But most environments have the internal scheduler and provide these methods. In particular, they are supported in all browsers and Node.js.
+Ці методи не є частиною специфікації JavaScript. Але більшість середовищ виконання JS-коду мають внутрішній планувальник і надають доступ до цих методів. Зокрема, вони підтримуються у всіх браузерах і Node.js.
 
 ## setTimeout
 
-The syntax:
+Синтаксис:
 
 ```js
 let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
 ```
 
-Parameters:
+Параметри:
 
 `func|code`
-: Function or a string of code to execute.
-Usually, that's a function. For historical reasons, a string of code can be passed, but that's not recommended.
+: Функція або рядок коду для виконання.
+Зазвичай це функція. З історичних причин можна передати і рядок коду, але це не рекомендується.
 
 `delay`
-: The delay before run, in milliseconds (1000 ms = 1 second), by default 0.
+: Затримка до виконання, у мілісекундах (1000 мс = 1 секунда), за замовчуванням = 0.
 
 `arg1`, `arg2`...
-: Arguments for the function (not supported in IE9-)
+: Аргументи для функції (не підтримується в IE9-)
 
-For instance, this code calls `sayHi()` after one second:
+Наприклад, цей код викликає `sayHi()` з затримкою в одну секунду:
 
 ```js run
 function sayHi() {
-  alert('Hello');
+  alert('Привіт');
 }
 
 *!*
@@ -41,7 +41,7 @@ setTimeout(sayHi, 1000);
 */!*
 ```
 
-With arguments:
+З аргументами:
 
 ```js run
 function sayHi(phrase, who) {
@@ -49,97 +49,96 @@ function sayHi(phrase, who) {
 }
 
 *!*
-setTimeout(sayHi, 1000, "Hello", "John"); // Hello, John
+setTimeout(sayHi, 1000, "Привіт", "Джон"); // Привіт, Джон
 */!*
 ```
 
-If the first argument is a string, then JavaScript creates a function from it.
+Якщо перший аргумент є рядком, тоді JavaScript створює з нього функцію.
 
-So, this will also work:
-
-```js run no-beautify
-setTimeout("alert('Hello')", 1000);
-```
-
-But using strings is not recommended, use arrow functions instead of them, like this:
+Тому це теж буде працювати:
 
 ```js run no-beautify
-setTimeout(() => alert('Hello'), 1000);
+setTimeout("alert('Привіт')", 1000);
 ```
 
-````smart header="Pass a function, but don't run it"
-Novice developers sometimes make a mistake by adding brackets `()` after the function:
+Але використання строки все ж не рекомендується. Краще використовувати функцію зі стрілкою, як тут:
+
+```js run no-beautify
+setTimeout(() => alert('Привіт'), 1000);
+```
+
+````smart header = "Передавання функції без запускання"
+Зверніть увагу: розробники іноді помиляються, додаючи дужки `()` після функції:
 
 ```js
-// wrong!
+// помилка!
 setTimeout(sayHi(), 1000);
 ```
-That doesn't work, because `setTimeout` expects a reference to a function. And here `sayHi()` runs the function, and the *result of its execution* is passed to `setTimeout`. In our case the result of `sayHi()` is `undefined` (the function returns nothing), so nothing is scheduled.
+Це не працює тому, що `setTimeout` очікує посилання на функцію. Тут `sayHi ()` запускає виконання функції. Результат виконання відправиться в `setTimeout`. У цьому нашому випадку результатом виконання `sayHi ()` є `undefined` (бо функція нічого не повертає). Тому нічого не планується.
 ````
 
-### Canceling with clearTimeout
+### Скасування через clearTimeout
 
-A call to `setTimeout` returns a "timer identifier" `timerId` that we can use to cancel the execution.
+Виклик `setTimeout` повертає "ідентифікатор таймара" `timerId`, який можна використовувати для скасування виконання.
 
-The syntax to cancel:
+Синтаксис для скасування:
 
 ```js
 let timerId = setTimeout(...);
 clearTimeout(timerId);
 ```
 
-In the code below, we schedule the function and then cancel it (changed our mind). As a result, nothing happens:
+У коді нижче ми плануємо виклик функції, а потім скасовуємо його (передумали). Як результат нічого не відбувається:
 
 ```js run no-beautify
-let timerId = setTimeout(() => alert("never happens"), 1000);
-alert(timerId); // timer identifier
+let timerId = setTimeout(() => alert("ніколи не відбудиться"), 1000);
+alert(timerId); // ідентифікатор таймера
 
 clearTimeout(timerId);
-alert(timerId); // same identifier (doesn't become null after canceling)
+alert(timerId); // той самий ідентифікатор (не перетворюється на null після скасування)
 ```
 
-As we can see from `alert` output, in a browser the timer identifier is a number. In other environments, this can be something else. For instance, Node.js returns a timer object with additional methods.
+Як ми бачимо з виводу `alert`, у браузері ідентифікатор таймера є числом. У інших середовищах це може бути щось ще. Наприклад, Node.js повертає об'єкт таймера з додатковими методами.
 
-Again, there is no universal specification for these methods, so that's fine.
+Повторюся, немає єдиної специфікації для цих методів, тому така поведінка є нормальною.
 
-For browsers, timers are described in the [timers section](https://www.w3.org/TR/html5/webappapis.html#timers) of HTML5 standard.
+Для браузерів таймери описані в [розділі таймерів] (https://www.w3.org/TR/html5/webappapis.html#timers) стандарту HTML5.
 
 ## setInterval
 
-The `setInterval` method has the same syntax as `setTimeout`:
+Метод `setInterval` має однаковий синтаксис з `setTimeout`:
 
 ```js
 let timerId = setInterval(func|code, [delay], [arg1], [arg2], ...)
 ```
 
-All arguments have the same meaning. But unlike `setTimeout` it runs the function not only once, but regularly after the given interval of time.
+Усі аргументи мають таке ж значення. Але відмінність цього методу від `setTimeout` у тому, що функція запускається не один раз, а періодично, через вказаний інтервал часу.
 
-To stop further calls, we should call `clearInterval(timerId)`.
+Щоб зупинити подальше виконання функції, необхідно викликати `clearInterval (timerId)`.
 
-The following example will show the message every 2 seconds. After 5 seconds, the output is stopped:
+Наступний приклад виводить повідомлення кожні 2 секунди. Через 5 секунд вивод припиняється:
 
 ```js run
-// repeat with the interval of 2 seconds
+// повторюється кожні 2 секунди
 let timerId = setInterval(() => alert('tick'), 2000);
 
-// after 5 seconds stop
+// через 5 секунд вивод припиниться
 setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
 ```
 
-```smart header="Time goes on while `alert` is shown"
-In most browsers, including Chrome and Firefox the internal timer continues "ticking" while showing `alert/confirm/prompt`.
-
-So if you run the code above and don't dismiss the `alert` window for some time, then in the next `alert` will be shown immediately as you do it. The actual interval between alerts will be shorter than 2 seconds.
+```smart header="Враховуємо час і при показу `alert`"
+У більшості браузерів, включаючи Chrome і Firefox, внутрішній лічильник продовжує цокати під час показу `alert/confirm/prompt`.
+ Якщо запустити код вгорі і почекати виконання `alert` вікна декілька секунд, тоді наступний `alert` буде показано одразу коли ви закриєте попередній. Тоді інтервал між повідомленнями 'alerts' буде коротшим за 2 секунди.
 ```
 
-## Nested setTimeout
+## Рекурсивний setTimeout
 
-There are two ways of running something regularly.
+Є два способи запускати щось регулярно.
 
-One is `setInterval`. The other one is a nested `setTimeout`, like this:
+Один з них `setInterval`. Іншим є рекурсивний `setTimeout`. наприклад:
 
 ```js
-/** instead of:
+/** замість
 let timerId = setInterval(() => alert('tick'), 2000);
 */
 
@@ -151,21 +150,22 @@ let timerId = setTimeout(function tick() {
 }, 2000);
 ```
 
-The `setTimeout` above schedules the next call right at the end of the current one `(*)`.
+Метод `setTimeout` вгорі планує наступний виклик одразу після закінчення поточного `(*)`.
 
-The nested `setTimeout` is a more flexible method than `setInterval`. This way the next call may be scheduled differently, depending on the results of the current one.
+Рекурсивний `setTimeout` - більш гнучкий ніж` setInterval`. З його допомогою наступний виклик може бути заданий по-різному в залежності від результата попереднього.
 
-For instance, we need to write a service that sends a request to the server every 5 seconds asking for data, but in case the server is overloaded, it should increase the interval to 10, 20, 40 seconds...
+Наприклад, необхідно написати сервіс, який відправляє запит для отримання даних на сервер кожні 5 секунд, але якщо сервер перевантажений, необхідно збільшити інтервал запитів до 10, 20, 40 секунд ...
 
-Here's the pseudocode:
+Ось псевдокод:
+
 ```js
 let delay = 5000;
 
 let timerId = setTimeout(function request() {
-  ...send request...
+  ...надсилає запит...
 
-  if (request failed due to server overload) {
-    // increase the interval to the next run
+  if (помилка запиту через перезавантаження сервера) {
+    // збільшуємо інтервал наступного запиту
     delay *= 2;
   }
 
@@ -175,11 +175,11 @@ let timerId = setTimeout(function request() {
 ```
 
 
-And if the functions that we're scheduling are CPU-hungry, then we can measure the time taken by the execution and plan the next call sooner or later.
+А якщо функції, які ми плануємо, ресурсомісткі і вимагають часу, то ми можемо виміряти час, витрачений на виконання, і спланувати наступний виклик раніше або пізніше.
 
-**Nested `setTimeout` allows to set the delay between the executions more precisely than `setInterval`.**
+**Рекурсивний `setTimeout` дозволяє задати затримку між виконаннями більш точно, ніж` setInterval`.**
 
-Let's compare two code fragments. The first one uses `setInterval`:
+Порівняємо два фрагмента коду. Перший використовує `setInterval`:
 
 ```js
 let i = 1;
@@ -188,7 +188,7 @@ setInterval(function() {
 }, 100);
 ```
 
-The second one uses nested `setTimeout`:
+Другий використовує рекурсивний `setTimeout`:
 
 ```js
 let i = 1;
@@ -198,105 +198,105 @@ setTimeout(function run() {
 }, 100);
 ```
 
-For `setInterval` the internal scheduler will run `func(i++)` every 100ms:
+У `setInterval`планувальник інтервалу запускає `func(i++)` кожні 100 мс:
 
 ![](setinterval-interval.svg)
 
-Did you notice?
+Звернули увагу?
 
-**The real delay between `func` calls for `setInterval` is less than in the code!**
+**Реальна затримка між викликом `func` за допомогою `setInterval` меньше, ніж вказано у коді!**
 
-That's normal, because the time taken by `func`'s execution "consumes" a part of the interval.
+Це нормально, тому що час, витрачений на виконання `func`, використовує частину заданого інтервалу часу.
 
-It is possible that `func`'s execution turns out to be longer than we expected and takes more than 100ms.
+Цілком можливо, що виконання `func` буде довше, ніж ми очікували, і займе більше 100 мс.
 
-In this case the engine waits for `func` to complete, then checks the scheduler and if the time is up, runs it again *immediately*.
+У даному випадку движок чекає закінчення виконання `func`, потім перевіряє планувальник і, якщо час минув, *негайно* запускає його знову.
 
-In the edge case, if the function always executes longer than `delay` ms, then the calls will happen without a pause at all.
+У крайньому випадку, якщо функція завжди виконується довше, ніж затримка `delay`, то виклики будуть виконуватися без затримок взагалі.
 
-And here is the picture for the nested `setTimeout`:
+Нижче представлено зображення, що показує процес роботи рекурсивного `setTimeout`:
 
 ![](settimeout-interval.svg)
 
-**The nested `setTimeout` guarantees the fixed delay (here 100ms).**
+**Рекурсивний `setTimeout`гарантує фіксовану затримку (тут 100 мс).**
 
-That's because a new call is planned at the end of the previous one.
+Це тому, що новий виклик заплановано після попереднього.
 
-````smart header="Garbage collection and setInterval/setTimeout callback"
-When a function is passed in `setInterval/setTimeout`, an internal reference is created to it and saved in the scheduler. It prevents the function from being garbage collected, even if there are no other references to it.
+````smart header="Збір мусора та колбек setInterval/setTimeout"
+Коли функція передається в `setInterval/setTimeout`, на неї створюється і зберігається в планувальнику внутрішнє посилання. Це захищає функцію від потрапляння в збирач сміття, навіть якщо на неї немає інших посилань.
 
-```js
-// the function stays in memory until the scheduler calls it
+```Js
+// функція залишається в пам'яті до тих пір, поки планувальник звертається до неї
 setTimeout(function() {...}, 100);
 ```
 
-For `setInterval` the function stays in memory until `clearInterval` is called.
+Для `setInterval` функція залишається в пам'яті поки не буде викликано `clearInterval`.
 
-There's a side-effect. A function references the outer lexical environment, so, while it lives, outer variables live too. They may take much more memory than the function itself. So when we don't need the scheduled function anymore, it's better to cancel it, even if it's very small.
+Також є побічний ефект. Функція посилається на зовнішнє лексичне оточення, тому поки вона існує, зовнішні змінні існують теж. Вони можуть займати більше пам'яті, ніж сама функція. Тому, якщо регулярний виклик функції більше не потрібен, краще скасувати його, навіть якщо функція дуже маленька.
 ````
 
-## Zero delay setTimeout
+## setTimeout з нульовою затримкою
 
-There's a special use case: `setTimeout(func, 0)`, or just `setTimeout(func)`.
+Є особливий варіант використання: `setTimeout (func, 0)` або просто `setTimeout (func)`.
 
-This schedules the execution of `func` as soon as possible. But the scheduler will invoke it only after the currently executing script is complete.
+Це планує виклик `func` настільки швидко, наскільки це можливо. Але надасть права викликати функцію тільки після завершення виконання поточного коду.
 
-So the function is scheduled to run "right after" the current script.
+Так виклик функції буде запланований відразу після виконання поточного коду.
 
-For instance, this outputs "Hello", then immediately "World":
+Наприклад, цей код виводить "Привіт", а потім одразу "Мир":
 
 ```js run
-setTimeout(() => alert("World"));
+setTimeout(() => alert("Мир"));
 
-alert("Hello");
+alert("Привіт");
 ```
 
-The first line "puts the call into calendar after 0ms". But the scheduler will only "check the calendar" after the current script is complete, so `"Hello"` is first, and `"World"` -- after it.
+Перший рядок "поміщає виклик у календар через 0 мс". Але планувальник "перевірить календар" тільки після того, як поточний код завершиться. Тому `"Привіт"` виводиться першим, а `"Мир"` -- після нього.
 
-There are also advanced browser-related use cases of zero-delay timeout, that we'll discuss in the chapter <info:event-loop>.
+Існують більш просунуті випадки використання нульової затримки в браузерах, які ми розглянемо в розділі <info:event-loop>.
 
-````smart header="Zero delay is in fact not zero (in a browser)"
-In the browser, there's a limitation of how often nested timers can run. The [HTML5 standard](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) says: "after five nested timers, the interval is forced to be at least 4 milliseconds.".
+````smart header = "Нульова затримка по факту не є нульовою (у браузері)"
+У браузері є обмеження на те, як часто внутрішні лічильники можуть виконуватися. В [стандарті HTML5] (https://www.w3.org/TR/html5/webappapis.html#timers) говориться: "після п'яти вкладених таймерів інтервал повинен становити не менше чотирьох мілісекунд.".
 
-Let's demonstrate what it means with the example below. The `setTimeout` call in it re-schedules itself with zero delay. Each call remembers the real time from the previous one in the `times` array. What do the real delays look like? Let's see:
+Продемонструємо це в прикладі нижче. Виклик `setTimeout` повторно викликає себе з затримкою 0 мс. Кожен виклик запам'ятовує реальний час попереднього виклику в масиві `times`. Яка реальна затримка? подивимося:
 
 ```js run
 let start = Date.now();
 let times = [];
 
 setTimeout(function run() {
-  times.push(Date.now() - start); // remember delay from the previous call
+  times.push(Date.now() - start); // запам'ятовуємо затримку попереднього виклику
 
-  if (start + 100 < Date.now()) alert(times); // show the delays after 100ms
-  else setTimeout(run); // else re-schedule
+  if (start + 100 < Date.now()) alert(times); // показуємо затримку після 100 мс
+  else setTimeout(run); // інакше перепланування
 });
 
-// an example of the output:
+// приклад виводу:
 // 1,1,1,1,9,15,20,24,30,35,40,45,50,55,59,64,70,75,80,85,90,95,100
 ```
 
-First timers run immediately (just as written in the spec), and then we see `9, 15, 20, 24...`. The 4+ ms obligatory delay between invocations comes into play.
+Перший таймер запускається одразу (як і вказано в специфікації), а потім ми бачимо `9, 15, 20, 24 ...`. Починається обов'язкова затримка 4+ мс.
 
-The similar thing happens if we use `setInterval` instead of `setTimeout`: `setInterval(f)` runs `f` few times with zero-delay, and afterwards with 4+ ms delay.
+Те ж саме відбувається при використанні `setInterval` замість` setTimeout`: `setInterval (f)` запускає `f` кілька разів з нульовою затримкою, а потім -- із затримкою 4+ мс.
 
-That limitation comes from ancient times and many scripts rely on it, so it exists for historical reasons.
+Це обмеження існує давно, багато скрипти покладаються на нього, тому воно зберігається з історичних причин.
 
-For server-side JavaScript, that limitation does not exist, and there exist other ways to schedule an immediate asynchronous job, like [setImmediate](https://nodejs.org/api/timers.html) for Node.js. So this note is browser-specific.
+Цього обмеження немає в серверному JavaScript. Там є й інші способи планування негайних асинхронних завдань. Наприклад, [setImmediate] (https://nodejs.org/api/timers.html) для Node.js. Так що це обмеження стосується лише браузерів.
 ````
 
-## Summary
+## Підсумки
 
-- Methods `setTimeout(func, delay, ...args)` and `setInterval(func, delay, ...args)` allow us to run the `func` once/regularly after `delay` milliseconds.
-- To cancel the execution, we should call `clearTimeout/clearInterval` with the value returned by `setTimeout/setInterval`.
-- Nested `setTimeout` calls are a more flexible alternative to `setInterval`, allowing us to set the time *between* executions more precisely.
-- Zero delay scheduling with `setTimeout(func, 0)` (the same as `setTimeout(func)`) is used to schedule the call "as soon as possible, but after the current script is complete".
-- The browser limits the minimal delay for five or more nested call of `setTimeout` or for `setInterval` (after 5th call) to 4ms. That's for historical reasons.
+- Методи `setTimeout(func, delay, ...args)` та `setInterval(func, delay, ...args)` дозволяють нам запускати `func` одноразово/регулярно після `delay` мілісекунд.
+- Щоб відмінити виконання, нам слід скористатись `clearTimeout/clearInterval` зі значенням, яке повертає `setTimeout/setInterval`.
+- Рекурсивний використання `setTimeout` є більш гнучкою альтернативою `setInterval`. Він дає нам можливість більш точно задати інтервал *між* викликами.
+- Нульова затримка за допомогою `setTimeout(func, 0)` (те ж саме що і `setTimeout(func)`) використовується для планування викликів "настільки швидко, наскільки це можливо, але завершення виконання поточного коду".
+- Браузер обмежує мінімальну затримку між п'ятьма або більше вкладеними викликами `setTimeout` або `setInterval` (після п'ятого виклику) до 4 мс. Це відбувається з історичних причин.
 
-Please note that all scheduling methods do not *guarantee* the exact delay.
+Звернемо увагу, що всі методи планування не *гарантують* точну затримку.
 
-For example, the in-browser timer may slow down for a lot of reasons:
-- The CPU is overloaded.
-- The browser tab is in the background mode.
-- The laptop is on battery.
+Наприклад, таймер в браузері може сповільнюватися з багатьох причин:
+- Перевантажені процесор.
+- Вкладка браузера працює у фоновому режимі.
+- Робота ноутбука від акумулятора.
 
-All that may increase the minimal timer resolution (the minimal delay) to 300ms or even 1000ms depending on the browser and OS-level performance settings.
+Все це може збільшувати мінімальний інтервал спрацьовування таймера (мінімальну затримку) до 300 мс або навіть 1000 мс в залежності від браузера і налаштувань продуктивності ОС.
