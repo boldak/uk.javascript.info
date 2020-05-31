@@ -522,20 +522,20 @@ list.next = list.next.next;
 ## У підсумку
 
 Поняття:
-- *Рекурсія*  is a programming term that means calling a function from itself. Recursive functions can be used to solve tasks in elegant ways.
+- *Рекурсія* -- це термін в програмуванні, що означає виклик функції всередині себе. Рекурсивні функції використовуються для вирішення задач оптимальним чином.
 
-    When a function calls itself, that's called a *recursion step*. The *basis* of recursion is function arguments that make the task so simple that the function does not make further calls.
+    Коли функція викликає саму себе, це називається *крок рекурсії*. *База* рекурсії == це аргументи функції, які спрощують задачу настільки, що функція не робить подальших викликів.
 
-- A [recursively-defined](https://en.wikipedia.org/wiki/Recursive_data_type) data structure is a data structure that can be defined using itself.
+- [Рекурсивно визначена](https://en.wikipedia.org/wiki/Recursive_data_type) структура даних -- це структура, що може бути визначена використовуючи саму себе.
 
-    For instance, the linked list can be defined as a data structure consisting of an object referencing a list (or null).
+    До прикладу, зв'язний список може бути визначений як структура даних, що складається з об'єктів, що посилаються на список (або null).
 
     ```js
     list = { value, next -> list }
     ```
 
-    Trees like HTML elements tree or the department tree from this chapter are also naturally recursive: they branch and every branch can have other branches.
+    Дерева як дерева елементів HTML або дерево відділів з цього розділу також є рекурсивними: вони розділяються, і кожна вітка може мати свої відгалуження.
 
-    Recursive functions can be used to walk them as we've seen in the `sumSalary` example.
+    Рекурсивні функції можуть використовуватися як в прикладі з `sumSalary`.
 
-Any recursive function can be rewritten into an iterative one. And that's sometimes required to optimize stuff. But for many tasks a recursive solution is fast enough and easier to write and support.
+Будь-які рекурсивні функції можна переписати в ітеративні. І це іноді може бути необхідним з метою оптимізації. Але для багатох задач рекурсивний метод є достатньо швидким та простим.
