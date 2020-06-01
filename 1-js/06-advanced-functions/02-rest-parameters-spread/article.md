@@ -1,20 +1,20 @@
-# Rest parameters and spread syntax
+# Залишкові параметри і синтакс розширення
 
-Many JavaScript built-in functions support an arbitrary number of arguments.
+Багато вбудованих функцій JavaScript підтримують довільну кількість аргументів. 
 
-For instance:
+Наприклад:
 
-- `Math.max(arg1, arg2, ..., argN)` -- returns the greatest of the arguments.
-- `Object.assign(dest, src1, ..., srcN)` -- copies properties from `src1..N` into `dest`.
-- ...and so on.
+- `Math.max(arg1, arg2, ..., argN)` -- повертає найбільший з аргументів.
+- `Object.assign(dest, src1, ..., srcN)` -- копіює властивості з `src1..N` в `dest`.
+- ...і т.д.
 
-In this chapter we'll learn how to do the same. And also, how to pass arrays to such functions as parameters.
+У цьому розділі ми розберемо як робити те саме з нашими власними функціями і як передавати масиви до них у якості параметрів.
 
-## Rest parameters `...`
+## Залишкові параметри `...`
 
-A function can be called with any number of arguments, no matter how it is defined.
+Функцію можна викликати використовуючи будь-яку кількість аргументів, незалежно від того, як вона визначена.
 
-Like here:
+Як-от тут:
 ```js run
 function sum(a, b) {
   return a + b;
@@ -23,14 +23,14 @@ function sum(a, b) {
 alert( sum(1, 2, 3, 4, 5) );
 ```
 
-There will be no error because of "excessive" arguments. But of course in the result only the first two will be counted.
+Помилки через "перевищену" кількість аргументів не буде. Але, звісно, зрештою лише перші два з них будуть використані.
 
-The rest of the parameters can be included in the function definition by using three dots `...` followed by the name of the array that will contain them. The dots literally mean "gather the remaining parameters into an array".
+Інші параметри можуть бути включені до визначення функції за допомогою `...`, за якими слідує ім'я масиву, що їх містить. Крапки буквально означають "зібрати решту параметрів в масив".
 
-For instance, to gather all arguments into array `args`:
+До прикладу, щоб помістити усі аргументи в масив `args`:
 
 ```js run
-function sumAll(...args) { // args is the name for the array
+function sumAll(...args) { // args -- ім'я масиву
   let sum = 0;
 
   for (let arg of args) sum += arg;
@@ -43,15 +43,15 @@ alert( sumAll(1, 2) ); // 3
 alert( sumAll(1, 2, 3) ); // 6
 ```
 
-We can choose to get the first parameters as variables, and gather only the rest.
+Ми можемо взяти перші змінні в якості параметрів, а решту зібрати в масив.
 
-Here the first two arguments go into variables and the rest go into `titles` array:
+Ось два аргументи беремо в якості змінних, а решту поміщаємо в масив `titles`:
 
 ```js run
 function showName(firstName, lastName, ...titles) {
   alert( firstName + ' ' + lastName ); // Julius Caesar
 
-  // the rest go into titles array
+  // решта -- до масиву titles
   // i.e. titles = ["Consul", "Imperator"]
   alert( titles[0] ); // Consul
   alert( titles[1] ); // Imperator
@@ -62,7 +62,7 @@ showName("Julius", "Caesar", "Consul", "Imperator");
 ```
 
 ````warn header="The rest parameters must be at the end"
-The rest parameters gather all remaining arguments, so the following does not make sense and causes an error:
+Залишкові параметри збирають усі інші аргументи, тому немає сенсу писали що-небудь після них. Це спровокує помилку:
 
 ```js
 function f(arg1, ...rest, arg2) { // arg2 after ...rest ?!
@@ -70,14 +70,14 @@ function f(arg1, ...rest, arg2) { // arg2 after ...rest ?!
 }
 ```
 
-The `...rest` must always be last.
+`...rest` повинен завжди стояти останнім.
 ````
 
-## The "arguments" variable
+## Змінна "arguments"
 
-There is also a special array-like object named `arguments` that contains all arguments by their index.
+Існує також спеціальний масив-подібний об'єкт під назвою `arguments`, який містить усі аргументи по індексу.
 
-For instance:
+Наприклад:
 
 ```js run
 function showName() {
@@ -85,7 +85,7 @@ function showName() {
   alert( arguments[0] );
   alert( arguments[1] );
 
-  // it's iterable
+  // ітерабельний
   // for(let arg of arguments) alert(arg);
 }
 
@@ -96,18 +96,18 @@ showName("Julius", "Caesar");
 showName("Ilya");
 ```
 
-In old times, rest parameters did not exist in the language, and using `arguments` was the only way to get all arguments of the function. And it still works, we can find it in the old code.
+Раніше залишкових параметрів у мові не існувало, і використання `arguments` було єдиним способом отримати всі аргументи функції. І це досі працює, ми можемо побачити це у старому коді.
 
-But the downside is that although `arguments` is both array-like and iterable, it's not an array. It does not support array methods, so we can't call `arguments.map(...)` for example.
+Але мінус полягає в тому, що хоча `arguments` є одначасно масив-подібним та ітерабельним, це не масив. Він не підтримує жоден метод для масивів, тому не можна викликати, наприклад, `arguments.map(...)`.
 
-Also, it always contains all arguments. We can't capture them partially, like we did with rest parameters.
+Також, він завжди містить усі аргументи. Ми не можемо частково їх захопити, як ми робили із залишковими параметрами.
 
-So when we need these features, then rest parameters are preferred.
+Тому коли нам це необхідно, залишкові члени стануть у пригоді.
 
-````smart header="Arrow functions do not have `\"arguments\"`"
-If we access the `arguments` object from an arrow function, it takes them from the outer "normal" function.
+````smart header="Стрілочні функції `\"arguments\"`"
+Якщо ми отримаємо об'єкт `arguments` із стрілочної функції, вона візьме їх із зовнішньої функції.
 
-Here's an example:
+Приклад:
 
 ```js run
 function f() {
@@ -118,23 +118,23 @@ function f() {
 f(1); // 1
 ```
 
-As we remember, arrow functions don't have their own `this`. Now we know they don't have the special `arguments` object either.
+Як Ви можете пам'ятати, стрілочні функції не мають власного `this`. Зараз ми знаємо, що також немає свого об'єкта `arguments`.
 ````
 
 
 ## Spread syntax [#spread-syntax]
 
-We've just seen how to get an array from the list of parameters.
+Тільки що ми бачили, як отримати масив із списку параметрів.
 
-But sometimes we need to do exactly the reverse.
+Але іноді нам необхідно зробити навпаки.
 
-For instance, there's a built-in function [Math.max](mdn:js/Math/max) that returns the greatest number from a list:
+До прикладу, існує вбудована функція [Math.max](mdn:js/Math/max), що повертає найбільше число зі списку:
 
 ```js run
 alert( Math.max(3, 5, 1) ); // 5
 ```
 
-Now let's say we have an array `[3, 5, 1]`. How do we call `Math.max` with it?
+Тепер, скажімо, ми маємо масив `[3, 5, 1]`. Як у цьому випадку викликати `Math.max`?
 
 Passing it "as is" won't work, because `Math.max` expects a list of numeric arguments, not a single array:
 
