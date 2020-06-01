@@ -62,7 +62,7 @@ showName("Julius", "Caesar", "Consul", "Imperator");
 ```
 
 ````warn header="The rest parameters must be at the end"
-Залишкові параметри збирають усі інші аргументи, тому немає сенсу писали що-небудь після них. Це спровокує помилку:
+Залишкові параметри збирають усі інші аргументи, тому немає сенсу писати що-небудь після них. Це спровокує помилку:
 
 ```js
 function f(arg1, ...rest, arg2) { // arg2 after ...rest ?!
@@ -150,17 +150,17 @@ alert( Math.max(arr) ); // NaN
 
 Тут *оператор розширення* і приходить на допомогу. Він виглядає подібно до решти параметрів, так само використовуючи `...`, але роблячи протилежне.
 
-When `...arr` is used in the function call, it "expands" an iterable object `arr` into the list of arguments.
+Коли `...arr` використовується у виклику функції, він "розширює" ітерабельний об'єкт `arr` до списку аргументів.
 
-For `Math.max`:
+Для `Math.max`:
 
 ```js run
 let arr = [3, 5, 1];
 
-alert( Math.max(...arr) ); // 5 (spread turns array into a list of arguments)
+alert( Math.max(...arr) ); // 5 (оператор розкриває масив у список аргументів)
 ```
 
-We also can pass multiple iterables this way:
+Так само можна передати декілька ітерабельних об'єктів:
 
 ```js run
 let arr1 = [1, -2, 3, 4];
@@ -169,7 +169,7 @@ let arr2 = [8, 3, -8, 1];
 alert( Math.max(...arr1, ...arr2) ); // 8
 ```
 
-We can even combine the spread syntax with normal values:
+Можемо навіть поєднувати оператори розширення зі звичайними значеннями:
 
 
 ```js run
@@ -179,7 +179,7 @@ let arr2 = [8, 3, -8, 1];
 alert( Math.max(1, ...arr1, 2, ...arr2, 25) ); // 25
 ```
 
-Also, the spread syntax can be used to merge arrays:
+Також оператор розширення можна використати для злиття масивів:
 
 ```js run
 let arr = [3, 5, 1];
@@ -189,12 +189,12 @@ let arr2 = [8, 9, 15];
 let merged = [0, ...arr, 2, ...arr2];
 */!*
 
-alert(merged); // 0,3,5,1,2,8,9,15 (0, then arr, then 2, then arr2)
+alert(merged); // 0,3,5,1,2,8,9,15 (0, далі arr, потім 2, нарешті arr2)
 ```
 
-In the examples above we used an array to demonstrate the spread syntax, but any iterable will do.
+У прикладах зверху ми використали масив для демонстрації оператору розширення, але він працює для будь-яких ітерабельних об'єктів.
 
-For instance, here we use the spread syntax to turn the string into array of characters:
+Наприклад, тут ми використовуємо його для перетворення рядка в масив симовлів:
 
 ```js run
 let str = "Hello";
@@ -202,66 +202,66 @@ let str = "Hello";
 alert( [...str] ); // H,e,l,l,o
 ```
 
-The spread syntax internally uses iterators to gather elements, the same way as `for..of` does.
+Оператор розвирення використовує ітератори для зібрання елемени, так само як `for..of`.
 
-So, for a string, `for..of` returns characters and `...str` becomes `"H","e","l","l","o"`. The list of characters is passed to array initializer `[...str]`.
+Отже, для рядка, `for..of` повертає символи, і `...str` стає `"H","e","l","l","o"`. Список символів передається на ініціалізатор масиву `[...str]`.
 
-For this particular task we could also use `Array.from`, because it converts an iterable (like a string) into an array:
+Для цієї конкретної задачі ми можемо також використати `Array.from`, адже він конвертує ітерабельний (як-от рядок) в масив:
 
 ```js run
 let str = "Hello";
 
-// Array.from converts an iterable into an array
+// Array.from конвертує ітерабельний об'єкт в масив
 alert( Array.from(str) ); // H,e,l,l,o
 ```
 
-The result is the same as `[...str]`.
+Результат такий самий, як для `[...str]`.
 
-But there's a subtle difference between `Array.from(obj)` and `[...obj]`:
+Але є невелика відмінність між `Array.from(obj)` і `[...obj]`:
 
-- `Array.from` operates on both array-likes and iterables.
-- The spread syntax works only with iterables.
+- `Array.from` застосовується як для масив-подібних об'єктів, так і для ітерабельних.
+- Оператор розширення працює лише з ітерабельними об'єктами.
 
-So, for the task of turning something into an array, `Array.from` tends to be more universal.
+Отже, для завдання перетворення чогось у масив `Array.from` є, мабуть, найбільш універсальним.
 
 
-## Get a new copy of an object/array
+## Отримати нову копію об'єкту/масиву
 
-Remember when we talked about `Object.assign()` [in the past](https://javascript.info/object#cloning-and-merging-object-assign)?
+Згадайте, коли ми говорили про `Object.assign()` [раніше](https://javascript.info/object#cloning-and-merging-object-assign)?
 
-It is possible to do the same thing with the spread operator!
+Це можливо зробити і з оператором розширення!
 
 ```js run
 let arr = [1, 2, 3];
-let arrCopy = [...arr]; // spread the array into a list of parameters
-                        // then put the result into a new array
+let arrCopy = [...arr]; // розширюємо масив до списку параметрів
+                        // далі поміщаємо результат в новий масив
 
-// do the arrays have the same contents?
+// масиви мають однаковий вміст?
 alert(JSON.stringify(arr) === JSON.stringify(arrCopy)); // true
 
-// are the arrays equal?
+// масиви рівні?
 alert(arr === arrCopy); // false (not same reference)
 
-// modifying our initial array does not modify the copy:
+// зміна початкового масиву не змінює копію:
 arr.push(4);
 alert(arr); // 1, 2, 3, 4
 alert(arrCopy); // 1, 2, 3
 ```
 
-Note that it is possible to do the same thing to make a copy of an object:
+Зауважте, що можливо зробити те саме для створення копії об'єкта:
 
 ```js run
 let obj = { a: 1, b: 2, c: 3 };
-let objCopy = { ...obj }; // spread the object into a list of parameters
-                          // then return the result in a new object
+let objCopy = { ...obj }; // розширюємо об'єкт до списку параметрів
+                          // далі повертаємо результат в новий об'єкт
 
-// do the objects have the same contents?
+// об'єкти мають однаковий вміст?
 alert(JSON.stringify(obj) === JSON.stringify(objCopy)); // true
 
-// are the objects equal?
+// об'єкти рівні?
 alert(obj === objCopy); // false (not same reference)
 
-// modifying our initial object does not modify the copy:
+// зміна початкового об'єкту не змінює копію:
 obj.d = 4;
 alert(JSON.stringify(obj)); // {"a":1,"b":2,"c":3,"d":4}
 alert(JSON.stringify(objCopy)); // {"a":1,"b":2,"c":3}
