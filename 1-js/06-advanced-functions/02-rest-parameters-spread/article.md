@@ -98,7 +98,7 @@ showName("Ilya");
 
 Раніше залишкових параметрів у мові не існувало, і використання `arguments` було єдиним способом отримати всі аргументи функції. І це досі працює, ми можемо побачити це у старому коді.
 
-Але мінус полягає в тому, що хоча `arguments` є одначасно масив-подібним та ітерабельним, це не масив. Він не підтримує жоден метод для масивів, тому не можна викликати, наприклад, `arguments.map(...)`.
+Але мінус полягає в тому, що хоча `arguments` є одначасно масив-подібним об'єктом (псевдомасивом) та ітерабельним, це не масив. Він не підтримує жоден метод для масивів, тому не можна викликати, наприклад, `arguments.map(...)`.
 
 Також, він завжди містить усі аргументи. Ми не можемо частково їх захопити, як ми робили із залишковими параметрами.
 
@@ -267,23 +267,23 @@ alert(JSON.stringify(obj)); // {"a":1,"b":2,"c":3,"d":4}
 alert(JSON.stringify(objCopy)); // {"a":1,"b":2,"c":3}
 ```
 
-This way of copying an object is much shorter than `let objCopy = Object.assign({}, obj);` or for an array `let arrCopy = Object.assign([], arr);` so we prefer to use it whenever we can.
+Це спосіб копіювання об'єкту є значно коротшим за `let objCopy = Object.assign({}, obj);` або для масивів `let arrCopy = Object.assign([], arr);`, тож краще використовувати його коли це можливо.
 
 
-## Summary
+## Підсумок
 
-When we see `"..."` in the code, it is either rest parameters or the spread syntax.
+Коли ми бачемо `"..."` в коді, це означає залишкові параметри або оператор розширення.
 
-There's an easy way to distinguish between them:
+Є простий спосіб їх розрізнити:
 
-- When `...` is at the end of function parameters, it's "rest parameters" and gathers the rest of the list of arguments into an array.
-- When `...` occurs in a function call or alike, it's called a "spread syntax" and expands an array into a list.
+- Коли `...` в кінці списку параметрів функції -- це "залишкові параметри". Решта "невказаних" параметрів збираються в масив.
+- Коли `...` розташовується у виклику функції або деінде -- це "оператор розширення". Він перетворює масив у список.
 
-Use patterns:
+Шаблони застосування:
 
-- Rest parameters are used to create functions that accept any number of arguments.
-- The spread syntax is used to pass an array to functions that normally require a list of many arguments.
+- Залишкові параметри використовуються для створення функцій, що приймають будь-яку кількість аргументів.
+- Оператор розширення використовується для передачі масиву у функції, що зазвичай потребують списку аргументів.
 
-Together they help to travel between a list and an array of parameters with ease.
+Разом вони дозволяють з легкістю переключатися між списком та масивом параметрів.
 
-All arguments of a function call are also available in "old-style" `arguments`: array-like iterable object.
+Усі аргументи виклику функції також доступні у "старому стилі": масив-подібному ітерабельному об'єкті (або псевдомасиві).
