@@ -136,7 +136,7 @@ alert( Math.max(3, 5, 1) ); // 5
 
 Тепер, скажімо, ми маємо масив `[3, 5, 1]`. Як у цьому випадку викликати `Math.max`?
 
-Passing it "as is" won't work, because `Math.max` expects a list of numeric arguments, not a single array:
+Передати його "як є" неможливо, адже `Math.max` потребує числовий список, а не один масив:
 
 ```js run
 let arr = [3, 5, 1];
@@ -146,9 +146,9 @@ alert( Math.max(arr) ); // NaN
 */!*
 ```
 
-And surely we can't manually list items in the code `Math.max(arr[0], arr[1], arr[2])`, because we may be unsure how many there are. As our script executes, there could be a lot, or there could be none. And that would get ugly.
+І, звісно, ми не можемо вручну вводити числа як `Math.max(arr[0], arr[1], arr[2])`, бо ми не знаємо, скільки їх. Коли наш скрипт виконується, їх може бути багато, а може не бути взагало. І це не круто.
 
-*Spread syntax* to the rescue! It looks similar to rest parameters, also using `...`, but does quite the opposite.
+Тут *оператор розширення* і приходить на допомогу. Він виглядає подібно до решти параметрів, так само використовуючи `...`, але роблячи протилежне.
 
 When `...arr` is used in the function call, it "expands" an iterable object `arr` into the list of arguments.
 
