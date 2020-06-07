@@ -31,7 +31,7 @@ alert(surname);  // Kantor
 
 Він відмінно виглядає в поєднанні з splitілі іншими методами, які повертають масив:
 
-`` `Js
+```js
 let [firstName, surname] = "Ilya Kantor".split(' ');
 ```
 
