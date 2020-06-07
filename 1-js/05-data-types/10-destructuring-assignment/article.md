@@ -90,7 +90,7 @@ alert(user.name); // Ilya
 У попередньому розділі ми бачили метод [Object.entries (obj)] (mdn: js / Object / records).
 
 Ми можемо використовувати його з деструктуризація для циклічного перебору ключів і значень об'єкта:
-`` `Js run
+```js run
 let user = {
   name: "John",
   age: 30
