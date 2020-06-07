@@ -1,20 +1,20 @@
 
-# Function object, NFE
+# Об'єкт функції, NFE
 
-As we already know, a function in JavaScript is a value.
+Як ми вже знаємо, в JavaScript функція - це значення.
 
-Every value in JavaScript has a type. What type is a function?
+Кожне значення в JavaScript має свій тип. А функція - це який тип?
 
-In JavaScript, functions are objects.
+В JavaScript функції - це об'єкти.
 
-A good way to imagine functions is as callable "action objects". We can not only call them, but also treat them as objects: add/remove properties, pass by reference etc.
+Можна уявити функцію як "об'єкт, який може робити якусь дію". Функції можна не тільки викликати, але і використовувати їх як звичайні об'єкти: додавати / видаляти властивості, передавати їх по посиланню і т.д.
 
 
-## The "name" property
+## Властивість "name" 
 
-Function objects contain some useable properties.
+Об'єкт функції містить кілька корисних властивостей.
 
-For instance, a function's name is accessible as the "name" property:
+Наприклад, ім'я функції нам доступно як властивість "name":
 
 ```js run
 function sayHi() {
@@ -24,29 +24,29 @@ function sayHi() {
 alert(sayHi.name); // sayHi
 ```
 
-What's kind of funny, the name-assigning logic is smart. It also assigns the correct name to a function even if it's created without one, and then immediately assigned:
+Що досить цукаво, логіка призначення `name` розумна. Вона привласнює коректне ім'я навіть в разі, коли функція створюється без імені і тут же присвоюється, ось так:
 
 ```js run
 let sayHi = function() {
   alert("Hi");
 };
 
-alert(sayHi.name); // sayHi (there's a name!)
+alert(sayHi.name); // sayHi (є ім'я!)
 ```
 
-It also works if the assignment is done via a default value:
+Це працює навіть в разі надання значення за замовчуванням:
 
 ```js run
 function f(sayHi = function() {}) {
-  alert(sayHi.name); // sayHi (works!)
+  alert(sayHi.name); // sayHi (працює!)
 }
 
 f();
 ```
 
-In the specification, this feature is called a "contextual name". If the function does not provide one, then in an assignment it is figured out from the context.
+У специфікації це називається "контекстне ім'я": якщо функція не має name, то JavaScript намагається визначити його з контексту.
 
-Object methods have names too:
+Також імена мають і методи об'єкта:
 
 ```js run
 let user = {
@@ -65,21 +65,23 @@ alert(user.sayHi.name); // sayHi
 alert(user.sayBye.name); // sayBye
 ```
 
-There's no magic though. There are cases when there's no way to figure out the right name. In that case, the name property is empty, like here:
+У цьому немає ніякої магії. Буває, що коректне ім'я визначити неможливо. У таких випадках властивість name має пусте значення.
+
+Наприклад:
 
 ```js run
-// function created inside array
+// функція оголошена всередині масиву
 let arr = [function() {}];
 
-alert( arr[0].name ); // <empty string>
-// the engine has no way to set up the right name, so there is none
+alert( arr[0].name ); // <порожня стрічка>
+// тут відсутня можливість визначити ім'я, тому його немає
 ```
 
-In practice, however, most functions do have a name.
+Втім, на практиці таке буває рідко, зазвичай функції мають `name`.
 
-## The "length" property
+## Властивість "length" 
 
-There is another built-in property "length" that returns the number of function parameters, for instance:
+Ще одна вбудована властивість "length" містить кількість параметрів функції в її оголошенні. Наприклад:
 
 ```js run
 function f1(a) {}
@@ -91,20 +93,20 @@ alert(f2.length); // 2
 alert(many.length); // 2
 ```
 
-Here we can see that rest parameters are not counted.
+Як ми бачимо, три крапки, що означає "залишкові параметри", тут як би "не рахується"
 
-The `length` property is sometimes used for [introspection](https://en.wikipedia.org/wiki/Type_introspection) in functions that operate on other functions.
+Властивість `length` іноді використовується для [інтроспекції] (https://uk.wikipedia.org/wiki/Інтроспекція_(програмування)) у функціях, які працюють з іншими функціями.
 
-For instance, in the code below the `ask` function accepts a `question` to ask and an arbitrary number of `handler` functions to call.
+Наприклад, в коді нижче функція `ask` приймає в якості параметрів питання` question` і довільну кількість функцій-обробників відповіді `handler`.
 
-Once a user provides their answer, the function calls the handlers. We can pass two kinds of handlers:
+Коли користувач відповідає на питання, функція викликає обробники. Ми можемо передати два типи обробників:
 
-- A zero-argument function, which is only called when the user gives a positive answer.
-- A function with arguments, which is called in either case and returns an answer.
+- Функцію без аргументів, яка буде викликатися тільки в разі позитивної відповіді.
+- Функцію з аргументами, яка буде викликатися в обох випадках і повертати відповідь.
 
-To call `handler` the right way, we examine the `handler.length` property.
+Щоб викликати обробник `handler` правильно, будемо перевіряти властивість` handler.length`.
 
-The idea is that we have a simple, no-arguments handler syntax for positive cases (most frequent variant), but are able to support universal handlers as well:
+Ідея полягає в тому, щоб мати простий синтаксис обробника без аргументів для позитивних відповідей (найбільш поширений випадок), але також і можливість передавати універсальні обробники:
 
 ```js run
 function ask(question, ...handlers) {
@@ -120,47 +122,47 @@ function ask(question, ...handlers) {
 
 }
 
-// for positive answer, both handlers are called
-// for negative answer, only the second one
+// для позитивних відповідей викликаються обидва типи обробників
+// для негативних - тільки другого типу
 ask("Question?", () => alert('You said yes'), result => alert(result));
 ```
 
-This is a particular case of so-called [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)) -- treating arguments differently depending on their type or, in our case depending on the `length`. The idea does have a use in JavaScript libraries.
+Це окремий випадок так званого [Ad-hoc-поліморфізму] (https://uk.wikipedia.org/wiki/Ad_hoc_поліморфізм) - обробка аргументів залежно від їх типу або, як в нашому випадку - від значення `length`. Ця ідея має застосування в бібліотеках JavaScript.
 
-## Custom properties
+## Користувацькі властивості
 
-We can also add properties of our own.
+Ми також можемо додати свої власні властивості.
 
-Here we add the `counter` property to track the total calls count:
+Давайте додамо властивість `counter` для відстеження загальної кількості викликів:
 
 ```js run
 function sayHi() {
   alert("Hi");
 
   *!*
-  // let's count how many times we run
+  // давайте порахуємо, скільки викликів ми зробили
   sayHi.counter++;
   */!*
 }
-sayHi.counter = 0; // initial value
+sayHi.counter = 0; // початкове значення
 
 sayHi(); // Hi
 sayHi(); // Hi
 
-alert( `Called ${sayHi.counter} times` ); // Called 2 times
+alert( `Called ${sayHi.counter} times` ); // Викликана 2 рази
 ```
 
-```warn header="A property is not a variable"
-A property assigned to a function like `sayHi.counter = 0` does *not* define a local variable `counter` inside it. In other words, a property `counter` and a variable `let counter` are two unrelated things.
+```warn header="Властивість не є змінною"
+Властивість функції, призначена як `sayHi.counter = 0`, не оголошує * локальну змінну` counter` всередині неї. Іншими словами, властивість `counter` і змінна` let counter` - це дві незалежні речі.
 
-We can treat a function as an object, store properties in it, but that has no effect on its execution. Variables are not function properties and vice versa. These are just parallel worlds.
+Ми можемо використовувати функцію як об'єкт, зберігати в ній властивості, але вони ніяк не впливають на її виконання. Змінні - це не властивості функції і навпаки. Це два паралельні світи.
 ```
 
-Function properties can replace closures sometimes. For instance, we can rewrite the counter function example from the chapter <info:closure> to use a function property:
+Іноді властивості функції можуть використовуватися замість замикань. Наприклад, ми можемо переписати функцію-лічильник з голови <info:closure>, використовуючи її властивість:
 
 ```js run
 function makeCounter() {
-  // instead of:
+  // замість:
   // let count = 0
 
   function counter() {
@@ -177,11 +179,11 @@ alert( counter() ); // 0
 alert( counter() ); // 1
 ```
 
-The `count` is now stored in the function directly, not in its outer Lexical Environment.
+Властивість `count` тепер зберігається прямо в функції, а не в її зовнішньому лексичному оточенні.
 
-Is it better or worse than using a closure?
+Це гірше або краще, ніж використовувати замикання?
 
-The main difference is that if the value of `count` lives in an outer variable, then external code is unable to access it. Only nested functions may modify it. And if it's bound to a function, then such a thing is possible:
+Основна відмінність в тому, що якщо значення `count` живе у зовнішній змінній, то воно не доступно для зовнішнього коду. Змінити його можуть тільки вкладені функції. А якщо воно присвоєно як властивість функції, то ми можемо його отримати:
 
 ```js run
 function makeCounter() {
@@ -203,13 +205,13 @@ alert( counter() ); // 10
 */!*
 ```
 
-So the choice of implementation depends on our aims.
+Тому вибір реалізації залежить від наших цілей.
 
 ## Named Function Expression
 
-Named Function Expression, or NFE, is a term for Function Expressions that have a name.
+Named Function Expression, або NFE -- це термін для Function Expressions який має ім'я.
 
-For instance, let's take an ordinary Function Expression:
+Наприклад, давайте об'явимо Function Expression:
 
 ```js
 let sayHi = function(who) {
@@ -217,7 +219,7 @@ let sayHi = function(who) {
 };
 ```
 
-And add a name to it:
+І присвоїмо йому ім'я:
 
 ```js
 let sayHi = function *!*func*/!*(who) {
@@ -225,13 +227,13 @@ let sayHi = function *!*func*/!*(who) {
 };
 ```
 
-Did we achieve anything here? What's the purpose of that additional `"func"` name?
+Чого ми тут досягли? Яка мета цього додаткового імені `func`?
 
-First let's note, that we still have a Function Expression. Adding the name `"func"` after `function` did not make it a Function Declaration, because it is still created as a part of an assignment expression.
+Для початку зауважимо, що функція все ще задана як Function Expression. Додавання `" func "` після `function` не перетворює оголошення в Function Declaration, тому що воно все ще є частиною виразу присвоювання.
 
-Adding such a name also did not break anything.
+Додавання такого імені нічого не ламає.
 
-The function is still available as `sayHi()`:
+Функція все ще доступна як `sayHi ()`:
 
 ```js run
 let sayHi = function *!*func*/!*(who) {
@@ -241,12 +243,12 @@ let sayHi = function *!*func*/!*(who) {
 sayHi("John"); // Hello, John
 ```
 
-There are two special things about the name `func`, that are the reasons for it:
+Є дві важливі особливості імені `func`, заради якого воно дається:
 
-1. It allows the function to reference itself internally.
-2. It is not visible outside of the function.
+1. Воно дозволяє функції посилатися на себе ж.
+2. Воно не доступна за межами функції.
 
-For instance, the function `sayHi` below calls itself again with `"Guest"` if no `who` is provided:
+Наприклад, нижче функція `sayHi` викликає себе з` "Guest" `, якщо не переданий параметр` who`:
 
 ```js run
 let sayHi = function *!*func*/!*(who) {
@@ -254,21 +256,20 @@ let sayHi = function *!*func*/!*(who) {
     alert(`Hello, ${who}`);
   } else {
 *!*
-    func("Guest"); // use func to re-call itself
+    func("Guest"); // використовує func, щоб знову викликати себе ж
 */!*
   }
 };
 
 sayHi(); // Hello, Guest
 
-// But this won't work:
-func(); // Error, func is not defined (not visible outside of the function)
+// А ось так - не працює:
+func(); // Помилка, func не визначена (недоступна поза функцією)
 ```
 
-Why do we use `func`? Maybe just use `sayHi` for the nested call?
+Чому ми використовуємо `func`? Чому просто не використовувати `sayHi` для вкладеного виклику?
 
-
-Actually, in most cases we can:
+Взагалі, зазвичай ми можемо вчинити так:
 
 ```js
 let sayHi = function(who) {
@@ -282,7 +283,7 @@ let sayHi = function(who) {
 };
 ```
 
-The problem with that code is that `sayHi` may change in the outer code. If the function gets assigned to another variable instead, the code will start to give errors:
+Однак, у цього коду є проблема, яка полягає в тому, що значення `sayHi` може бути змінено. Функція може бути присвоєна іншій змінній, і тоді код почне видавати помилки:
 
 ```js run
 let sayHi = function(who) {
@@ -290,7 +291,7 @@ let sayHi = function(who) {
     alert(`Hello, ${who}`);
   } else {
 *!*
-    sayHi("Guest"); // Error: sayHi is not a function
+    sayHi("Guest"); // Помилка: sayHi не є функцією
 */!*
   }
 };
@@ -298,14 +299,14 @@ let sayHi = function(who) {
 let welcome = sayHi;
 sayHi = null;
 
-welcome(); // Error, the nested sayHi call doesn't work any more!
+welcome(); // Помилка, вкладений виклик sayHi більше не працює!
 ```
 
-That happens because the function takes `sayHi` from its outer lexical environment. There's no local `sayHi`, so the outer variable is used. And at the moment of the call that outer `sayHi` is `null`.
+Так відбувається, тому що функція бере `sayHi` з зовнішнього лексичного оточення. Так як локальна змінна `sayHi` відсутня, використовується зовнішня. І на момент виклику ця зовнішня `sayHi` дорівнює` null`.
 
-The optional name which we can put into the Function Expression is meant to solve exactly these kinds of problems.
+Необов'язкове ім'я, яке можна вставити в Function Expression, якраз і покликане вирішувати такого роду проблеми.
 
-Let's use it to fix our code:
+Давайте використаємо його, щоб виправити наш код:
 
 ```js run
 let sayHi = function *!*func*/!*(who) {
@@ -313,7 +314,7 @@ let sayHi = function *!*func*/!*(who) {
     alert(`Hello, ${who}`);
   } else {
 *!*
-    func("Guest"); // Now all fine
+    func("Guest"); // Тепер все у порядку
 */!*
   }
 };
@@ -321,33 +322,33 @@ let sayHi = function *!*func*/!*(who) {
 let welcome = sayHi;
 sayHi = null;
 
-welcome(); // Hello, Guest (nested call works)
+welcome(); // Hello, Guest (вкладений виклик працює)
 ```
 
-Now it works, because the name `"func"` is function-local. It is not taken from outside (and not visible there). The specification guarantees that it will always reference the current function.
+Тепер все працює, тому що ім'я `" func "` локальне і знаходиться всередині функції. Тепер воно взято не зовні (і недоступно звідти). Специфікація гарантує, що воно завжди буде посилатися на поточну функцію.
 
-The outer code still has it's variable `sayHi` or `welcome`. And `func` is an "internal function name", how the function can call itself internally.
+Зовнішній код все ще містить змінні `sayHi` і` welcome`, але тепер `func` - це" внутрішнє ім'я функції ", таким чином вона може викликати себе зсередини.
 
-```smart header="There's no such thing for Function Declaration"
-The "internal name" feature described here is only available for Function Expressions, not for Function Declarations. For Function Declarations, there is no syntax for adding an "internal" name.
+```smart header =" Це не працює з Function Declaration "
+Трюк з "внутрішнім" ім'ям, описаний вище, працює тільки для Function Expression і *не* працює для Function Declaration. Для Function Declaration синтаксис не передбачає можливість оголосити додаткове "внутрішнє" ім'я.
 
-Sometimes, when we need a reliable internal name, it's the reason to rewrite a Function Declaration to Named Function Expression form.
+Найчастіше, коли нам потрібно надійне "внутрішнє" ім'я, варто переписати Function Declaration на Named Function Expression.
 ```
 
-## Summary
+## Підсумок
 
-Functions are objects.
+Функції -- це об'єкти.
 
-Here we covered their properties:
+Їх властивості:
 
-- `name` -- the function name. Usually taken from the function definition, but if there's none, JavaScript tries to guess it from the context (e.g. an assignment).
-- `length` -- the number of arguments in the function definition. Rest parameters are not counted.
+- `name` - ім'я функції. Зазвичай береться з оголошення функції, але якщо там немає - JavaScript намагається зрозуміти його з контексту.
+- `length` - кількість аргументів на оголошенні функції. Три крапки ("залишкові параметри") не рахуються.
 
-If the function is declared as a Function Expression (not in the main code flow), and it carries the name, then it is called a Named Function Expression. The name can be used inside to reference itself, for recursive calls or such.
+Якщо функція оголошена як Function Expression (поза основним потоком коду) і має ім'я, тоді це називається Named Function Expression. Це ім'я може бути використано для посилання на себе ж, для рекурсивних викликів і т.п.
 
-Also, functions may carry additional properties. Many well-known JavaScript libraries make great use of this feature.
+Також функції можуть містити додаткові властивості. Багато відомих JavaScript-бібліотек майстерно використовують цю можливість.
 
-They create a "main" function and attach many other "helper" functions to it. For instance, the [jQuery](https://jquery.com) library creates a function named `$`. The [lodash](https://lodash.com) library creates a function `_`, and then adds `_.clone`, `_.keyBy` and other properties to it (see the [docs](https://lodash.com/docs) when you want learn more about them). Actually, they do it to lessen their pollution of the global space, so that a single library gives only one global variable. That reduces the possibility of naming conflicts.
+Вони створюють "основну" функцію і додають безліч "допоміжних" функцій всередину першої. Наприклад, бібліотека [jQuery] (https://jquery.com) створює функцію з ім'ям `$`. Бібліотека [lodash] (https://lodash.com) створює функцію `_`, а потім додає в неї` _.clone`, `_.keyBy` і інші властивості (щоб дізнатися про неї більше див. [Документацію] ( https://lodash.com/docs)). Вони роблять це, щоб зменшити засмічення глобального простору імен за допомогою того, що одна бібліотека надає тільки одну глобальну змінну, зменшуючи ймовірність конфлікту імен.
 
 
-So, a function can do a useful job by itself and also carry a bunch of other functionality in properties.
+Таким чином, функція може не тільки робити щось сама по собі, але також і надавати корисну функціональність через свої властивості.

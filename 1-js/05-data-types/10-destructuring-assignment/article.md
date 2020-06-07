@@ -1,44 +1,43 @@
 # Destructuring assignment
+Дві найбільш часто використовувані структури даних в JavaScript - це Objectі Array.
 
-The two most used data structures in JavaScript are `Object` and `Array`.
+Об'єкти дозволяють нам створювати єдиний об'єкт, який зберігає елементи даних по ключам, а масиви дозволяють нам збирати елементи даних в впорядковану колекцію.
 
-Objects allow us to create a single entity that stores data items by key, and arrays allow us to gather data items into an ordered collection.
+Але коли ми передаємо їх функції, їй може знадобитися не об'єкт / масив в цілому, а окремі частини.
 
-But when we pass those to a function, it may need not an object/array as a whole, but rather individual pieces.
-
-*Destructuring assignment* is a special syntax that allows us to "unpack" arrays or objects into a bunch of variables, as sometimes that's more convenient. Destructuring also works great with complex functions that have a lot of parameters, default values, and so on.
+Руйнівна присвоювання - це спеціальний синтаксис, який дозволяє нам «розпаковувати» масиви або об'єкти в купу змінних, що іноді буває зручніше. Руйнування також прекрасно працює зі складними функціями, які мають багато параметрів, значень за замовчуванням і так далі.
 
 ## Array destructuring
 
-An example of how the array is destructured into variables:
+Приклад того, як масив розбитий на змінні:
 
-```js
-// we have an array with the name and surname
+// у нас є масив з ім'ям і прізвищем
+
 let arr = ["Ilya", "Kantor"]
 
 *!*
-// destructuring assignment
-// sets firstName = arr[0]
-// and surname = arr[1]
+// деструктурірующее призначення
+// встановлює firstName = arr[0]
+// і прізвище = arr[1]
 let [firstName, surname] = arr;
 */!*
 
-alert(firstName); // Ilya
+alert(firstName); // Илья
 alert(surname);  // Kantor
 ```
 
-Now we can work with variables instead of array members.
+Тепер ми можемо працювати зі змінними замість членів масиву.
 
-It looks great when combined with `split` or other array-returning methods:
+Він відмінно виглядає в поєднанні з splitілі іншими методами, які повертають масив:
 
-```js
+`` `Js
 let [firstName, surname] = "Ilya Kantor".split(' ');
 ```
 
 ````smart header="\"Destructuring\" does not mean \"destructive\"."
-It's called "destructuring assignment," because it "destructurizes" by copying items into variables. But the array itself is not modified.
+Це називається «деструктурірующім привласненням», тому що воно «деструктурірует» шляхом копіювання елементів в змінні. Але сам масив не змінюється.
 
-It's just a shorter way to write:
+Це просто більш короткий спосіб написати:
 ```js
 // let [firstName, surname] = arr;
 let firstName = arr[0];
@@ -47,24 +46,22 @@ let surname = arr[1];
 ````
 
 ````smart header="Ignore elements using commas"
-Unwanted elements of the array can also be thrown away via an extra comma:
-
+Небажані елементи масиву також можуть бути викинуті через кому:
 ```js run
 *!*
-// second element is not needed
+// другий елемент не потрібен
 let [firstName, , title] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 */!*
 
 alert( title ); // Consul
 ```
 
-In the code above, the second element of the array is skipped, the third one is assigned to `title`, and the rest of the array items is also skipped (as there are no variables for them).
-````
+У наведеному вище коді другий елемент масиву пропущений, третій елемент призначений на `title`, а інші елементи масиву також пропущені (оскільки для них немає змінних).
+`` ``
 
 ````smart header="Works with any iterable on the right-side"
 
-...Actually, we can use it with any iterable, not only arrays:
-
+...Насправді, ми можемо використовувати його з будь-якими повторюваними, не тільки масивами:
 ```js
 let [a, b, c] = "abc"; // ["a", "b", "c"]
 let [one, two, three] = new Set([1, 2, 3]);
@@ -75,9 +72,9 @@ let [one, two, three] = new Set([1, 2, 3]);
 
 ````smart header="Assign to anything at the left-side"
 
-We can use any "assignables" at the left side.
+Ми можемо використовувати будь-які «призначаються об'єкти» на лівій стороні.
 
-For instance, an object property:
+Наприклад, властивість об'єкта:
 ```js run
 let user = {};
 [user.name, user.surname] = "Ilya Kantor".split(' ');
@@ -89,17 +86,16 @@ alert(user.name); // Ilya
 
 ````smart header="Looping with .entries()"
 
-In the previous chapter we saw the [Object.entries(obj)](mdn:js/Object/entries) method.
+У попередньому розділі ми бачили метод [Object.entries (obj)] (mdn: js / Object / records).
 
-We can use it with destructuring to loop over keys-and-values of an object:
-
-```js run
+Ми можемо використовувати його з деструктуризація для циклічного перебору ключів і значень об'єкта:
+`` `Js run
 let user = {
   name: "John",
   age: 30
 };
 
-// loop over keys-and-values
+// цикл по ключам і значенням
 *!*
 for (let [key, value] of Object.entries(user)) {
 */!*
@@ -107,7 +103,7 @@ for (let [key, value] of Object.entries(user)) {
 }
 ```
 
-...And the same for a map:
+...І те ж саме для карти:
 
 ```js run
 let user = new Map();
@@ -123,8 +119,7 @@ for (let [key, value] of user) {
 ````
 ### The rest '...'
 
-If we want not just to get first values, but also to gather all that follows -- we can add one more parameter that gets "the rest" using three dots `"..."`:
-
+Якщо ми хочемо не просто отримати перші значення, а й зібрати все, що слід, - ми можемо додати ще один параметр, який отримує «інше», використовуючи три точки `" ... "`:
 ```js run
 let [name1, name2, *!*...rest*/!*] = ["Julius", "Caesar", *!*"Consul", "of the Roman Republic"*/!*];
 
@@ -132,19 +127,17 @@ alert(name1); // Julius
 alert(name2); // Caesar
 
 *!*
-// Note that type of `rest` is Array.
+// Зверніть увагу, що типом `rest` є Array.
 alert(rest[0]); // Consul
 alert(rest[1]); // of the Roman Republic
 alert(rest.length); // 2
 */!*
 ```
 
-The value of `rest` is the array of the remaining array elements. We can use any other variable name in place of `rest`, just make sure it has three dots before it and goes last in the destructuring assignment.
-
+Значення `rest` - це масив елементів, що залишилися масиву. Ми можемо використовувати будь-яке інше ім'я змінної замість `rest`, просто переконайтеся, що перед ним три точки і воно йде останнім в призначенні деструктуризации.
 ### Default values
 
-If there are fewer values in the array than variables in the assignment, there will be no error. Absent values are considered undefined:
-
+Якщо в масиві менше значень, ніж змінних в привласненні, помилки не буде. Відсутні значення вважаються невизначеними:
 ```js run
 *!*
 let [firstName, surname] = [];
@@ -154,8 +147,7 @@ alert(firstName); // undefined
 alert(surname); // undefined
 ```
 
-If we want a "default" value to replace the missing one, we can provide it using `=`:
-
+Якщо ми хочемо, щоб значення «за замовчуванням» замінило відсутнє, ми можемо надати його за допомогою `=`:
 ```js run
 *!*
 // default values
@@ -166,10 +158,9 @@ alert(name);    // Julius (from array)
 alert(surname); // Anonymous (default used)
 ```
 
-Default values can be more complex expressions or even function calls. They are evaluated only if the value is not provided.
+Значення за замовчуванням можуть бути більш складними виразами або навіть викликами функцій. Вони оцінюються, тільки якщо значення не вказано.
 
-For instance, here we use the `prompt` function for two defaults. But it will run only for the missing one:
-
+Наприклад, тут ми використовуємо функцію `prompt` для двох значень за замовчуванням. Але він буде працювати тільки для зниклого:
 ```js run
 // runs only prompt for surname
 let [name = prompt('name?'), surname = prompt('surname?')] = ["Julius"];
@@ -182,16 +173,15 @@ alert(surname); // whatever prompt gets
 
 ## Object destructuring
 
-The destructuring assignment also works with objects.
+Призначення деструктурірованіе також працює з об'єктами.
 
-The basic syntax is:
+Основний синтаксис:
 
 ```js
 let {var1, var2} = {var1:…, var2:…}
 ```
 
-We have an existing object at the right side, that we want to split into variables. The left side contains a "pattern" for corresponding properties. In the simple case, that's a list of variable names in `{...}`.
-
+У нас є існуючий об'єкт з правого боку, який ми хочемо розділити на змінні. Ліва сторона містить «шаблон» для відповідних властивостей. У простому випадку це список імен змінних в `{...}`.
 For instance:
 
 ```js run
@@ -210,17 +200,16 @@ alert(width);  // 100
 alert(height); // 200
 ```
 
-Properties `options.title`, `options.width` and `options.height` are assigned to the corresponding variables. The order does not matter. This works too:
+Властивості `options.title`,` options.width` і `options.height` присвоюються відповідним змінним. Порядок не має значення. Це теж працює:
 
-```js
-// changed the order in let {...}
+`` `JS
+// змінив порядок вlet {...}
 let {height, width, title} = { title: "Menu", height: 200, width: 100 }
 ```
 
-The pattern on the left side may be more complex and specify the mapping between properties and variables.
+Шаблон з лівого боку може бути більш складним і визначати відповідність між властивостями і змінними.
 
-If we want to assign a property to a variable with another name, for instance, `options.width` to go into the variable named `w`, then we can set it using a colon:
-
+Якщо ми хочемо привласнити властивість змінної з іншим ім'ям, наприклад, `options.width`, щоб перейти в змінну з іменем` w`, то ми можемо встановити його за допомогою двокрапки:
 ```js run
 let options = {
   title: "Menu",
@@ -242,10 +231,9 @@ alert(w);      // 100
 alert(h);      // 200
 ```
 
-The colon shows "what : goes where". In the example above the property `width` goes to `w`, property `height` goes to `h`, and `title` is assigned to the same name.
+Двокрапка показує «що: куди йде». У наведеному вище прикладі властивість `width` переходить К` w`, властивість` height` переходить К` h`, а для `title` присвоюється той же ім'я.
 
-For potentially missing properties we can set default values using `"="`, like this:
-
+Для потенційно відсутніх властивостей ми можемо встановити значення за замовчуванням, використовуючи `" = "`, наприклад так:
 ```js run
 let options = {
   title: "Menu"
@@ -260,9 +248,9 @@ alert(width);  // 100
 alert(height); // 200
 ```
 
-Just like with arrays or function parameters, default values can be any expressions or even function calls. They will be evaluated if the value is not provided.
+Як і в разі масивів або параметрів функцій, значеннями за замовчуванням можуть бути будь-які вирази або навіть виклики функцій. Вони будуть оцінені, якщо значення не вказано.
 
-In the code below `prompt` asks for `width`, but not for `title`:
+У наведеному нижче коді `prompt` запрашівает` width`, але не для` title`:
 
 ```js run
 let options = {
@@ -277,7 +265,7 @@ alert(title);  // Menu
 alert(width);  // (whatever the result of prompt is)
 ```
 
-We also can combine both the colon and equality:
+Ми також можемо об'єднати двокрапка і рівність:
 
 ```js run
 let options = {
@@ -293,8 +281,7 @@ alert(w);      // 100
 alert(h);      // 200
 ```
 
-If we have a complex object with many properties, we can extract only what we need:
-
+Якщо у нас є складний об'єкт з багатьма властивостями, ми можемо витягти тільки те, що нам потрібно:
 ```js run
 let options = {
   title: "Menu",
@@ -310,12 +297,11 @@ alert(title); // Menu
 
 ### The rest pattern "..."
 
-What if the object has more properties than we have variables? Can we take some and then assign the "rest" somewhere?
+Що якщо об'єкт має більше властивостей, ніж у нас є змінні? Чи можемо ми взяти трохи, а потім призначити «відпочинок» де-небудь?
 
-We can use the rest pattern, just like we did with arrays. It's not supported by some older browsers (IE, use Babel to polyfill it), but works in modern ones.
+Ми можемо використовувати шаблон відпочинку так само, як і з масивами. Він не підтримується деякими старими браузерами (наприклад, для його заповнення використовується Babel), але працює в сучасних.
 
-It looks like this:
-
+Це виглядає так:
 ```js run
 let options = {
   title: "Menu",
@@ -335,9 +321,9 @@ alert(rest.width);   // 100
 ```
 
 ````smart header="Gotcha if there's no `let`"
-In the examples above variables were declared right in the assignment: `let {…} = {…}`. Of course, we could use existing variables too, without `let`. But there's a catch.
+У наведених вище прикладах змінні були оголошені прямо в присвоєнні: `let {...} = {...}`. Звичайно, ми можемо використовувати і існуючі змінні без `let`. Але є підступ.
 
-This won't work:
+Це не спрацює:
 ```js run
 let title, width, height;
 
@@ -345,25 +331,24 @@ let title, width, height;
 {title, width, height} = {title: "Menu", width: 200, height: 100};
 ```
 
-The problem is that JavaScript treats `{...}` in the main code flow (not inside another expression) as a code block. Such code blocks can be used to group statements, like this:
-
+Проблема полягає в тому, що JavaScript трактує `{...}` в основному потоці коду (не всередині іншого виразу) як блок коду. Такі блоки коду можуть бути використані для групування операторів, таких як:
 ```js run
 {
-  // a code block
+  // блок кода
   let message = "Hello";
   // ...
   alert( message );
 }
 ```
 
-So here JavaScript assumes that we have a code block, that's why there's an error. We want destructuring instead.
+Тут JavaScript передбачає наявність блоку коду, тому виникає помилка. Ми хочемо натомість деструктуріровать.
 
-To show JavaScript that it's not a code block, we can wrap the expression in parentheses `(...)`:
+Щоб показати JavaScript, що це не блок коду, ми можемо зробити висновок вираз в дужки `(...)`:
 
 ```js run
 let title, width, height;
 
-// okay now
+// хорошо сейчас
 *!*(*/!*{title, width, height} = {title: "Menu", width: 200, height: 100}*!*)*/!*;
 
 alert( title ); // Menu
@@ -372,10 +357,9 @@ alert( title ); // Menu
 
 ## Nested destructuring
 
-If an object or an array contain other nested objects and arrays, we can use more complex left-side patterns to extract deeper portions.
+Якщо об'єкт або масив містять інші вкладені об'єкти і масиви, ми можемо використовувати більш складні ліві шаблони для вилучення глибших частин.
 
-In the code below `options` has another object in the property `size` and an array in the property `items`. The pattern at the left side of the assignment has the same structure to extract values from them:
-
+У наведеному нижче коді `options` має інший об'єкт в свойстве` size` і масив у властивості` items`. Шаблон в лівій частині призначення має ту ж структуру для вилучення значень з них:
 ```js run
 let options = {
   size: {
@@ -386,14 +370,14 @@ let options = {
   extra: true   
 };
 
-// destructuring assignment split in multiple lines for clarity
+// деструктуризація призначення розбита на кілька рядків для ясності
 let {
-  size: { // put size here
+  size: { // вкажіть розмір тут
     width,
     height
   },
-  items: [item1, item2], // assign items here
-  title = "Menu" // not present in the object (default value is used)
+  items: [item1, item2], // призначити предмети тут
+  title = "Menu" // відсутня в об'єкті (використовується значення за замовчуванням)
 } = options;
 
 alert(title);  // Menu
@@ -403,61 +387,56 @@ alert(item1);  // Cake
 alert(item2);  // Donut
 ```
 
-All properties of `options` object except `extra` that is absent in the left part, are assigned to corresponding variables:
-
+Всі властивості об'єкта `options` кроме` extra`, відсутнього в лівій частині, присвоюються відповідним змінним:
 ![](destructuring-complex.svg)
 
-Finally, we have `width`, `height`, `item1`, `item2` and `title` from the default value.
+Нарешті, у нас є `width`,` height`, `item1`,` item2` і `title` з значення за замовчуванням.
 
-Note that there are no variables for `size` and `items`, as we take their content instead.
-
+Зверніть увагу, що для `size` і` items` немає змінних, так як замість них ми беремо їх вміст.
 ## Smart function parameters
 
-There are times when a function has many parameters, most of which are optional. That's especially true for user interfaces. Imagine a function that creates a menu. It may have a width, a height, a title, items list and so on.
+Є моменти, коли функція має багато параметрів, більшість з яких є необов'язковими. Це особливо вірно для призначених для користувача інтерфейсів. Уявіть собі функцію, яка створює меню. Він може мати ширину, висоту, заголовок, список елементів і так далі.
 
-Here's a bad way to write such function:
-
+Ось поганий спосіб написати таку функцію:
 ```js
 function showMenu(title = "Untitled", width = 200, height = 100, items = []) {
   // ...
 }
 ```
 
-In real-life, the problem is how to remember the order of arguments. Usually IDEs try to help us, especially if the code is well-documented, but still... Another problem is how to call a function when most parameters are ok by default.
+У реальному житті проблема полягає в тому, як запам'ятати порядок аргументів. Зазвичай IDE намагаються нам допомогти, особливо якщо код добре документований, але все ж ... Інша проблема - як викликати функцію, коли більшість параметрів в порядку за замовчуванням.
 
-Like this?
+Подобається?
 
 ```js
-// undefined where default values are fine
+// невизначено, де значення за замовчуванням є нормальними
 showMenu("My Menu", undefined, undefined, ["Item1", "Item2"])
 ```
 
-That's ugly. And becomes unreadable when we deal with more parameters.
+Це бридко І стає нечитабельним, коли ми маємо справу з великою кількістю параметрів.
 
-Destructuring comes to the rescue!
+На допомогу приходить руйнування!
 
-We can pass parameters as an object, and the function immediately destructurizes them into variables:
-
+Ми можемо передати параметри як об'єкт, і функція негайно розкладе їх на змінні:
 ```js run
-// we pass object to function
+// ми передаємо об’єкт у функцію
 let options = {
   title: "My menu",
   items: ["Item1", "Item2"]
 };
 
-// ...and it immediately expands it to variables
+// ...і він відразу ж розширює його до змінних
 function showMenu(*!*{title = "Untitled", width = 200, height = 100, items = []}*/!*) {
   // title, items – taken from options,
   // width, height – defaults used
-  alert( `${title} ${width} ${height}` ); // My Menu 200 100
+  alert( `${title} ${width} ${height}` ); // Мое меню 200 100
   alert( items ); // Item1, Item2
 }
 
 showMenu(options);
 ```
 
-We can also use more complex destructuring with nested objects and colon mappings:
-
+Ми також можемо використовувати більш складну деструктуризація з вкладеними об'єктами і відображеннями двокрапки:
 ```js run
 let options = {
   title: "My menu",
@@ -469,7 +448,7 @@ function showMenu({
   title = "Untitled",
   width: w = 100,  // width goes to w
   height: h = 200, // height goes to h
-  items: [item1, item2] // items first element goes to item1, second to item2
+  items: [item1, item2] // items перший елемент переходить в item1, другий в item2
 }) {
 */!*
   alert( `${title} ${w} ${h}` ); // My Menu 100 200
@@ -480,7 +459,7 @@ function showMenu({
 showMenu(options);
 ```
 
-The full syntax is the same as for a destructuring assignment:
+Повний синтаксис такий же, як і для деструктурірующего присвоювання:
 ```js
 function({
   incomingProperty: varName = defaultValue
@@ -488,18 +467,16 @@ function({
 })
 ```
 
-Then, for an object of parameters, there will be a variable `varName` for property `incomingProperty`, with `defaultValue` by default.
+Потім, для об'єкта параметрів, буде мінлива `varName` для свойства` InputProperty`, з` defaultValue` за замовчуванням.
 
-Please note that such destructuring assumes that `showMenu()` does have an argument. If we want all values by default, then we should specify an empty object:
-
+Зверніть увагу, що така деструктуризація передбачає, що у showMenu () є аргумент. Якщо нам потрібні всі значення за замовчуванням, то нам слід вказати порожній об'єкт:
 ```js
-showMenu({}); // ok, all values are default
+showMenu({}); // ок, усі значення за замовчуванням
 
-showMenu(); // this would give an error
+showMenu(); // це призведе до помилки
 ```
 
-We can fix this by making `{}` the default value for the whole object of parameters:
-
+Ми можемо виправити це, зробивши `{}` значенням за замовчуванням для всього об'єкта параметрів:
 ```js run
 function showMenu({ title = "Menu", width = 100, height = 200 }*!* = {}*/!*) {
   alert( `${title} ${width} ${height}` );
@@ -508,26 +485,24 @@ function showMenu({ title = "Menu", width = 100, height = 200 }*!* = {}*/!*) {
 showMenu(); // Menu 100 200
 ```
 
-In the code above, the whole arguments object is `{}` by default, so there's always something to destructurize.
-
+У наведеному вище коді весь об'єкт arguments за замовчуванням дорівнює `{}`, тому завжди є щось, що можна зруйнувати.
 ## Summary
 
-- Destructuring assignment allows for instantly mapping an object or array onto many variables.
-- The full object syntax:
+- Руйнівна присвоювання дозволяє миттєво відображати об'єкт або масив на безліч змінних.
+- Повний синтаксис об'єкта:
     ```js
     let {prop : varName = default, ...rest} = object
     ```
 
-    This means that property `prop` should go into the variable `varName` and, if no such property exists, then the `default` value should be used.
+   Це означає, що властивість `prop` має входити в переменную` varName` і, якщо такого властивості не існує, слід використовувати значення` default`.
 
-    Object properties that have no mapping are copied to the `rest` object.
+     Властивості об'єкта, які не мають зіставлення, копіюються в об'єкт `rest`.
 
-- The full array syntax:
-
+- Повний синтаксис масиву:
     ```js
     let [item1 = default, item2, ...rest] = array
     ```
 
-    The first item goes to `item1`; the second goes into `item2`, all the rest makes the array `rest`.
+   Перший елемент відправляється в `item1`; друга переходить в `item2`, все інше робить массів` rest`.
 
-- It's possible to extract data from nested arrays/objects, for that the left side must have the same structure as the right one.
+- Можна витягти дані з вкладених масивів / об'єктів, для цього ліва сторона повинна мати ту ж структуру, що і права.

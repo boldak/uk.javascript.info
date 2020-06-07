@@ -1,10 +1,10 @@
-# JSON methods, toJSON
+# Формат JSON, метод toJSON
 
-Let's say we have a complex object, and we'd like to convert it into a string, to send it over a network, or just to output it for logging purposes.
+Скажімо, у нас є складний об’єкт, і ми хотіли б перетворити його в рядок, щоб надіслати його по мережі або просто вивести для логування.
 
-Naturally, such a string should include all important properties.
+Звісно, такий рядок повинен містити всі важливі властивості.
 
-We could implement the conversion like this:
+Ми могли б реалізувати перетворення так:
 
 ```js run
 let user = {
@@ -21,20 +21,20 @@ let user = {
 alert(user); // {name: "John", age: 30}
 ```
 
-...But in the process of development, new properties are added, old properties are renamed and removed. Updating such `toString` every time can become a pain. We could try to loop over properties in it, but what if the object is complex and has nested objects in properties? We'd need to implement their conversion as well.
+...Але в процесі розробки додаються нові властивості, старі властивості перейменовуються і видаляються. Оновлення таких `toString` що разу може стати проблемою. Ми можемо спробувати перебрати властивості в ньому, але що як об'єкт складний і в його властивостях містяться вкладені об'єкти? Нам потрібно було б здійснити їх конверсію також.
 
-Luckily, there's no need to write the code to handle all this. The task has been solved already.
+На щастя, не потрібно писати код, щоб обробити все це. Завдання вже має рішення.
 
 ## JSON.stringify
 
-The [JSON](http://en.wikipedia.org/wiki/JSON) (JavaScript Object Notation) is a general format to represent values and objects. It is described as in [RFC 4627](http://tools.ietf.org/html/rfc4627) standard. Initially it was made for JavaScript, but many other languages have libraries to handle it as well.  So it's easy to use JSON for data exchange when the client uses JavaScript and the server is written on Ruby/PHP/Java/Whatever.
+[JSON](http://uk.wikipedia.org/wiki/JSON) (JavaScript Object Notation) є загальним форматом для представлення значень та об’єктів. Його опис задокументовано в стандарті [RFC 4627](http://tools.ietf.org/html/rfc4627). Спочатку він робився для JavaScript, але багато інших мов також мають бібліотеки, які можуть працювати з ним.  Тому JSON легко використовувати для обміну даними, коли клієнт використовує JavaScript, а сервер написаний на Ruby/PHP/Java або будь-якій іншій мові.
 
-JavaScript provides methods:
+JavaScript надає методи:
 
-- `JSON.stringify` to convert objects into JSON.
-- `JSON.parse` to convert JSON back into an object.
+- `JSON.stringify` для перетворення об’єктів у JSON.
+- `JSON.parse` для перетворення JSON назад в об’єкт.
 
-For instance, here we `JSON.stringify` a student:
+Наприклад, тут ми перетворимо через `JSON.stringify` дані студента:
 ```js run
 let student = {
   name: 'John',
@@ -48,11 +48,11 @@ let student = {
 let json = JSON.stringify(student);
 */!*
 
-alert(typeof json); // we've got a string!
+alert(typeof json); // ми отримали рядок!
 
 alert(json);
 *!*
-/* JSON-encoded object:
+/* виведе об’єкт в форматі JSON:
 {
   "name": "John",
   "age": 30,
@@ -64,35 +64,35 @@ alert(json);
 */!*
 ```
 
-The method `JSON.stringify(student)` takes the object and converts it into a string.
+Метод `JSON.stringify(student)` бере об’єкт і перетворює його в рядок.
 
-The resulting `json` string is called a *JSON-encoded* or *serialized* or *stringified* or *marshalled* object. We are ready to send it over the wire or put into a plain data store.
+Отриманий рядок `json` зветься *JSON-форматований* або *серіалізований* об'єкт. Ми готові надіслати його по мережі або помістити в звичайне сховище даних.
 
 
-Please note that a JSON-encoded object has several important differences from the object literal:
+Зауважте, що JSON-encoded об’єкт має кілька важливих відмінностей від об’єктного літерала:
 
-- Strings use double quotes. No single quotes or backticks in JSON. So `'John'` becomes `"John"`.
-- Object property names are double-quoted also. That's obligatory. So `age:30` becomes `"age":30`.
+- Рядки використовують подвійні лапки. У JSON немає жодних одинарних чи зворотних лапок. Тому `'John'` стає `"John"`.
+- Імена властивостей об’єкта також у подвійних лапках. Це обов’язково. Тому `age:30` стає `"age":30`.
 
-`JSON.stringify` can be applied to primitives as well.
+`JSON.stringify` може застосовуватись і до примітивів.
 
-JSON supports following data types:
+JSON підтримує наступні типи даних:
 
-- Objects `{ ... }`
-- Arrays `[ ... ]`
-- Primitives:
-    - strings,
-    - numbers,
-    - boolean values `true/false`,
+- Об’єкти `{ ... }`
+- Масиви `[ ... ]`
+- Примітиви:
+    - рядки,
+    - числа,
+    - булеві значення `true/false`,
     - `null`.
 
-For instance:
+Наприклад:
 
 ```js run
-// a number in JSON is just a number
+// число в JSON залишається числом
 alert( JSON.stringify(1) ) // 1
 
-// a string in JSON is still a string, but double-quoted
+// рядок у JSON все ще є рядком, але у подвійних лапках
 alert( JSON.stringify('test') ) // "test"
 
 alert( JSON.stringify(true) ); // true
@@ -100,31 +100,31 @@ alert( JSON.stringify(true) ); // true
 alert( JSON.stringify([1, 2, 3]) ); // [1,2,3]
 ```
 
-JSON is data-only language-independent specification, so some JavaScript-specific object properties are skipped by `JSON.stringify`.
+JSON є не залежною від мови специфікацєю для даних, тому `JSON.stringify` пропускає деякі специфічні властивості об'єктів JavaScript.
 
-Namely:
+А саме:
 
-- Function properties (methods).
-- Symbolic properties.
-- Properties that store `undefined`.
+- Властивості-функції (методи).
+- Символічні властивості.
+- Властивості, які зберігають `undefined`.
 
 ```js run
 let user = {
-  sayHi() { // ignored
+  sayHi() { // ігнорується
     alert("Hello");
   },
-  [Symbol("id")]: 123, // ignored
-  something: undefined // ignored
+  [Symbol("id")]: 123, // ігнорується
+  something: undefined // ігнорується
 };
 
-alert( JSON.stringify(user) ); // {} (empty object)
+alert( JSON.stringify(user) ); // {} (порожній об’єкт)
 ```
 
-Usually that's fine. If that's not what we want, then soon we'll see how to customize the process.
+Зазвичай це нормально. Якщо це не те, що ми хочемо, то незабаром ми побачимо, як налаштувати процес.
 
-The great thing is that nested objects are supported and converted automatically.
+Чудова річ, що вкладені об’єкти підтримуються та перетворюються автоматично.
 
-For instance:
+Наприклад:
 
 ```js run
 let meetup = {
@@ -138,7 +138,7 @@ let meetup = {
 };
 
 alert( JSON.stringify(meetup) );
-/* The whole structure is stringified:
+/* Вся структура преретворена в рядок:
 {
   "title":"Conference",
   "room":{"number":23,"participants":["john","ann"]},
@@ -146,9 +146,9 @@ alert( JSON.stringify(meetup) );
 */
 ```
 
-The important limitation: there must be no circular references.
+Важливе обмеження: не повинно бути кругових посилань.
 
-For instance:
+Наприклад:
 
 ```js run
 let room = {
@@ -160,41 +160,41 @@ let meetup = {
   participants: ["john", "ann"]
 };
 
-meetup.place = room;       // meetup references room
-room.occupiedBy = meetup; // room references meetup
+meetup.place = room;       // meetup посилається на room
+room.occupiedBy = meetup; // room посилається на meetup
 
 *!*
-JSON.stringify(meetup); // Error: Converting circular structure to JSON
+JSON.stringify(meetup); // Помилка: Перетворення кругової структури у JSON
 */!*
 ```
 
-Here, the conversion fails, because of circular reference: `room.occupiedBy` references `meetup`, and `meetup.place` references `room`:
+Тут конверсія не вдається через кругові посилання: `room.occupiedBy` посилається на `meetup`, і `meetup.place` посилається на `room`:
 
 ![](json-meetup.svg)
 
 
-## Excluding and transforming: replacer
+## Виключаєм та перетворюємо: replacer
 
-The full syntax of `JSON.stringify` is:
+Повний синтаксис `JSON.stringify`:
 
 ```js
 let json = JSON.stringify(value[, replacer, space])
 ```
 
 value
-: A value to encode.
+: Значення для кодування.
 
 replacer
-: Array of properties to encode or a mapping function `function(key, value)`.
+: Масив властивостей для кодування або функції відображення `function(key, value)`.
 
 space
-: Amount of space to use for formatting
+: Кількість місця, яке буде використано для форматування
 
-Most of the time, `JSON.stringify` is used with the first argument only. But if we need to fine-tune the replacement process, like to filter out circular references, we can use the second argument of `JSON.stringify`.
+У більшості випадків, `JSON.stringify` використовується лише з першим аргументом. Але якщо нам потрібно налагодити процес заміни, як от відфільтрувати кругові посилання, ми можемо використовувати другий аргумент `JSON.stringify`.
 
-If we pass an array of properties to it, only these properties will be encoded.
+Якщо ми передамо йому масив властивостей, кодуються лише ці властивості.
 
-For instance:
+Наприклад:
 
 ```js run
 let room = {
@@ -204,18 +204,18 @@ let room = {
 let meetup = {
   title: "Conference",
   participants: [{name: "John"}, {name: "Alice"}],
-  place: room // meetup references room
+  place: room // meetup посилається на room
 };
 
-room.occupiedBy = meetup; // room references meetup
+room.occupiedBy = meetup; // room посилається на meetup
 
 alert( JSON.stringify(meetup, *!*['title', 'participants']*/!*) );
 // {"title":"Conference","participants":[{},{}]}
 ```
 
-Here we are probably too strict. The property list is applied to the whole object structure. So the objects in `participants` are empty, because `name` is not in the list.
+Тут ми, мабуть, занадто суворі. Список властивостей застосовується до всієї структури об’єкта. Тож об’єкти в `participants` порожні, оскільки `name` немає в списку.
 
-Let's include in the list every property except `room.occupiedBy` that would cause the circular reference:
+Додамо до списку всі властивості, за винятком `room.occupiedBy` яка призвела б до кругового посилання:
 
 ```js run
 let room = {
@@ -225,10 +225,10 @@ let room = {
 let meetup = {
   title: "Conference",
   participants: [{name: "John"}, {name: "Alice"}],
-  place: room // meetup references room
+  place: room // meetup посилається на room
 };
 
-room.occupiedBy = meetup; // room references meetup
+room.occupiedBy = meetup; // room посилається на meetup
 
 alert( JSON.stringify(meetup, *!*['title', 'participants', 'place', 'name', 'number']*/!*) );
 /*
@@ -240,13 +240,13 @@ alert( JSON.stringify(meetup, *!*['title', 'participants', 'place', 'name', 'num
 */
 ```
 
-Now everything except `occupiedBy` is serialized. But the list of properties is quite long.
+Тепер все, окрім `occupiedBy` серіалізовано. Але перелік властивостей досить довгий.
 
-Fortunately, we can use a function instead of an array as the `replacer`.
+На щастя, в якості `replacer` ми можемо використовувати функцію, а не масив.
 
-The function will be called for every `(key, value)` pair and should return the "replaced" value, which will be used instead of the original one. Or `undefined` if the value is to be skipped.
+Функція буде викликана для кожної пари `(key, value)`, і повинна повернути значення "replaced", яке буде використовуватися замість початкового. Або `undefined`, якщо значення потрібно буде пропустити.
 
-In our case, we can return `value` "as is" for everything except `occupiedBy`. To ignore `occupiedBy`, the code below returns `undefined`:
+У нашому випадку ми можемо повернути `value` "як є" для всього, крім `occupiedBy`. Щоб ігнорувати `occupiedBy`, наведений код нижче повертає `undefined`:
 
 ```js run
 let room = {
@@ -256,17 +256,17 @@ let room = {
 let meetup = {
   title: "Conference",
   participants: [{name: "John"}, {name: "Alice"}],
-  place: room // meetup references room
+  place: room // meetup посилається на room
 };
 
-room.occupiedBy = meetup; // room references meetup
+room.occupiedBy = meetup; // room посилається на meetup
 
 alert( JSON.stringify(meetup, function replacer(key, value) {
   alert(`${key}: ${value}`);
   return (key == 'occupiedBy') ? undefined : value;
 }));
 
-/* key:value pairs that come to replacer:
+/* пари ключ:значення, які приходят в replacer:
 :             [object Object]
 title:        Conference
 participants: [object Object],[object Object]
@@ -279,20 +279,20 @@ number:       23
 */
 ```
 
-Please note that `replacer` function gets every key/value pair including nested objects and array items. It is applied recursively. The value of `this` inside `replacer` is the object that contains the current property.
+Будь ласка, зверніть увагу, що `replacer` функція отримує кожну пару ключ/значення, включаючи вкладені об’єкти та елементи масиву. Вона застосовується рекурсивно. Значення `this` всередині `replacer` - це об’єкт, який містить поточну властивість.
 
-The first call is special. It is made using a special "wrapper object": `{"": meetup}`. In other words, the first `(key, value)` pair has an empty key, and the value is the target object as a whole. That's why the first line is `":[object Object]"` in the example above.
+Перший виклик є особливим. Він виготовляється за допомогою спеціального "wrapper object": `{"": meetup}`. Іншими словами, перша `(key, value)` пара має порожній ключ, а значенням є цільовим об’єктом у цілому. Ось чому перший рядок з прикладу вище буде `":[object Object]"`.
 
-The idea is to provide as much power for `replacer` as possible: it has a chance to analyze and replace/skip even the whole object if necessary.
+Ідея полягає в тому, щоб дати якомога більше можливостей для `replacer` - у нього є можливість проаналізувати і замінити/пропустити навіть весь об’єкт, якщо це необхідно.
 
 
-## Formatting: space
+## Форматування: space
 
-The third argument of `JSON.stringify(value, replacer, space)` is the number of spaces to use for pretty formatting.
+Третій аргумент `JSON.stringify(value, replacer, space)` - це кількість пропусків, які використовуються для зручного форматування.
 
-Previously, all stringified objects had no indents and extra spaces. That's fine if we want to send an object over a network. The `space` argument is used exclusively for a nice output.
+Раніше, у всіх JSON-форматованих об’єктах не було відступів чи зайвих пропусків. Це нормально, якщо ми хочемо надіслати об’єкт по мережі. Аргумент `space` використовується виключно для приємного виводу.
 
-Here `space = 2` tells JavaScript to show nested objects on multiple lines, with indentation of 2 spaces inside an object:
+Нижче `space = 2` каже JavaScript показувати вкладені об’єкти в декількох рядках з відступом у 2 пропуски всередині об’єкта:
 
 ```js run
 let user = {
@@ -305,7 +305,7 @@ let user = {
 };
 
 alert(JSON.stringify(user, null, 2));
-/* two-space indents:
+/* відступ у 2 пропуски:
 {
   "name": "John",
   "age": 25,
@@ -316,7 +316,7 @@ alert(JSON.stringify(user, null, 2));
 }
 */
 
-/* for JSON.stringify(user, null, 4) the result would be more indented:
+/* for JSON.stringify(user, null, 4) результат містить більше відступів:
 {
     "name": "John",
     "age": 25,
@@ -328,13 +328,13 @@ alert(JSON.stringify(user, null, 2));
 */
 ```
 
-The `space` parameter is used solely for logging and nice-output purposes.
+Параметр `space` використовується виключно для ведення логування та приємного виводу.
 
-## Custom "toJSON"
+## Користувальницький "toJSON"
 
-Like `toString` for string conversion, an object may provide method `toJSON` for to-JSON conversion. `JSON.stringify` automatically calls it if available.
+Як і `toString` для перетворення рядків, об’єкт може надати метод `toJSON` для перетворення в JSON. `JSON.stringify` автоматично виклече його, якщо він є.
 
-For instance:
+Наприклад:
 
 ```js run
 let room = {
@@ -359,9 +359,9 @@ alert( JSON.stringify(meetup) );
 */
 ```
 
-Here we can see that `date` `(1)` became a string. That's because all dates have a built-in `toJSON` method which returns such kind of string.
+Тут ми можемо побачити, що `date` `(1)` став рядком. Це тому, що всі об’єкти типу `dates` мають вбудований метод `toJSON`, який повертає такий тип рядка.
 
-Now let's add a custom `toJSON` for our object `room` `(2)`:
+Тепер додамо власну реалізацію методу `toJSON` в наш об’єкт `room` `(2)`:
 
 ```js run
 let room = {
@@ -393,28 +393,28 @@ alert( JSON.stringify(meetup) );
 */
 ```
 
-As we can see, `toJSON` is used both for the direct call `JSON.stringify(room)` and when `room` is nested in another encoded object.
+Як ми бачимо, `toJSON` використовується як для прямого виклику `JSON.stringify(room)` і коли `room` вкладено в інший кодований об’єкт.
 
 
 ## JSON.parse
 
-To decode a JSON-string, we need another method named [JSON.parse](mdn:js/JSON/parse).
+Щоб розшифрувати JSON-рядок, нам потрібен інший метод з назвою [JSON.parse](mdn:js/JSON/parse).
 
-The syntax:
+Синтаксис:
 ```js
 let value = JSON.parse(str, [reviver]);
 ```
 
 str
-: JSON-string to parse.
+: JSON для перетворення в об’єкт.
 
 reviver
-: Optional function(key,value) that will be called for each `(key, value)` pair and can transform the value.
+: Необов’язкова функція, яка буде викликана для кожної пари `(key, value)` і можуть перетворити значення.
 
-For instance:
+Наприклад:
 
 ```js run
-// stringified array
+// рядковий масив
 let numbers = "[0, 1, 2, 3]";
 
 numbers = JSON.parse(numbers);
@@ -422,7 +422,7 @@ numbers = JSON.parse(numbers);
 alert( numbers[1] ); // 1
 ```
 
-Or for nested objects:
+Або для вкладених об’єктів:
 
 ```js run
 let userData = '{ "name": "John", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
@@ -432,40 +432,40 @@ let user = JSON.parse(userData);
 alert( user.friends[1] ); // 1
 ```
 
-The JSON may be as complex as necessary, objects and arrays can include other objects and arrays. But they must obey the same JSON format.
+JSON може бути настільки складним, наскільки це необхідно, об’єкти та масиви можуть включати інші об'єкти та масиви. Але вони повинні відповідати тому ж формату JSON.
 
-Here are typical mistakes in hand-written JSON (sometimes we have to write it for debugging purposes):
+Ось типові помилки в написаному від руки JSON (іноді доводиться писати його для цілей налагодження):
 
 ```js
 let json = `{
-  *!*name*/!*: "John",                     // mistake: property name without quotes
-  "surname": *!*'Smith'*/!*,               // mistake: single quotes in value (must be double)
-  *!*'isAdmin'*/!*: false                  // mistake: single quotes in key (must be double)
-  "birthday": *!*new Date(2000, 2, 3)*/!*, // mistake: no "new" is allowed, only bare values
-  "friends": [0,1,2,3]              // here all fine
+  *!*name*/!*: "John",                     // Помилка: ім’я властивості без лапок
+  "surname": *!*'Smith'*/!*,               // Помилка: одиничні лапки в значенні (повинні бути подвійні)
+  *!*'isAdmin'*/!*: false                  // Помилка: одиничні лапки в ключі (повинні бути подвійні)
+  "birthday": *!*new Date(2000, 2, 3)*/!*, // Помилка: не допускається конструктор "new", тільки значення
+  "friends": [0,1,2,3]              // тут все добре
 }`;
 ```
 
-Besides, JSON does not support comments. Adding a comment to JSON makes it invalid.
+Крім того, JSON не підтримує коментарів. Додавання коментаря до JSON робить його недійсним.
 
-There's another format named [JSON5](http://json5.org/), which allows unquoted keys, comments etc. But this is a standalone library, not in the specification of the language.
+Є ще один формат [JSON5](http://json5.org/), який підтримує ключі без лапок, коментарі і т.д. Але це окрема бібліотека, а не специфікація мови.
 
-The regular JSON is that strict not because its developers are lazy, but to allow easy, reliable and very fast implementations of the parsing algorithm.
+Звичайний JSON такий суворий не тому, що його розробники ледачі, а тому, що дозволяє легко, надійно та дуже швидко реалізовувати алгоритм кодування і читання.
 
-## Using reviver
+## Використання reviver
 
-Imagine, we got a stringified `meetup` object from the server.
+Уявіть, що ми отримали об'єкт `meetup` з сервера у вигляду рядка даних.
 
-It looks like this:
+Це виглядає приблизно так:
 
 ```js
 // title: (meetup title), date: (meetup date)
 let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
 ```
 
-...And now we need to *deserialize* it, to turn back into JavaScript object.
+...А тепер нам потрібно *десеріалізувати* її, тобто повернути назад в об’єкт JavaScript.
 
-Let's do it by calling `JSON.parse`:
+Давайте це зробимо, викликавши `JSON.parse`:
 
 ```js run
 let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
@@ -473,15 +473,15 @@ let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
 let meetup = JSON.parse(str);
 
 *!*
-alert( meetup.date.getDate() ); // Error!
+alert( meetup.date.getDate() ); // Помилка!
 */!*
 ```
 
-Whoops! An error!
+Ой! Помилка!
 
-The value of `meetup.date` is a string, not a `Date` object. How could `JSON.parse` know that it should transform that string into a `Date`?
+Значенням `meetup.date` є рядок, а не `Date` об'єкт. Як `JSON.parse` міг знати що він повинен перетворити цей рядок в `Date`?
 
-Let's pass to `JSON.parse` the reviving function as the second argument, that returns all values "as is", but `date` will become a `Date`:
+Давайте передамо `JSON.parse` функцію відродження як другий аргумент, яка повертає всі значення "як є", але `date` стане `Date`:
 
 ```js run
 let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
@@ -493,10 +493,10 @@ let meetup = JSON.parse(str, function(key, value) {
 });
 */!*
 
-alert( meetup.date.getDate() ); // now works!
+alert( meetup.date.getDate() ); // тепер працює!
 ```
 
-By the way, that works for nested objects as well:
+До речі, це працює і для вкладених об'єктів:
 
 ```js run
 let schedule = `{
@@ -512,16 +512,16 @@ schedule = JSON.parse(schedule, function(key, value) {
 });
 
 *!*
-alert( schedule.meetups[1].date.getDate() ); // works!
+alert( schedule.meetups[1].date.getDate() ); // Працює!
 */!*
 ```
 
 
 
-## Summary
+## Підсумок
 
-- JSON is a data format that has its own independent standard and libraries for most programming languages.
-- JSON supports plain objects, arrays, strings, numbers, booleans, and `null`.
-- JavaScript provides methods [JSON.stringify](mdn:js/JSON/stringify) to serialize into JSON and [JSON.parse](mdn:js/JSON/parse) to read from JSON.
-- Both methods support transformer functions for smart reading/writing.
-- If an object has `toJSON`, then it is called by `JSON.stringify`.
+- JSON - це формат даних, який має власний незалежний стандарт і бібліотеки для більшості мов програмування.
+- JSON підтримує звичайні об'єкти, масиви, рядки, числа, булеві значення і `null`.
+- JavaScript надає методи [JSON.stringify](mdn:js/JSON/stringify) для серіалізації в JSON і [JSON.parse](mdn:js/JSON/parse) для читання з JSON.
+- Обидва способи підтримують функції перетворення для розумного читання/запису.
+- Якщо об’єкт має метод `toJSON`, то його викликають через `JSON.stringify`.

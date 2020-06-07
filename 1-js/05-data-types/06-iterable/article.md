@@ -1,20 +1,20 @@
 
-# Iterables
+# Ітерабельні
 
-*Iterable* objects is a generalization of arrays. That's a concept that allows us to make any object useable in a `for..of` loop.
+*Ітерабельні* об’єкти - це узагальнення масивів. Це концепція, яка дозволяє нам зробити будь-який об’єкт корисним у циклі `for..of`.
 
-Of course, Arrays are iterable. But there are many other built-in objects, that are iterable as well. For instance, strings are also iterable.
+Звичайно, масиви є ітерабельними. Але є багато інших вбудованих об'єктів, які також є ітерабельними. Наприклад, рядки також є ітерабельними.
 
-If an object isn't technically an array, but represents a collection (list, set) of something, then `for..of` is a great syntax to loop over it, so let's see how to make it work.
+Якщо об'єкт технічно не є масивом, але представляє колекцію (list, set) чогось, тоді `for..of` - це чудовий синтаксис, який потрібно перетворити на нього, тому давайте подивимося, як змусити його працювати.
 
 
 ## Symbol.iterator
 
-We can easily grasp the concept of iterables by making one of our own.
+Ми можемо легко зрозуміти поняття ітерабельних об’єктів, зробивши один із своїх.
 
-For instance, we have an object that is not an array, but looks suitable for `for..of`.
+Наприклад, у нас є об’єкт, який не є масивом, але виглядає придатним для `for..of`.
 
-Like a `range` object that represents an interval of numbers:
+Як об'єкт `range`, який представляє інтервал чисел:
 
 ```js
 let range = {
@@ -22,18 +22,18 @@ let range = {
   to: 5
 };
 
-// We want the for..of to work:
+// Ми хочемо щоб працював for..of:
 // for(let num of range) ... num=1,2,3,4,5
 ```
 
-To make the `range` iterable (and thus let `for..of` work) we need to add a method to the object named `Symbol.iterator` (a special built-in symbol just for that).
+Щоб зробити `range` ітерабельним (і, таким чином, дозволити працювати з `for..of`), нам потрібно додати метод до об'єкта з назвою     `Symbol.iterator` (спеціальний вбудований символ саме для цього).
 
-1. When `for..of` starts, it calls that method once (or errors if not found). The method must return an *iterator* -- an object with the method `next`.
-2. Onward, `for..of` works *only with that returned object*.
-3. When `for..of` wants the next value, it calls `next()` on that object.
-4. The result of `next()` must have the form `{done: Boolean, value: any}`, where `done=true`  means that the iteration is finished, otherwise `value` is the next value.
+1. Коли починається `for..of`, він викликає цей метод один раз (або помилки, якщо їх не знайдено). Метод повинен повернути *ітератор* - об’єкт із методом `next`.
+2. Надалі `for..of` працює *лише з тим повернутим об'єктом*.
+3. Коли `for..of` бажає наступного значення, він викликає `next()` на цьому об'єкті.
+4. Результат `next()` повинен мати вигляд `{done: Boolean, value: any}`, де `done = true` означає, що ітерація закінчена, інакше `value` є наступним значенням.
 
-Here's the full implementation for `range` with remarks:
+Ось повна реалізація для `range` із зауваженнями:
 
 ```js run
 let range = {
@@ -41,18 +41,18 @@ let range = {
   to: 5
 };
 
-// 1. call to for..of initially calls this
+// 1. виклик for..of спочатку викликає цю функцію
 range[Symbol.iterator] = function() {
 
-  // ...it returns the iterator object:
-  // 2. Onward, for..of works only with this iterator, asking it for next values
+  // ...він повертає об'єкт ітератора:
+  // 2. Надалі, for..of працює лише з цим ітератором, задаючи йому наступні значення
   return {
     current: this.from,
     last: this.to,      
 
-    // 3. next() is called on each iteration by the for..of loop
+    // 3. next() викликається на кожній ітерації циклом for..of
     next() {
-      // 4. it should return the value as an object {done:.., value :...}
+      // 4. він повинен повернути значення як об’єкт {done:.., value:...}
       if (this.current <= this.last) {
         return { done: false, value: this.current++ };
       } else {
@@ -62,22 +62,22 @@ range[Symbol.iterator] = function() {
   };
 };
 
-// now it works!
+// тепер це працює!
 for (let num of range) {
   alert(num); // 1, then 2, 3, 4, 5
 }
 ```
 
-Please note the core feature of iterables: separation of concerns.
+Зверніть увагу на головну особливість ітерабельних об’єктів: розділення проблем.
 
-- The `range` itself does not have the `next()` method.
-- Instead, another object, a so-called "iterator" is created by the call to `range[Symbol.iterator]()`, and its `next()` generates values for the iteration.
+- Сам `range` не має методу `next()`.
+- Натомість інший об'єкт, так званий "ітератор", створюється за допомогою виклику `range[Symbol.iterator]()`, а його `next()` генерує значення для ітерації.
 
-So, the iterator object is separate from the object it iterates over.
+Отже, об’єкт ітератора відокремлений від об'єкта, над яким він повторюється.
 
-Technically, we may merge them and use `range` itself as the iterator to make the code simpler.
+Технічно ми можемо їх об'єднати і використовувати `range` як ітератор, щоб зробити простішим код.
 
-Like this:
+Як показано тут:
 
 ```js run
 let range = {
@@ -99,55 +99,55 @@ let range = {
 };
 
 for (let num of range) {
-  alert(num); // 1, then 2, 3, 4, 5
+  alert(num); // 1, потім 2, 3, 4, 5
 }
 ```
 
-Now `range[Symbol.iterator]()` returns the `range` object itself:  it has the necessary `next()` method and remembers the current iteration progress in `this.current`. Shorter? Yes. And sometimes that's fine too.
+Тепер `range[Symbol.iterator]()` повертає об'єкт `range` сам: він має необхідний метод `next()` і запам'ятовує поточний прогрес ітерації в `this.current`. Коротше? Так. І іноді це теж добре.
 
-The downside is that now it's impossible to have two `for..of` loops running over the object simultaneously: they'll share the iteration state, because there's only one iterator -- the object itself. But two parallel for-ofs is a rare thing, even in async scenarios.
+Мінус полягає в тому, що зараз неможливо мати дві петлі `for..of`, що працюють над об’єктом одночасно: вони поділять стан ітерації, тому що існує лише один ітератор -- сам об’єкт. Але два паралельних формати - це рідкісна річ навіть у сценаріях асинхронізації.
 
-```smart header="Infinite iterators"
-Infinite iterators are also possible. For instance, the `range` becomes infinite for `range.to = Infinity`. Or we can make an iterable object that generates an infinite sequence of pseudorandom numbers. Also can be useful.
+```smart header="Нескінченні ітератори"
+Можливі також безмежні ітератори. Наприклад, `range` стає нескінченним для `range.to = Infinity`. Або ми можемо зробити ітерабельний об’єкт, який генерує нескінченну послідовність псевдовипадкових чисел. Також може бути корисним.
 
-There are no limitations on `next`, it can return more and more values, that's normal.
+Немає обмежень на `next`, він може повертати все більше і більше значень, це нормально.
 
-Of course, the `for..of` loop over such an iterable would be endless. But we can always stop it using `break`.
+Звичайно, цикл `for..of` над таким ітерабельним буде нескінченним. Але ми завжди можемо зупинити це, використовуючи `break`.
 ```
 
 
-## String is iterable
+## Рядок є ітерабельним
 
-Arrays and strings are most widely used built-in iterables.
+Масиви та рядки найбільш широко використовуються вбудованими ітерабельними об'єктами.
 
-For a string, `for..of` loops over its characters:
+Для рядка цикл `for..of` за його символами:
 
 ```js run
 for (let char of "test") {
-  // triggers 4 times: once for each character
-  alert( char ); // t, then e, then s, then t
+  // спрацьовує 4 рази: один раз для кожного символу
+  alert( char ); // t, потім e, потім s, потім t
 }
 ```
 
-And it works correctly with surrogate pairs!
+І це правильно працює з сурогатними парами!
 
 ```js run
 let str = '𝒳😂';
 for (let char of str) {
-    alert( char ); // 𝒳, and then 😂
+    alert( char ); // 𝒳, і потім 😂
 }
 ```
 
-## Calling an iterator explicitly
+## Виклик ітератора явно
 
-For deeper understanding let's see how to use an iterator explicitly.
+Для глибшого розуміння давайте подивимося, як явно використовувати ітератор.
 
-We'll iterate over a string in exactly the same way as `for..of`, but with direct calls. This code creates a string iterator and gets values from it "manually":
+Ми будемо повторювати рядок точно так само, як `for..of`, але прямими дзвінками. Цей код створює ітератор рядків і отримує з нього значення "вручну":
 
 ```js run
 let str = "Hello";
 
-// does the same as
+// робить те саме, що і
 // for (let char of str) alert(char);
 
 *!*
@@ -157,49 +157,49 @@ let iterator = str[Symbol.iterator]();
 while (true) {
   let result = iterator.next();
   if (result.done) break;
-  alert(result.value); // outputs characters one by one
+  alert(result.value); // виводить символи один за одним
 }
 ```
 
-That is rarely needed, but gives us more control over the process than `for..of`. For instance, we can split the iteration process: iterate a bit, then stop, do something else, and then resume later.
+Це рідко потрібно, але дає нам більше контролю над процесом, ніж `for..of`. Наприклад, ми можемо розділити процес ітерації: трохи повторити, потім зупинити, зробити щось інше, а потім відновити пізніше.
 
-## Iterables and array-likes [#array-like]
+## Ітерабельні об'єкти і псевдомасиви [#array-like]
 
-There are two official terms that look similar, but are very different. Please make sure you understand them well to avoid the confusion.
+Є два офіційні терміни, які схожі, але сильно відрізняються. Переконайтесь, що ви добре їх розумієте, щоб уникнути плутанини.
 
-- *Iterables* are objects that implement the `Symbol.iterator` method, as described above.
-- *Array-likes* are objects that have indexes and `length`, so they look like arrays.
+- *Ітерабельні* - це об'єкти, які реалізують метод `Symbol.iterator`, як описано вище.
+- *Псевдомасиви* - це об'єкти, що мають індекси та `lenght`, тому вони виглядають як масиви.
 
-When we use JavaScript for practical tasks in browser or other environments, we may meet objects that are iterables or array-likes, or both.
+Коли ми використовуємо JavaScript для виконання практичних завдань у веб-переглядачі чи інших середовищах, ми можемо зустріти об'єкти, які є ітерабельними або подібними до масиву, або обом.
 
-For instance, strings are both iterable (`for..of` works on them) and array-like (they have numeric indexes and `length`).
+Наприклад, рядки є одночасно ітерабельними (`for..of` працює на них) і схожими на масив (вони мають числові індекси та `length`).
 
-But an iterable may be not array-like. And vice versa an array-like may be not iterable.
+Але ітерабельний може бути не схожий на масив. І навпаки, подібний масив може бути не ітерабельним.
 
-For example, the `range` in the example above is iterable, but not array-like, because it does not have indexed properties and `length`.
+Наприклад, `range` у наведеному вище прикладі є ітерабельним, але не схожий на масив, оскільки він не має індексованих властивостей та `length`.
 
-And here's the object that is array-like, but not iterable:
+А ось об’єкт, схожий на масив, але не ітерабельний:
 
 ```js run
-let arrayLike = { // has indexes and length => array-like
+let arrayLike = { // має покажчики та довжину => псевдомасив
   0: "Hello",
   1: "World",
   length: 2
 };
 
 *!*
-// Error (no Symbol.iterator)
+// Помилка (no Symbol.iterator)
 for (let item of arrayLike) {}
 */!*
 ```
 
-Both iterables and array-likes are usually *not arrays*, they don't have `push`, `pop` etc. That's rather inconvenient if we have such an object and want to work with it as with an array. E.g. we would like to work with `range` using array methods. How to achieve that?
+І ітерабельні, і псевдомасиви зазвичай *не масиви*, у них немає `push`, `pop` тощо. Це досить незручно, якщо у нас є такий об'єкт і хочемо працювати з ним, як з масивом. Наприклад ми хотіли б працювати з `range` методами масиву. Як цього досягти?
 
 ## Array.from
 
-There's a universal method [Array.from](mdn:js/Array/from) that takes an iterable or array-like value and makes a "real" `Array` from it. Then we can call array methods on it.
+Існує універсальний метод [Array.from](mdn:js/Array/from), який приймає ітерабельне або схоже на масив значення і робить з нього "справжній" масив. Тоді ми можемо викликати на ньому методи масиву.
 
-For instance:
+Наприклад:
 
 ```js run
 let arrayLike = {
@@ -211,43 +211,43 @@ let arrayLike = {
 *!*
 let arr = Array.from(arrayLike); // (*)
 */!*
-alert(arr.pop()); // World (method works)
+alert(arr.pop()); // World (метод працює)
 ```
 
-`Array.from` at the line `(*)` takes the object, examines it for being an iterable or array-like, then makes a new array and copies all items to it.
+`Array.from` у рядку `(*)` приймає об'єкт, перевіряє його на ітерабельність або подібність до масиву, потім робить новий масив і копіює всі елементи до нього.
 
-The same happens for an iterable:
+Те саме відбувається з ітерабельним:
 
 ```js
-// assuming that range is taken from the example above
+// припускаючи, що діапазон взято з наведеного вище прикладу
 let arr = Array.from(range);
-alert(arr); // 1,2,3,4,5 (array toString conversion works)
+alert(arr); // 1,2,3,4,5 (перетворення масиву через toString працює)
 ```
 
-The full syntax for `Array.from` also allows us to provide an optional "mapping" function:
+Повний синтаксис `Array.from` також дозволяє нам надати додаткову функцію "відображення":
 ```js
 Array.from(obj[, mapFn, thisArg])
 ```
 
-The optional second argument `mapFn` can be a function that will be applied to each element before adding it to the array, and `thisArg` allows us to set `this` for it.
+Необов'язковий другий аргумент `mapFn` може бути функцією, яка буде застосована до кожного елемента перед тим, як додати його до масиву, і `thisArg` дозволяє нам встановити для цього `this`.
 
-For instance:
+Напрклад:
 
 ```js
-// assuming that range is taken from the example above
+// припускаючи, що діапазон взято з наведеного вище прикладу
 
-// square each number
+// квадрат кожного числа
 let arr = Array.from(range, num => num * num);
 
 alert(arr); // 1,4,9,16,25
 ```
 
-Here we use `Array.from` to turn a string into an array of characters:
+Тут ми використовуємо `Array.from`, щоб перетворити рядок у масив символів:
 
 ```js run
 let str = '𝒳😂';
 
-// splits str into array of characters
+// розбиває рядок на масив символів
 let chars = Array.from(str);
 
 alert(chars[0]); // 𝒳
@@ -255,14 +255,14 @@ alert(chars[1]); // 😂
 alert(chars.length); // 2
 ```
 
-Unlike `str.split`, it relies on the iterable nature of the string and so, just like `for..of`, correctly works with surrogate pairs.
+На відміну від `str.split`, він покладається на ітерабельний характер рядка і так, як і `for..of`, правильно працює з сурогатними парами.
 
-Technically here it does the same as:
+Технічно це робить те саме, що:
 
 ```js run
 let str = '𝒳😂';
 
-let chars = []; // Array.from internally does the same loop
+let chars = []; // Array.from внутрішньо робить той же цикл
 for (let char of str) {
   chars.push(char);
 }
@@ -270,9 +270,9 @@ for (let char of str) {
 alert(chars);
 ```
 
-...But it is shorter.    
+...Але він коротший.    
 
-We can even build surrogate-aware `slice` on it:
+Ми навіть можемо створити на ньому сурогатний `slice`:
 
 ```js run
 function slice(str, start, end) {
@@ -283,25 +283,25 @@ let str = '𝒳😂𩷶';
 
 alert( slice(str, 1, 3) ); // 😂𩷶
 
-// the native method does not support surrogate pairs
-alert( str.slice(1, 3) ); // garbage (two pieces from different surrogate pairs)
+// нативний метод не підтримує сурогатних пар
+alert( str.slice(1, 3) ); // сміття (дві штуки від різних сурогатних пар)
 ```
 
 
-## Summary
+## Підсумок
 
-Objects that can be used in `for..of` are called *iterable*.
+Об'єкти, які можуть бути використані в `for..of`, називаються *ітерабельними*.
 
-- Technically, iterables must implement the method named `Symbol.iterator`.
-    - The result of `obj[Symbol.iterator]` is called an *iterator*. It handles the further iteration process.
-    - An iterator must have the method named `next()` that returns an object `{done: Boolean, value: any}`, here `done:true` denotes the end of the iteration process, otherwise the `value` is the next value.
-- The `Symbol.iterator` method is called automatically by `for..of`, but we also can do it directly.
-- Built-in iterables like strings or arrays, also implement `Symbol.iterator`.
-- String iterator knows about surrogate pairs.
+- Технічно ітерабельні об’єкти повинні реалізувати метод під назвою "Symbol.iterator".
+    - Результат `obj[Symbol.iterator]` називається *ітератором*. Він обробляє подальший процес ітерації.
+    - Ітератор повинен мати метод з назвою `next()`, який повертає об'єкт `{done:Boolean, value:any}`, тут `done: true` позначає кінець процесу ітерації, інакше `value` є наступним значення.
+- Метод `Symbol.iterator` викликається автоматично через `for..of`, але ми також можемо це зробити безпосередньо.
+- Вбудовані ітерабелі, такі як рядки або масиви, також реалізують `Symbol.iterator`.
+- Строковий ітератор знає про сурогатні пари.
 
 
-Objects that have indexed properties and `length` are called *array-like*. Such objects may also have other properties and methods, but lack the built-in methods of arrays.
+Об'єкти, які мають індексовані властивості та `lenght`, називаються *псевдомасивами*. Такі об'єкти також можуть мати інші властивості та методи, але їм не вистачає вбудованих методів масивів.
 
-If we look inside the specification -- we'll see that most built-in methods assume that they work with iterables or array-likes instead of "real" arrays, because that's more abstract.
+Якщо ми заглянемо всередину специфікації - ми побачимо, що більшість вбудованих методів передбачають, що вони працюють з ітерабелями або подібними до масивів замість "реальних" масивів, оскільки це більш абстрактно.
 
-`Array.from(obj[, mapFn, thisArg])` makes a real `Array` of an iterable or array-like `obj`, and we can then use array methods on it. The optional arguments `mapFn` and `thisArg` allow us to apply a function to each item.
+`Array.from(obj[, mapFn, thisArg])` робить справжній `Array` ітерабельного або подібного до масиву `obj`, і тоді ми можемо використовувати методи масиву на ньому. Необов'язкові аргументи `mapFn` і `thisArg` дозволяють нам застосувати функцію до кожного елемента.

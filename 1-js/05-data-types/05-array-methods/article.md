@@ -1,111 +1,111 @@
-# Array methods
+# Методи масивів
 
-Arrays provide a lot of methods. To make things easier, in this chapter they are split into groups.
+Масиви мають безліч методів. Щоб було простіше, в цьому розділі вони розбиті на групи.
 
-## Add/remove items
+## Додавання/видалення елементів
 
-We already know methods that add and remove items from the beginning or the end:
+Ми вже знаємо методи, які додають і видаляють елементи з початку або з кінця:
 
-- `arr.push(...items)` -- adds items to the end,
-- `arr.pop()` -- extracts an item from the end,
-- `arr.shift()` -- extracts an item from the beginning,
-- `arr.unshift(...items)` -- adds items to the beginning.
+- `arr.push(...items)` -- додає елементи в кінець,
+- `arr.pop()` -- видобуває елемент з кінця,
+- `arr.shift()` -- видобуває елемент з початку,
+- `arr.unshift(...items)` -- додає елементи на початок.
 
-Here are a few others.
+Ось деякі інші методи.
 
 ### splice
 
-How to delete an element from the array?
+Як видалити елемент з масиву?
 
-The arrays are objects, so we can try to use `delete`:
+Масиви є об'єктами, тому ми можемо спробувати використати `delete`:
 
 ```js run
 let arr = ["I", "go", "home"];
 
-delete arr[1]; // remove "go"
+delete arr[1]; // видалити "go"
 
 alert( arr[1] ); // undefined
 
-// now arr = ["I",  , "home"];
+// тепер arr = ["I",  , "home"];
 alert( arr.length ); // 3
 ```
 
-The element was removed, but the array still has 3 elements, we can see that `arr.length == 3`.
+Елемент був видалений, але при перевірці виявляється, що масив досі має 3 елементи, можемо переконатись в цьому `arr.length == 3`.
 
-That's natural, because `delete obj.key` removes a value by the `key`. It's all it does. Fine for objects. But for arrays we usually want the rest of elements to shift and occupy the freed place. We expect to have a shorter array now.
+Це природньо, бо все, що робить `delete obj.key` - це видаляє значення за ключем `key`. Подібне підходить для об'єктів, але для масивів треба, щоб елементи які залишилися зсунулися і зайняли місце що звільнилося. Ми очікуємо, що масив стане коротшим.
 
-So, special methods should be used.
+Тому для цього потрібно використовувати особливі методи.
 
-The [arr.splice(start)](mdn:js/Array/splice) method is a swiss army knife for arrays. It can do everything: insert, remove and replace elements.
+Метод [arr.splice(start)](mdn:js/Array/splice) є універсальним для роботи з масивами. Він може: додавати, видаляти і замінювати елемети.
 
-The syntax is:
+Його синтаксис:
 
 ```js
 arr.splice(index[, deleteCount, elem1, ..., elemN])
 ```
 
-It starts from the position `index`: removes `deleteCount` elements and then inserts `elem1, ..., elemN` at their place. Returns the array of removed elements.
+Він починає з позиції `index`: видаляє `deleteCount` елементів і потім вставляє `elem1, ..., elemN` на їх місце. Повертає масив з видалених елементів.
 
-This method is easy to grasp by examples.
+Цей метод легко зрозуміти на прикладах.
 
-Let's start with the deletion:
+Почнемо з видалення:
 
 ```js run
-let arr = ["I", "study", "JavaScript"];
+let arr = ["Я", "вивчаю", "JavaScript"];
 
 *!*
-arr.splice(1, 1); // from index 1 remove 1 element
+arr.splice(1, 1); // з позиції 1 видалити 1 елемент
 */!*
 
-alert( arr ); // ["I", "JavaScript"]
+alert( arr ); // ["Я", "JavaScript"]
 ```
 
-Easy, right? Starting from the index `1` it removed `1` element.
+Легко, правда? Починаючи з позиції `1` він видалив `1` елемент.
 
-In the next example we remove 3 elements and replace them with the other two:
+У наступному прикладі ми видалимо 3 елементи і замінимо їх двома ішими:
 
 ```js run
-let arr = [*!*"I", "study", "JavaScript",*/!* "right", "now"];
+let arr = [*!*"Я", "вивчаю", "JavaScript",*/!* "прямо", "зараз"];
 
-// remove 3 first elements and replace them with another
-arr.splice(0, 3, "Let's", "dance");
+// видалити 3 перших елемента і замінити їх іншими
+arr.splice(0, 3, "Давайте", "потанцюємо");
 
-alert( arr ) // now [*!*"Let's", "dance"*/!*, "right", "now"]
+alert( arr ) // now [*!*"Давайте", "потанцюємо"*/!*, "прямо", "зараз"]
 ```
 
-Here we can see that `splice` returns the array of removed elements:
+Тут видно, що `splice` повертає масив з видалених елементів:
 
 ```js run
-let arr = [*!*"I", "study",*/!* "JavaScript", "right", "now"];
+let arr = [*!*"Я", "вивчаю",*/!* "JavaScript", "прямо", "зараз"];
 
-// remove 2 first elements
+// видалити 2 перших елемента
 let removed = arr.splice(0, 2);
 
-alert( removed ); // "I", "study" <-- array of removed elements
+alert( removed ); // "Я", "вивчаю" <-- масив з видалених елементів
 ```
 
-The `splice` method is also able to insert the elements without any removals. For that we need to set `deleteCount` to `0`:
+Метод `splice` також може вставляти елементи без видалення, для цього нам треба виставити `deleteCount` на `0`:
 
 ```js run
-let arr = ["I", "study", "JavaScript"];
+let arr = ["Я", "вивчаю", "JavaScript"];
 
-// from index 2
-// delete 0
-// then insert "complex" and "language"
-arr.splice(2, 0, "complex", "language");
+// з позиції 2
+// видалити 0 елементів
+// потім вставити "складну" і "мову"
+arr.splice(2, 0, "складну", "мову");
 
-alert( arr ); // "I", "study", "complex", "language", "JavaScript"
+alert( arr ); // "Я", "вивчаю", "складну", "мову", "JavaScript"
 ```
 
-````smart header="Negative indexes allowed"
-Here and in other array methods, negative indexes are allowed. They specify the position from the end of the array, like here:
+````smart header="Від'ємні індекси дозволено"
+В цьому і в інших методах масиву допускаються від'ємні індекси. Вони визначають позицію з кінця масиву, як тут:
 
 ```js run
 let arr = [1, 2, 5];
 
-// from index -1 (one step from the end)
-// delete 0 elements,
-// then insert 3 and 4
+// з позиції -1 (перед останнім елементом)
+// видалити 0 елементів,
+// потім вставити 3 та 4
 arr.splice(-1, 0, 3, 4);
 
 alert( arr ); // 1,2,3,4,5
@@ -114,133 +114,130 @@ alert( arr ); // 1,2,3,4,5
 
 ### slice
 
-The method [arr.slice](mdn:js/Array/slice) is much simpler than similar-looking `arr.splice`.
+Метод [arr.slice](mdn:js/Array/slice) набагато простіший, ніж схожий на нього `arr.splice`.
 
-The syntax is:
+Його синтаксис:
 
 ```js
 arr.slice([start], [end])
 ```
 
-It returns a new array copying to it all items from index `start` to `end` (not including `end`). Both `start` and `end` can be negative, in that case position from array end is assumed.
+Він повертає новий масив копіюючи до нього всі елементи з позиції `start` до позиції `end` (не включаючи саму `end`). Обидві позиції `start` і `end` можуть бути від'ємними. В такому випадку відлік буде здійснюватись з кінця масиву.
 
-It's similar to a string method `str.slice`, but instead of substrings it makes subarrays.
+Це схоже на рядковий метод `str.slice`, але замість підрядків він повертає підмасиви.
 
-For instance:
+Наприклад:
 
 ```js run
-let arr = ["t", "e", "s", "t"];
+let arr = ["т", "е", "с", "т"];
 
-alert( arr.slice(1, 3) ); // e,s (copy from 1 to 3)
+alert( arr.slice(1, 3) ); // е,с (копіює з 1 до 3)
 
-alert( arr.slice(-2) ); // s,t (copy from -2 till the end)
+alert( arr.slice(-2) ); // с,т (копіює з -2 до кінця)
 ```
 
-We can also call it without arguments: `arr.slice()` creates a copy of `arr`. That's often used to obtain a copy for further transformations that should not affect the original array.
-
+Можливо визвати `slice` і взагалі без аргументів: `arr.slice()` створює копію масиву `arr`. Це часто використовують, щоб створити копію масиву для подальших перетворень, котрі не повинні змінювати вихідний масив.
 ### concat
 
-The method [arr.concat](mdn:js/Array/concat) creates a new array that includes values from other arrays and additional items.
+Метод [arr.concat](mdn:js/Array/concat) створює новий масив, який включає в себе дані з інших масивів та додаткові значення.
 
-The syntax is:
+Його синтаксис:
 
 ```js
 arr.concat(arg1, arg2...)
 ```
 
-It accepts any number of arguments -- either arrays or values.
+Він приймає будь-яку кількість аргументів, котрі можуть бути як масивами так і простими значеннями.
 
-The result is a new array containing items from `arr`, then `arg1`, `arg2` etc.
+Результат є новим масивом, що містить елементи з `arr`, а також `arg1`, `arg2` і т.д.
 
-If an argument `argN` is an array, then all its elements are copied. Otherwise, the argument itself is copied.
+Якщо аргумент `argN` масив, то всі його елементи копіюються. Інакше копіюється сам аргумент.
 
-For instance:
+Наприклад:
 
 ```js run
 let arr = [1, 2];
 
-// create an array from: arr and [3,4]
+// створити масив з: arr і [3,4]
 alert( arr.concat([3, 4]) ); // 1,2,3,4
 
-// create an array from: arr and [3,4] and [5,6]
+// створити масив з: arr і [3,4] і [5,6]
 alert( arr.concat([3, 4], [5, 6]) ); // 1,2,3,4,5,6
 
-// create an array from: arr and [3,4], then add values 5 and 6
+// створити масив з: arr 1 [3,4], потім додати значення 5 і 6
 alert( arr.concat([3, 4], 5, 6) ); // 1,2,3,4,5,6
 ```
 
-Normally, it only copies elements from arrays. Other objects, even if they look like arrays, are added as a whole:
+Як правило, він копіює тільки елементи з масивів. Інші об'єкти, навіть якщо вони виглядають як масиви, додаються як є:
 
 ```js run
 let arr = [1, 2];
 
 let arrayLike = {
-  0: "something",
+  0: "щось",
   length: 1
 };
 
 alert( arr.concat(arrayLike) ); // 1,2,[object Object]
 ```
 
-...But if an array-like object has a special `Symbol.isConcatSpreadable` property, then it's treated as an array by `concat`: its elements are added instead:
+...Але якщо об'єкт має спеціальну властивість `Symbol.isConcatSpreadable` , то він обробляється `concat` як масив: замість нього додається його значення.
 
 ```js run
 let arr = [1, 2];
 
 let arrayLike = {
-  0: "something",
-  1: "else",
+  0: "щось",
+  1: "ще",
 *!*
   [Symbol.isConcatSpreadable]: true,
 */!*
   length: 2
 };
 
-alert( arr.concat(arrayLike) ); // 1,2,something,else
+alert( arr.concat(arrayLike) ); // 1,2,щось,ще
 ```
 
-## Iterate: forEach
+## Перебір: forEach
 
-The [arr.forEach](mdn:js/Array/forEach) method allows to run a function for every element of the array.
+Метод [arr.forEach](mdn:js/Array/forEach) дозволяє запускати функцію для кожного елемента масиву.
 
-The syntax:
+Його синтаксис:
 ```js
 arr.forEach(function(item, index, array) {
-  // ... do something with item
+  // ... робить щось з item
 });
 ```
 
-For instance, this shows each element of the array:
+Наприклад, цей код виводить на екран кожен елемент масиву:
 
 ```js run
-// for each element call alert
+// Виклик alert для кожного елемента
 ["Bilbo", "Gandalf", "Nazgul"].forEach(alert);
 ```
 
-And this code is more elaborate about their positions in the target array:
+А цей до того ж розповість і про свою позицію в масиві:
 
 ```js run
 ["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
-  alert(`${item} is at index ${index} in ${array}`);
+  alert(`${item} має позицію ${index} в ${array}`);
 });
 ```
 
-The result of the function (if it returns any) is thrown away and ignored.
+Результат функції (якщо вона взагалі щось повертає) відкидається і ігнорується.
 
 
-## Searching in array
+## Пошук в масиві
+Тепер ми розлянемо методи, котрі допоможуть нам знайти що-небудь в масиві.
 
-Now let's cover methods that search in an array.
+### indexOf/lastIndexOf і includes
+Методи [arr.indexOf](mdn:js/Array/indexOf), [arr.lastIndexOf](mdn:js/Array/lastIndexOf) і [arr.includes](mdn:js/Array/includes) мають однаковий синтаксис і роблять по суті те ж саме, що і їх рядкові аналоги, але працюють з елементами замість символів:
 
-### indexOf/lastIndexOf and includes
+- `arr.indexOf(item, from)` -- шукає `item` починаючи з індексу `from`, і повертає індекс, на якому було знайдено шуканий елемент, інакше `-1`.
+- `arr.lastIndexOf(item, from)` -- те ж саме, але шукає справа наліво.
+- `arr.includes(item, from)` -- шукає `item` починаючи з індексу `from`, повертає `true`, якщо знайдено.
 
-The methods [arr.indexOf](mdn:js/Array/indexOf), [arr.lastIndexOf](mdn:js/Array/lastIndexOf) and [arr.includes](mdn:js/Array/includes) have the same syntax and do essentially the same as their string counterparts, but operate on items instead of characters:
-
-- `arr.indexOf(item, from)` -- looks for `item` starting from index `from`, and returns the index where it was found, otherwise `-1`.
-- `arr.lastIndexOf(item, from)` -- same, but looks for from right to left.
-- `arr.includes(item, from)` -- looks for `item` starting from index `from`, returns `true` if found.
-
-For instance:
+Наприклад:
 
 ```js run
 let arr = [1, 0, false];
@@ -252,41 +249,41 @@ alert( arr.indexOf(null) ); // -1
 alert( arr.includes(1) ); // true
 ```
 
-Note that the methods use `===` comparison. So, if we look for `false`, it finds exactly `false` and not the zero.
+Зверніть увагу що методи використовують суворе порівняння `===`. Таким чином, якщо ми шукаємо `false`, він знаходить саме `false`, а не нуль.
 
-If we want to check for inclusion, and don't want to know the exact index, then `arr.includes` is preferred.
+Якщо ми хочемо перевірити наявність елемента, і немає необхідності знати його точний індекс, тоді надаємо перевагу `arr.includes`.
 
-Also, a very minor difference of `includes` is that it correctly handles `NaN`, unlike `indexOf/lastIndexOf`:
+Крім того, дуже незначною відмінністю `includes` є те, що він правильно обробляє `NaN`, на відміну від `indexOf/lastIndexOf`:
 
 ```js run
 const arr = [NaN];
-alert( arr.indexOf(NaN) ); // -1 (should be 0, but === equality doesn't work for NaN)
-alert( arr.includes(NaN) );// true (correct)
+alert( arr.indexOf(NaN) ); // -1 (повинен бути 0, але === перевірка на рівність не працює для NaN)
+alert( arr.includes(NaN) );// true (вірно)
 ```
 
-### find and findIndex
+### find і findIndex
 
-Imagine we have an array of objects. How do we find an object with the specific condition?
+Уявіть, що у нас є масив об'єктів. Як ми знайдемо об'єкт за конкретною умовою?
 
-Here the [arr.find(fn)](mdn:js/Array/find) method comes in handy.
+Тут нам допоможе метод [arr.find(fn)](mdn:js/Array/find).
 
-The syntax is:
+Ось його синтаксис:
 ```js
 let result = arr.find(function(item, index, array) {
-  // if true is returned, item is returned and iteration is stopped
-  // for falsy scenario returns undefined
+  // якщо true, то повертається поточний елемент і перебір переривається
+  // якщо всі ітерації виявились виявились хибними, то повертається undefined
 });
 ```
 
-The function is called for elements of the array, one after another:
+Функція викликається для елементів масиву, одного за іншим:
 
-- `item` is the element.
-- `index` is its index.
-- `array` is the array itself.
+- `item` черговий елемент.
+- `index` його індекс.
+- `array` сам масив.
 
-If it returns `true`, the search is stopped, the `item` is returned. If nothing found, `undefined` is returned.
+Якщо функція повертає `true`, то пошук зупиняється і повертається `item`. Якщо нічого не знайдено, то повертається `undefined`.
 
-For example, we have an array of users, each with the fields `id` and `name`. Let's find the one with `id == 1`:
+Наприклад, в нас є масив користувачів, кожен з яких має по полю `id` і `name`. Спробуємо знайти того, хто має `id == 1`:
 
 ```js run
 let users = [
@@ -300,28 +297,28 @@ let user = users.find(item => item.id == 1);
 alert(user.name); // John
 ```
 
-In real life arrays of objects is a common thing, so the `find` method is very useful.
+В дійсності масиви об'єктів - звичайна річ, тому метод `find` вкрай корисний.
 
-Note that in the example we provide to `find` the function `item => item.id == 1` with one argument. That's typical, other arguments of this function are rarely used.
+Зверніть увагу що в цьому прикладі ми надаємо `find` функцію `item => item.id == 1` з одним аргументом. Це типово, додаткові аргументи для цієї функції використовуються рідко.
 
-The [arr.findIndex](mdn:js/Array/findIndex) method is essentially the same, but it returns the index where the element was found instead of the element itself and `-1` is returned when nothing is found.
+Метод [arr.findIndex](mdn:js/Array/findIndex) по суті, те ж саме, але повертає індекс, на якому був знайдений елемент, а не сам елемент, і `-1` якщо нічого не знайдено.
 
 ### filter
 
-The `find` method looks for a single (first) element that makes the function return `true`.
+Метод `find` шукає один (перший-ліпший) елемент, на якому функція-колбек поверне `true`.
 
-If there may be many, we can use [arr.filter(fn)](mdn:js/Array/filter).
+На той випадок, якщо знайдених елементів може бути багато, передбачений метод [arr.filter(fn)](mdn:js/Array/filter).
 
-The syntax is similar to `find`, but `filter` returns an array of all matching elements:
+Синтаксис цього методу схожий з `find`, але `filter` повертає масив з усіх відповідних елементів:
 
 ```js
 let results = arr.filter(function(item, index, array) {
-  // if true item is pushed to results and the iteration continues
-  // returns empty array if nothing found
+  // якщо true - елемент додається до результату, і перебір продовжується
+  // повертається пустий масив в випадку, якщо нічого не знайдено
 });
 ```
 
-For instance:
+Наприклад:
 
 ```js run
 let users = [
@@ -330,31 +327,31 @@ let users = [
   {id: 3, name: "Mary"}
 ];
 
-// returns array of the first two users
+// повертає масив, який складається з перших двох користувачів
 let someUsers = users.filter(item => item.id < 3);
 
 alert(someUsers.length); // 2
 ```
 
-## Transform an array
+## Перетворення масивів
 
-Let's move on to methods that transform and reorder an array.
+Перейдемо до методів перетворення і упорядкування масиву.
 
 ### map
 
-The [arr.map](mdn:js/Array/map) method is one of the most useful and often used.
+Метод [arr.map](mdn:js/Array/map) - один із найбільш корисних і часто використовуваних.
 
-It calls the function for each element of the array and returns the array of results.
+Він викликає функцію для кожного елемента масиву і повертає масив результатів виконання цієї функції.
 
-The syntax is:
+Його синтаксис:
 
 ```js
 let result = arr.map(function(item, index, array) {
-  // returns the new value instead of item
+  // повертає нове значення замість елемента
 });
 ```
 
-For instance, here we transform each element into its length:
+Наприклад, тут ми перетворимо кожен елемент в його довжину:
 
 ```js run
 let lengths = ["Bilbo", "Gandalf", "Nazgul"].map(item => item.length);
@@ -363,41 +360,41 @@ alert(lengths); // 5,7,6
 
 ### sort(fn)
 
-The call to [arr.sort()](mdn:js/Array/sort) sorts the array *in place*, changing its element order.
+Виклик [arr.sort()](mdn:js/Array/sort) сортує масив "на місці", змінюючи в ньому порядок елементів.
 
-It also returns the sorted array, but the returned value is usually ignored, as `arr` itself is modified.
+Він повертає відсортований масив, але зазвичай значення, що повертається, ігнорується, оскільки  `arr` сам модифікується.
 
-For instance:
+Наприклад:
 
 ```js run
 let arr = [ 1, 2, 15 ];
 
-// the method reorders the content of arr
+// метод сортує вміст arr 
 arr.sort();
 
 alert( arr );  // *!*1, 15, 2*/!*
 ```
 
-Did you notice anything strange in the outcome?
+Не помітили нічого дивного в цьому прикладі?
 
-The order became `1, 15, 2`. Incorrect. But why?
+Порядок став `1, 15, 2`. Це невірно! Але чому?
 
-**The items are sorted as strings by default.**
+**За замовчуванням елементи сортуються як рядки.**
 
-Literally, all elements are converted to strings for comparisons. For strings, lexicographic ordering is applied and indeed `"2" > "15"`.
+Буквально, всі елементи перетворюються в рядки при порівнянні. Для рядків застосовується лексикографічний порядок, тому виходить, що `"2" > "15"`.
 
-To use our own sorting order, we need to supply a function as the argument of `arr.sort()`.
+Для того, щоб використовувати власний порядок сортування, нам потрібно надати функцію як аргумент для `arr.sort()`.
 
-The function should compare two arbitrary values and return:
+Функція повинна для пари довільних значень повертати:
 ```js
 function compare(a, b) {
-  if (a > b) return 1; // if the first value is greater than the second
-  if (a == b) return 0; // if values are equal
-  if (a < b) return -1; // if the first value is less than the second
+  if (a > b) return 1; // якщо перше значення більше другого
+  if (a == b) return 0; // якщо рівні
+  if (a < b) return -1; // якщо перше значення менше другого
 }
 ```
 
-For instance, to sort as numbers:
+Наприклад, для сортування чисел:
 
 ```js run
 function compareNumeric(a, b) {
@@ -415,13 +412,12 @@ arr.sort(compareNumeric);
 alert(arr);  // *!*1, 2, 15*/!*
 ```
 
-Now it works as intended.
+Тепер все працює як потрібно.
+Давайте зупинимося і подумаємо, що ж відбувається. Масив `arr` може бути масивом чого завгодно, вірно? Він може містити числа, рядки, об'єкти або ще щось. Ми маємо набір "якихось елементів". Щоб його посортувати, нам потрібна "функція", яка знає, як порівнювати ці елементи. За замовчуванням елементи сортуються як рядки.
 
-Let's step aside and think what's happening. The `arr` can be array of anything, right? It may contain numbers or strings or objects or whatever. We have a set of *some items*. To sort it, we need an *ordering function* that knows how to compare its elements. The default is a string order.
+Метод `arr.sort(fn)` реалізує загальний алгоритм сортування. Нам не потрібно піклуватися про те, як він працює всередині (в більшості випадків це оптимізоване [quicksort](https://uk.wikipedia.org/wiki/Швидке_сортування)). Воно проходиться по масиву, порівнює його елементи за допомогою наданої йому функції і змінює їх порядок розташування. Все, що залишається нам, це надати функцію `fn` яка порівнює елементи.
 
-The `arr.sort(fn)` method implements a generic sorting algorithm. We don't need to care how it internally works (an optimized [quicksort](https://en.wikipedia.org/wiki/Quicksort) most of the time). It will walk the array, compare its elements using the provided function and reorder them, all we need is to provide the `fn` which does the comparison.
-
-By the way, if we ever want to know which elements are compared -- nothing prevents from alerting them:
+До речі, якщо ми коли-небудь захочемо дізнатися, які елементи порівнюються -- ніщо не заважає нам вивести їх на екран:
 
 ```js run
 [1, -2, 15, 2, 0, 8].sort(function(a, b) {
@@ -429,12 +425,12 @@ By the way, if we ever want to know which elements are compared -- nothing preve
 });
 ```
 
-The algorithm may compare an element with multiple others in the process, but it tries to make as few comparisons as possible.
+В процесі роботи алгоритм може порівнювати елемент з іншими по декілька разів, але він намагається зробити якомога менше порівнянь.
 
-````smart header="A comparison function may return any number"
-Actually, a comparison function is only required to return a positive number to say "greater" and a negative number to say "less".
+````smart header="Порівняльна функція може повернути будь-яке число"
+Насправді, функція порівняння потрібна тільки для того, щоб повернути додатне число і показати "більше", або від'ємне, щоб показати "менше".
 
-That allows to write shorter functions:
+Це дозволяє писати більш короткі функції:
 
 ```js run
 let arr = [ 1, 2, 15 ];
@@ -445,37 +441,37 @@ alert(arr);  // *!*1, 2, 15*/!*
 ```
 ````
 
-````smart header="Arrow functions for the best"
-Remember [arrow functions](info:arrow-functions-basics)? We can use them here for neater sorting:
+````smart header="Стрілкові функції рулять!"
+Пам'ятаєте [стрілкові функції](info:arrow-functions-basics)? Ми їх можемо використати тут для кращого сортування, працює так само, а писати менше:
 
 ```js
 arr.sort( (a, b) => a - b );
 ```
 
-This works exactly the same as the longer version above.
+Працює ідентично до довгої версії, котра наведена вище.
 ````
 
-````smart header="Use `localeCompare` for strings"
-Remember [strings](info:string#correct-comparisons) comparison algorithm? It compares letters by their codes by default.
+````smart header="Використання `localeCompare` для рядків"
+Пам'ятаєте [алгоритм](info:string#correct-comparisons) порівняння рядків? Він за замовчуванням порівнює літери за їх кодом.
 
-For many alphabets, it's better to use `str.localeCompare` method to correctly sort letters, such as `Ö`.
+Для багатьох абеток краще використовувати метод `str.localeCompare`, щоб правильно відсортовувати за абеткою, наприклад, такий символ як `Ö`.
 
-For example, let's sort a few countries in German:
+Наприклад, давайте посортуємо кілька країн за Німецькою абеткою:
 
 ```js run
 let countries = ['Österreich', 'Andorra', 'Vietnam'];
 
-alert( countries.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Österreich (wrong)
+alert( countries.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Österreich (неправильно)
 
-alert( countries.sort( (a, b) => a.localeCompare(b) ) ); // Andorra,Österreich,Vietnam (correct!)
+alert( countries.sort( (a, b) => a.localeCompare(b) ) ); // Andorra,Österreich,Vietnam (тепер посортовано як треба!)
 ```
 ````
 
 ### reverse
 
-The method [arr.reverse](mdn:js/Array/reverse) reverses the order of elements in `arr`.
+Метод [arr.reverse](mdn:js/Array/reverse) змінює порядок розміщення елементів в `arr` на протилежний.
 
-For instance:
+Наприклад:
 
 ```js run
 let arr = [1, 2, 3, 4, 5];
@@ -484,15 +480,15 @@ arr.reverse();
 alert( arr ); // 5,4,3,2,1
 ```
 
-It also returns the array `arr` after the reversal.
+Він також повертає масив `arr` з зміненим порядком елементів.
 
-### split and join
+### split і join
 
-Here's the situation from real life. We are writing a messaging app, and the person enters the comma-delimited list of receivers: `John, Pete, Mary`. But for us an array of names would be much more comfortable than a single string. How to get it?
+Ось ситуація з реального життя. Ми пишемо додаток для обміну повідомленнями, і відвідувач вводить імена тих, кому має відправити повідомлення, через кому: `John, Pete, Mary`. Але для нас масив імен був би набагато зручнішим, ніж один рядок. Як його отримати?
 
-The [str.split(delim)](mdn:js/String/split) method does exactly that. It splits the string into an array by the given delimiter `delim`.
+Метод [str.split(delim)](mdn:js/String/split) якраз те, що нам потрібно. Він розбиває рядок на елементи масиву за вказаним роздільником `delim`.
 
-In the example below, we split by a comma followed by space:
+В нижченаведеному випадку ми розбиваємо рядок за комою з пробілом:
 
 ```js run
 let names = 'Bilbo, Gandalf, Nazgul';
@@ -500,11 +496,11 @@ let names = 'Bilbo, Gandalf, Nazgul';
 let arr = names.split(', ');
 
 for (let name of arr) {
-  alert( `A message to ${name}.` ); // A message to Bilbo  (and other names)
+  alert( `Повідомлення для ${name}.` ); // Повідомлення для Bilbo  (і т.д.)
 }
 ```
 
-The `split` method has an optional second numeric argument -- a limit on the array length. If it is provided, then the extra elements are ignored. In practice it is rarely used though:
+Метод `split` має другий умовний числовий аргумент -- обмеження на кількість елементів в масиві. Якщо їх більше, ніж вказано, то залишок масива буде пропущено. Хоча на практиці це використовується рідко:
 
 ```js run
 let arr = 'Bilbo, Gandalf, Nazgul, Saruman'.split(', ', 2);
@@ -512,37 +508,38 @@ let arr = 'Bilbo, Gandalf, Nazgul, Saruman'.split(', ', 2);
 alert(arr); // Bilbo, Gandalf
 ```
 
-````smart header="Split into letters"
-The call to `split(s)` with an empty `s` would split the string into an array of letters:
+````smart header="Розщеплення рядка на літери"
+Виклик `split(s)` з пустим `s` буде розщеплювати рядок на літери:
 
 ```js run
-let str = "test";
+let str = "cqcqcqdx";
 
-alert( str.split('') ); // t,e,s,t
+alert( str.split('') ); // c,q,c,q,c,q,d,x
 ```
 ````
 
-The call [arr.join(glue)](mdn:js/Array/join) does the reverse to `split`. It creates a string of `arr` items joined by `glue` between them.
+Виклик [arr.join(glue)](mdn:js/Array/join) є протилежним до `split`.Він створює рядок з елементів `arr` з'єднаних за допомогою `glue` між собою.
 
-For instance:
+Наприклад:
 
 ```js run
 let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
 
-let str = arr.join(';'); // glue the array into a string using ;
+let str = arr.join(';'); // зліплюємо масив в рядок за допомогою ;
 
 alert( str ); // Bilbo;Gandalf;Nazgul
 ```
 
 ### reduce/reduceRight
 
-When we need to iterate over an array -- we can use `forEach`, `for` or `for..of`.
+Якщо нам потрібно перебрати масив -- ми можемо використати `forEach`, `for` або `for..of`.
 
-When we need to iterate and return the data for each element -- we can use `map`.
+Якщо нам потрібно перебирати і повертати дані для кожного елемента -- ми можемо скористатись `map`.
 
-The methods [arr.reduce](mdn:js/Array/reduce) and [arr.reduceRight](mdn:js/Array/reduceRight) also belong to that breed, but are a little bit more intricate. They are used to calculate a single value based on the array.
+Методи [arr.reduce](mdn:js/Array/reduce) і [arr.reduceRight](mdn:js/Array/reduceRight) схожі на вищезазначені методи, але вони більш складні. Вони використовуються для обчислення будь-якого єдиного значення на основі всього масиву.
 
-The syntax is:
+
+Синтаксис:
 
 ```js
 let value = arr.reduce(function(accumulator, item, index, array) {
@@ -550,24 +547,24 @@ let value = arr.reduce(function(accumulator, item, index, array) {
 }, [initial]);
 ```
 
-The function is applied to all array elements one after another and "carries on" its result to the next call.
+Функція застосовується по черзі до всих елементів масиву і "переносить" свій результат на слідуючий виклик.
 
-Arguments:
+Аргументи:
 
-- `accumulator` -- is the result of the previous function call, equals `initial` the first time (if `initial` is provided).
-- `item` -- is the current array item.
-- `index` -- is its position.
-- `array` -- is the array.
+- `accumulator` -- результат попереднього виклика цієї функції, дорівнює `initial` при першому виклику (якщо переданий `initial`).
+- `item` -- черговий елемент масива.
+- `index` -- його індекс.
+- `array` -- сам масив.
 
-As function is applied, the result of the previous function call is passed to the next one as the first argument.
+Під час застосування функції, результат попереднього виклику функції передається до наступного в якості першого аргументу.
 
-So, the first argument is essentially the accumulator that stores the combined result of all previous executions. And at the end it becomes the result of `reduce`.
+Так, перший аргумент є по суті накопичувачем, який зберігає об'єднаний результат усіх попередніх виконань функції і врешті-решт він стає результатом `reduce`.
 
-Sounds complicated?
+Звучить складно?
 
-The easiest way to grasp that is by example.
+Цей метод найпростіше зрозуміти на прикладі.
 
-Here we get a sum of an array in one line:
+Тут ми отримаємо суму усіх елементів масиву всього одним рядком:
 
 ```js run
 let arr = [1, 2, 3, 4, 5];
@@ -577,74 +574,74 @@ let result = arr.reduce((sum, current) => sum + current, 0);
 alert(result); // 15
 ```
 
-The function passed to `reduce` uses only 2 arguments, that's typically enough.
+Функція передана до `reduce` використовує 2 аргумента, що досить типово.
 
-Let's see the details of what's going on.
+Давайте розберемо детальніше, як це працює.
 
-1. On the first run, `sum` is the `initial` value (the last argument of `reduce`), equals `0`, and `current` is the first array element, equals `1`. So the function result is `1`.
-2. On the second run, `sum = 1`, we add the second array element (`2`) to it and return.
-3. On the 3rd run, `sum = 3` and we add one more element to it, and so on...
+1. При першому запуску `sum` дорівнює `initial` (останній аргумент `reduce`), тобто `0`, а `current` -- перший елемент масиву, дорівнює `1`. Таким чином, результат функції дорівнює `1`.
+2. При другому запуску, `sum = 1`, ми додаємо до нього другий елемент масиву (`2`).
+3. При третьому запуску, `sum = 3` ми додаємо до нього слідуючий елемент масиву і т.д.
 
-The calculation flow:
+Потік обчислень:
 
 ![](reduce.svg)
 
-Or in the form of a table, where each row represents a function call on the next array element:
+Або у вигляді таблиці, де кожен рядок являє собою виклик функції на наступний елемент масиву:
 
 |   |`sum`|`current`|result|
 |---|-----|---------|---------|
-|the first call|`0`|`1`|`1`|
-|the second call|`1`|`2`|`3`|
-|the third call|`3`|`3`|`6`|
-|the fourth call|`6`|`4`|`10`|
-|the fifth call|`10`|`5`|`15`|
+|перший виклик|`0`|`1`|`1`|
+|другий виклик|`1`|`2`|`3`|
+|третій виклик|`3`|`3`|`6`|
+|четвертий виклик|`6`|`4`|`10`|
+|п'ятий виклик|`10`|`5`|`15`|
 
-Here we can clearly see how the result of the previous call becomes the first argument of the next one.
+Тут виразно видно, як результат попереднього виклику передається в перший аргумент наступного.
 
-We also can omit the initial value:
+Ми також можемо опустити початкове значення:
 
 ```js run
 let arr = [1, 2, 3, 4, 5];
 
-// removed initial value from reduce (no 0)
+// прибрано початкове значення з reduce (немає 0 в кінці)
 let result = arr.reduce((sum, current) => sum + current);
 
 alert( result ); // 15
 ```
 
-The result is the same. That's because if there's no initial, then `reduce` takes the first element of the array as the initial value and starts the iteration from the 2nd element.
+Результат однаковий. Це тому, що якщо немає значення `initial`, тоді `reduce` приймає перший елемент масиву в якості початкового значення і починає ітерацію з 2-го елемента.
 
-The calculation table is the same as above, minus the first row.
+Таблиця розрахунку така ж, як зазначено вище, але без першого рядка.
 
-But such use requires an extreme care. If the array is empty, then `reduce` call without initial value gives an error.
+Але таке використання вимагає обережності. Якщо масив порожній, тоді виклик `reduce` без початкового значення видає помилку.
 
-Here's an example:
+Ось приклад:
 
 ```js run
 let arr = [];
 
 // Error: Reduce of empty array with no initial value
-// if the initial value existed, reduce would return it for the empty arr.
+// якщо б існувало початкове значення, reduce повернув би його для порожнього масиву arr.
 arr.reduce((sum, current) => sum + current);
 ```
 
-So it's advised to always specify the initial value.
+Тому рекомендується завжди вказувати початкове значення.
 
-The method [arr.reduceRight](mdn:js/Array/reduceRight) does the same, but goes from right to left.
+Метод [arr.reduceRight](mdn:js/Array/reduceRight) робить те ж саме, але проходить по масиву справа наліво.
 
 
 ## Array.isArray
 
-Arrays do not form a separate language type. They are based on objects.
+Масиви не утворюють окремий тип мови. Вони засновані на об'єктах.
 
-So `typeof` does not help to distinguish a plain object from an array:
+Тому `typeof` не може відрізнити простий об'єкт від масиву:
 
 ```js run
 alert(typeof {}); // object
-alert(typeof []); // same
+alert(typeof []); // також object
 ```
 
-...But arrays are used so often that there's a special method for that: [Array.isArray(value)](mdn:js/Array/isArray). It returns `true` if the `value` is an array, and `false` otherwise.
+...Але масиви використовуються настільки часто, що для цього вигадали спеціальний метод : [Array.isArray(value)](mdn:js/Array/isArray). Він повертає `true`, якщо `value` масив, і `false`, якщо ні.
 
 ```js run
 alert(Array.isArray({})); // false
@@ -652,25 +649,25 @@ alert(Array.isArray({})); // false
 alert(Array.isArray([])); // true
 ```
 
-## Most methods support "thisArg"
+## Більшість методів підтримують "thisArg"
 
-Almost all array methods that call functions -- like `find`, `filter`, `map`, with a notable exception of `sort`, accept an optional additional parameter `thisArg`.
+Майже всі методи масиву, які викликають функції -- такі як `find`, `filter`, `map`, за виключенням методу `sort`, приймають необов'язковий параметр `thisArg`.
 
-That parameter is not explained in the sections above, because it's rarely used. But for completeness we have to cover it.
+Цей параметр не пояснювався в вищевикладених розділах, оскільки він рідко використовується, але для повного розуміння теми ми зобов'язані його розглянути.
 
-Here's the full syntax of these methods:
+Ось повний синтаксис цих методів:
 
 ```js
 arr.find(func, thisArg);
 arr.filter(func, thisArg);
 arr.map(func, thisArg);
 // ...
-// thisArg is the optional last argument
+// thisArg - це необов'язковий останній аргумент
 ```
 
-The value of `thisArg` parameter becomes `this` for `func`.
+Значення параметра `thisArg` стає `this` для `func`.
 
-For example, here we use a method of `army` object as a filter, and `thisArg` passes the context:
+Наприклад, ось тут ми використовуємо метод об'єкту `army` як фільтр, і `thisArg` передає йому контекст :
 
 ```js run
 let army = {
@@ -689,7 +686,7 @@ let users = [
 ];
 
 *!*
-// find users, for who army.canJoin returns true
+// знайти користувачів, для котрих army.canJoin повертає true
 let soldiers = users.filter(army.canJoin, army);
 */!*
 
@@ -698,58 +695,58 @@ alert(soldiers[0].age); // 20
 alert(soldiers[1].age); // 23
 ```
 
-If in the example above we used `users.filter(army.canJoin)`, then `army.canJoin` would be called as a standalone function, with `this=undefined`, thus leading to an instant error.
+Якщо б ми на вищенаведеному прикладі використовували просто `users.filter(army.canJoin)`, то виклик `army.canJoin` був би в режимі окремої функції `this=undefined`, миттєво приводячи до помилки.
 
-A call to `users.filter(army.canJoin, army)` can be replaced with `users.filter(user => army.canJoin(user))`, that does the same. The former is used more often, as it's a bit easier to understand for most people.
+Виклик `users.filter(army.canJoin, army)` може бути замінений на `users.filter(user => army.canJoin(user))`, який робить те ж саме. Останній запис використовується навіть частіше, оскільки стрілочна функція більш наглядна.
 
-## Summary
+## Висновок
 
-A cheat sheet of array methods:
+Шпаргалка по методах масиву:
 
-- To add/remove elements:
-  - `push(...items)` -- adds items to the end,
-  - `pop()` -- extracts an item from the end,
-  - `shift()` -- extracts an item from the beginning,
-  - `unshift(...items)` -- adds items to the beginning.
-  - `splice(pos, deleteCount, ...items)` -- at index `pos` delete `deleteCount` elements and insert `items`.
-  - `slice(start, end)` -- creates a new array, copies elements from position `start` till `end` (not inclusive) into it.
-  - `concat(...items)` -- returns a new array: copies all members of the current one and adds `items` to it. If any of `items` is an array, then its elements are taken.
+- Для додавання/видалення елементів:
+  - `push(...items)` -- додає елемент в кінець,
+  - `pop()` -- видобуває елемент з кінця,
+  - `shift()` -- видобуває елемент з початку,
+  - `unshift(...items)` -- додає елемент на початок.
+  - `splice(pos, deleteCount, ...items)` -- починаючи з індексу `pos` видаляє `deleteCount` елементів і вставляє `items`.
+  - `slice(start, end)` -- створює новий масив, копіюючи в нього елементи з позиції `start` до `end` (не включаючи `end`).
+  - `concat(...items)` -- повертає новий масив: копіює всіх членів поточного масиву і додає до нього `items`. Якщо якийсь з `items` є масивом, тоді беруться його елементи.
 
-- To search among elements:
-  - `indexOf/lastIndexOf(item, pos)` -- look for `item` starting from position `pos`, return the index or `-1` if not found.
-  - `includes(value)` -- returns `true` if the array has `value`, otherwise `false`.
-  - `find/filter(func)` -- filter elements through the function, return first/all values that make it return `true`.
-  - `findIndex` is like `find`, but returns the index instead of a value.
+- Для пошуку серед елементів:
+  - `indexOf/lastIndexOf(item, pos)` -- шукає `item` починаючи з позиції `pos`, і повертає його індекс або `-1`, якщо нічого не знайдено.
+  - `includes(value)` -- повертає `true` якщо в масиві є елемент `value`, інакше  `false`.
+  - `find/filter(func)` -- фільтрує елементи через функцію і віддає перше/всі значення, при проходженні яких через функцію повертається `true`.
+  - `findIndex` схожий на `find`, але повертає індекс замість значення.
 
-- To iterate over elements:
-  - `forEach(func)` -- calls `func` for every element, does not return anything.
+- Для перебору елементів:
+  - `forEach(func)` -- викликає `func` для кожного елементу, нічого не повертаючи.
 
-- To transform the array:
-  - `map(func)` -- creates a new array from results of calling `func` for every element.
-  - `sort(func)` -- sorts the array in-place, then returns it.
-  - `reverse()` -- reverses the array in-place, then returns it.
-  - `split/join` -- convert a string to array and back.
-  - `reduce(func, initial)` -- calculate a single value over the array by calling `func` for each element and passing an intermediate result between the calls.
+- Для перетворення масиву:
+  - `map(func)` -- створює новий масив за результатами виклику `func` для кожного елементу.
+  - `sort(func)` -- сортує масив "на місці", а потім повертає його.
+  - `reverse()` -- "на місці" змінює послідовність елементів на протилежну і повертає змінений масив.
+  - `split/join` -- перетворює рядок в масив і навпаки.
+  - `reduce(func, initial)` -- обчислює одне значення на основі всього масиву, викликаючи `func` для кожного елемента і передаючи проміжний результат між викликами.
 
-- Additionally:
-  - `Array.isArray(arr)` checks `arr` for being an array.
+- Додатково:
+  - `Array.isArray(arr)` перевіряє, чи є `arr` масивом.
 
-Please note that methods `sort`, `reverse` and `splice` modify the array itself.
+Зверніть увагу, що методи `sort`, `reverse` і `splice` змінюють вихідний масив.
 
-These methods are the most used ones, they cover 99% of use cases. But there are few others:
+Вивчених нами методів досить в 99% випадків, але існують і інші:
 
-- [arr.some(fn)](mdn:js/Array/some)/[arr.every(fn)](mdn:js/Array/every) checks the array.
+- [arr.some(fn)](mdn:js/Array/some)/[arr.every(fn)](mdn:js/Array/every) перевіряє масив.
 
-  The function `fn` is called on each element of the array similar to `map`. If any/all results are `true`, returns `true`, otherwise `false`.
+  Функція `fn` викликається для кожного елемента масиву аналогічно `map`. Якщо будь-які/всі результати викликів є `true`, то метод повертає `true`, інакше `false`.
 
-- [arr.fill(value, start, end)](mdn:js/Array/fill) -- fills the array with repeating `value` from index `start` to `end`.
+- [arr.fill(value, start, end)](mdn:js/Array/fill) -- заповнює масив повторюваними `value` починаючи з індексу `start` до `end`.
 
-- [arr.copyWithin(target, start, end)](mdn:js/Array/copyWithin) -- copies its elements from position `start` till position `end` into *itself*, at position `target` (overwrites existing).
+- [arr.copyWithin(target, start, end)](mdn:js/Array/copyWithin) -- копіює свої елементи, починаючи з `start` і закінчуючи `end` в власну позицію `target` (перезаписує існуючі).
 
-For the full list, see the [manual](mdn:js/Array).
+Повний список є в довіднику [manual](mdn:js/Array).
 
-From the first sight it may seem that there are so many methods, quite difficult to remember. But actually that's much easier.
+На перший погляд може здатися, що існує дуже багато різних методів, які досить складно запам'ятати. Але це набагато простіше, ніж здається.
 
-Look through the cheat sheet just to be aware of them. Then solve the tasks of this chapter to practice, so that you have experience with array methods.
+Уважно вивчіть шпаргалку, наведену вище, а потім, щоб попрактикуватися, вирішіть завдання, запропоновані в цьому розділі. Так ви отримаєте необхідний досвід в правильному використанні методів масиву.
 
-Afterwards whenever you need to do something with an array, and you don't know how -- come here, look at the cheat sheet and find the right method. Examples will help you to write it correctly. Soon you'll automatically remember the methods, without specific efforts from your side.
+Кожен раз, коли вам буде необхідно зробити що-небудь з масивом, а ви не знаєте, як це зробити -- приходьте сюди, дивіться на таблицю і шукайте вірний метод. Приклади допоможуть вам все зробити вірно, і незабаром ви швидко запам'ятаєте методи без особливих зусиль.
