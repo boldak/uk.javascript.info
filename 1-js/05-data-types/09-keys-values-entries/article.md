@@ -56,7 +56,8 @@ let user = {
 for (let value of Object.values(user)) {
   alert(value); // Джону, тоді 30 років
 }
-`` warn header =" Object.keys / величини / записи ігнорують символьні властивості " Як і цикл for..in`, ці методи ігнорують властивості, які використовують` Symbol (...) `як ключі.
+```
+```warn header =" Object.keys / величини / записи ігнорують символьні властивості " Як і цикл for..in`, ці методи ігнорують властивості, які використовують` Symbol (...) `як ключі.
 
 Зазвичай це зручно. Але якщо ми також хочемо символічних ключів, то існує окремий метод [Object.getOwnPropertySymbols] (mdn: js / Object / getOwnPropertySymbols), який повертає масив лише символічних ключів. Також існує метод [Reflect.ownKeys (obj)] (mdn: js / Reflect / ownKeys), який повертає * усі * ключі.
 ```
@@ -81,7 +82,7 @@ let prices = {
   meat: 4, //м'ясо: 4//
 };
 
-*!*
+/*!*
 let doublePrices = Object.fromEntries(
   // перетворити в масив, карту, а потім із fromEntries повертає об'єкт
   Object.entries(prices).map(([key, value]) => [key, value * 2])
@@ -89,5 +90,5 @@ let doublePrices = Object.fromEntries(
 */!*
 
 alert(doublePrices.meat); // 8
-``
+```
 Це може виглядати важко з першого погляду, але стає зрозумілим легко після того, як ви використовуєте його один або два рази. Ми можемо зробити потужні ланцюги перетворень таким чином. 
