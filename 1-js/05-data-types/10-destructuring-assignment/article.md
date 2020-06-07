@@ -35,7 +35,7 @@ alert(surname);  // Kantor
 let [firstName, surname] = "Ilya Kantor".split(' ');
 ```
 
-````smart header="\"Destructuring\" does not mean \"destructive\"."
+````smart header="Destructuring does not mean destructive."
 Це називається «деструктурірующім привласненням», тому що воно «деструктурірует» шляхом копіювання елементів в змінні. Але сам масив не змінюється.
 
 Це просто більш короткий спосіб написати:
